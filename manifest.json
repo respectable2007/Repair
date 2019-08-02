@@ -175,7 +175,7 @@
 				"android": {
 					"mdpi": "", /*普通屏启动图片，分辨率：240x282*/
 					"ldpi": "", /*大屏启动图片，分辨率：320x442*/
-					"hdpi": "", /*高分屏启动图片，分辨率：480x762*/
+					"hdpi": "img/irChatStart.png", /*高分屏启动图片，分辨率：480x762*/
 					"xhdpi": "", /*720P高分屏启动图片，分辨率：720x1242*/
 					"xxhdpi": ""
 				}
@@ -183,5 +183,5 @@
 			"debug": true
 		}
 	},
-	"fullscreen": true
+	"fullscreen": false
 }

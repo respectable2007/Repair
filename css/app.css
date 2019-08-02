@@ -1,0 +1,13 @@
+header.mui-bar{
+  -webkit-box-shadow: 0 0 1px rgba(0,0,0,.85);
+  box-shadow: 0 0 1px rgba(0,0,0,.85);
+}
+.mui-title{
+	font-weight: bold;
+}
+header.mui-bar .mui-icon-plus {
+	color: rgba(0,0,0,.95);
+}
+.mui-content > .mui-table-view:first-child{
+ margin-top: 0;
+}
