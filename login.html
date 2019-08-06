@@ -7,14 +7,99 @@
 		<link href="css/mui.min.css" rel="stylesheet" />
 	</head>
 	<body>
+		<form class="mui-input-group">
+		    <div class="mui-input-row">
+		        <label>用户名</label>
+		        <input type="text" class="mui-input-clear" placeholder="用户名" id='account'>
+		    </div>
+		    <div class="mui-input-row">
+		        <label>密码</label>
+		        <input type="password" class="mui-input-clear" placeholder="密码" id='password'>
+		    </div>
+		    <div class="mui-content-padded">
+		        <button type="button" class="mui-btn mui-btn-primary mui-btn-block" id='login'>登录</button>
+		    </div>
+		</form>
 		<script src="js/mui.min.js"></script>
 		<script src="js/libs/vue.min.js" type="text/javascript"></script>
-		<script src="js/libs/mock.min.js" type="text/javascript"></script>
 		<script src="js/common/global.js" type="text/javascript"></script>
-		<script src="js/common/config.js" type="text/javascript"></script>
-		<script src="js/common/mockdata.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			mui.init()
+		  var nwaiting = null;
+		  function launchScreen() {
+		    var showGuide = localStorage.getItem('lauchFlag');
+		    if (showGuide) {
+		      plus.navigator.closeSplashscreen();
+		      plus.navigator.setFullscreen(false);
+		    } else {
+		      // 删除登录状态标识
+		      localStorage.removeItem('$ loginstate');
+		      plus.navigator.closeSplashscreen();
+		      mui.openWindow({
+		        id: 'guide',
+		        url: 'guide.html',
+		        show: {
+		          aniShow: 'none'
+		        },
+		        waiting: {
+		          autoShow: false
+		        }
+		      })
+		    }
+		  }
+		  function toMain() {
+		    var mainPage = mui.preload({
+		      "id": 'index',
+		      "url": "index.html"
+		    });
+		    mui.fire(mainPage, 'show', null);
+		    if (nwaiting) {
+		      nwaiting.close();
+		    }
+		    mainPage.show('pop-in');
+		  }
+		  mui.plusReady(function() {
+		  	var self = plus.webview.currentWebview();
+		  	if(self.mark == undefined) {
+		  	  launchScreen();
+		  	} else {
+		  	  plus.navigator.closeSplashscreen();
+		  	}
+		  	plus.screen.lockOrientation("portrait-primary");
+		  	var loginstate = localStorage.getItem('$ loginstate');
+		  	if(loginstate) {
+		  	  toMain();
+		  	}
+		  	var loginButton = g.id('login'),
+		  	    accountBox = g.id('account'),
+		  	    passwordBox = g.id('password');
+		  	if(loginButton) {
+		  	  loginButton.addEventListener('tap', function(e) {
+		  	  	var loginInfo = {
+		  	  	  account: accountBox.value.trim(),
+		  	  	  password: passwordBox.value.trim()
+		  	  	};
+		  	  	console.log(u);
+		  	  	u.login(loginInfo, function(err) {
+		  	  	  console.log('start');
+		  	  	  mui.toast(err);
+		  	  	  if (err) {
+		  	  	  	plus.nativeUI.toast(err);
+		  	  	  	return;
+		  	  	  }
+		  	  	  var uuid = plus.device.uuid;//获取设备唯一标识
+		  	  	  localStorage.setItem('$ uuid', uuid);
+		  	  	  mui.toast('success');
+		  	  	  toMain();
+		  	  	});
+		  	  });
+		  	}
+		  });
+		  mui.init({
+		  	statusBarBackground: '#f7f7f7'
+		  })
+		  //localStorage.removeItem('lauchFlag');
+		  //localStorage.removeItem('$ loginstate');
+		  //localStorage.removeItem('$ uuid');
 		</script>
 	</body>
 </html>

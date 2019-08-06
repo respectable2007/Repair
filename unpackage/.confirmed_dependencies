@@ -5,7 +5,9 @@
       "css/mui.min.css",
       "js/mui.min.js"
     ],
-    "refer": [],
+    "refer": [
+      "guide.html"
+    ],
     "priority": 0
   }
 }

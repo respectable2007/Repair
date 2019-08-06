@@ -165,7 +165,10 @@
 					"fonts/mui.ttf",
 					"js/mui.min.js"
 				],
-				"priority": 0
+				"priority": 0,
+				"refer": [
+					"guide.html"
+				]
 			}
 		},
 		"idle": {
