@@ -1,2 +1,7 @@
-# irChat
-hybrid app like weChat
+# 
+a hybrid app
+mui
+hbuilder
+h5+
+vuejs
+mock
