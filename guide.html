@@ -7,6 +7,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/iconfont.css"/>
 		<style>
 			#close {
 				position: absolute;
@@ -27,7 +28,7 @@
 				width: 200px;
 				height: 200px;
 				display: block;
-				border: 1px solid #FFFFFF;
+				border: 4px solid #FFFFFF;
 				border-color: rgba(255, 255, 255, 0.5);
 				text-align: center;
 				line-height: 200px;
@@ -39,6 +40,9 @@
 				left: 50%;
 				margin-left: -100px;
 			}
+			.span-icon{
+			 font-size: 40px;
+			}
 			.animate {
 				position: absolute;
 				left: 0;
@@ -46,128 +50,27 @@
 				width: 100%;
 				color: #fff;
 				display: -moz-box;
+				text-align: center;
 			}
 			.animate h2 {
 				text-align: center;
 				margin-bottom: 20px;
 			}
 			.animate li {
-				width: 50%;
 				height: 30px;
 				line-height: 30px;
 				list-style: none;
 				font-size: 16px;
-				text-align: right;
 			}
-			.animate li:nth-child(3) {
-				text-align: left;
-				float: right;
+			.mui-slider-indicator{
+			  bottom: 12px;
 			}
-			.animated {
-				-webkit-animation-duration: 1s;
-				-webkit-animation-play-state: paused;
-				-webkit-animation-fill-mode: both;
-			}
-			.guide-show .bounceInDown {
-				-webkit-animation-name: bounceInDown;
-				-webkit-animation-play-state: running;
-				-webkit-animation-delay: 1s;
-				display: block;
-			}
-			.guide-show .bounceInLeft {
-				-webkit-animation-name: bounceInLeft;
-				display: block;
-				-webkit-animation-play-state: running;
-			}
-			.guide-show .bounceInRight {
-				-webkit-animation-name: bounceInRight;
-				display: block;
-				-webkit-animation-play-state: running;
-				-webkit-animation-delay: 0.5s;
-			}
-			@-webkit-keyframes bounceInDown {
-				0%, 60%, 75%, 90%, 100% {
-					-webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-					animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-				}
-				0% {
-					opacity: 0;
-					-webkit-transform: translate3d(0, -3000px, 0);
-					transform: translate3d(0, -3000px, 0);
-				}
-				60% {
-					opacity: 1;
-					-webkit-transform: translate3d(0, 25px, 0);
-					transform: translate3d(0, 25px, 0);
-				}
-				75% {
-					-webkit-transform: translate3d(0, -5px, 0);
-					transform: translate3d(0, -5px, 0);
-				}
-				90% {
-					-webkit-transform: translate3d(0, 3px, 0);
-					transform: translate3d(0, 3px, 0);
-				}
-				100% {
-					-webkit-transform: none;
-					transform: none;
-				}
-			}
-			@-webkit-keyframes bounceInLeft {
-				0%, 60%, 75%, 90%, 100% {
-					-webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-					animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-				}
-				0% {
-					opacity: 0;
-					-webkit-transform: translate3d(-3000px, 0, 0);
-					transform: translate3d(-3000px, 0, 0);
-				}
-				60% {
-					opacity: 1;
-					-webkit-transform: translate3d(25px, 0, 0);
-					transform: translate3d(25px, 0, 0);
-				}
-				75% {
-					-webkit-transform: translate3d(-10px, 0, 0);
-					transform: translate3d(-10px, 0, 0);
-				}
-				90% {
-					-webkit-transform: translate3d(5px, 0, 0);
-					transform: translate3d(5px, 0, 0);
-				}
-				100% {
-					-webkit-transform: none;
-					transform: none;
-				}
-			}
-			@-webkit-keyframes bounceInRight {
-				0%, 60%, 75%, 90%, 100% {
-					-webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-					animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-				}
-				0% {
-					opacity: 0;
-					-webkit-transform: translate3d(3000px, 0, 0);
-					transform: translate3d(3000px, 0, 0);
-				}
-				60% {
-					opacity: 1;
-					-webkit-transform: translate3d(-25px, 0, 0);
-					transform: translate3d(-25px, 0, 0);
-				}
-				75% {
-					-webkit-transform: translate3d(10px, 0, 0);
-					transform: translate3d(10px, 0, 0);
-				}
-				90% {
-					-webkit-transform: translate3d(-5px, 0, 0);
-					transform: translate3d(-5px, 0, 0);
-				}
-				100% {
-					-webkit-transform: none;
-					transform: none;
-				}
+			.mui-slider-indicator .mui-indicator{
+			 height: 10px;
+			 width: 10px;
+			 -webkit-box-shadow: none;
+			 box-shadow: none;
+			 background: #d7dbdd;
 			}
 		</style>
 	</head>
@@ -177,48 +80,45 @@
 				<!-- 第一张 -->
 				<div class="mui-slider-item">
 					<div class="item-logo" style="background-color: #D74B28">
-						<a href="#">
-						MUI
+						<a href="javascript:void(0)">
+						 <span class="iconfont iconcog span-icon"></span>
 						</a>
-						<div class="animate guide-show">
-							<h2 class="animated bounceInDown">小巧高能</h2>
-							<li class="animated bounceInLeft">几十K的JS和CSS</li>
-							<li class="animated bounceInRight">上百种控件样式和模板</li>
+						<div class="animate">
+							<h2 >设备维修</h2>
+							<li>维修工单便捷管理</li>
 						</div>
 					</div>
 				</div>
 				<!-- 第二张 -->
 				<div class="mui-slider-item">
 					<div class="item-logo" style="background-color: #02C1ED;">
-						<a href="#">
-						MUI
+						<a href="javascript:void(0)">
+						 <span class="iconfont iconcog span-icon"></span>
 						</a>
-						<div id="tips-2" class="animate mui-hidden">
-							<h2 class="animated bounceInDown">原生UI</h2>
-							<li class="animated bounceInLeft">以iOS原生UI为基础</li>
-							<li class="animated bounceInRight">补充Android特有样式</li>
+						<div class="animate">
+							<h2 >设备维修</h2>
+							<li>维修工单便捷管理</li>
 						</div>
 					</div>
 				</div>
 				<!-- 第三张 -->
 				<div class="mui-slider-item">
 					<div class="item-logo" style="background-color: #67C962;">
-						<a href="#">
-						MUI
+						<a href="javascript:void(0)">
+						 <span class="iconfont iconcog span-icon"></span>
 						</a>
-						<div id="tips-3" class="animate mui-hidden">
-							<h2 class="animated bounceInDown">流畅体验</h2>
-							<li class="animated bounceInLeft">下拉刷新、转场动画</li>
-							<li class="animated bounceInRight">整个世界都流畅了</li>
+						<div class="animate">
+							<h2 >设备维修</h2>
+							<li>维修工单便捷管理</li>
 						</div>
 					</div>
 				</div>
 				<!-- 第四张 -->
 				<div class="mui-slider-item">
-					<div class="item-logo" style="background-color: #FCD208;">
-						<a href="#">
-						MUI
-						</a>
+					<div class="item-logo" style="background-color: #fad247;">
+						<a href="javascript:void(0)">                    
+						 <span class="iconfont iconcog span-icon"></span>
+						</a>                                             
 						<div class="animate">
 							<button id='close' class="mui-btn mui-btn-warning mui-btn-outlined">立即体验</button>
 						</div>
@@ -255,7 +155,7 @@
 				})
 			}, false);
 			//图片切换时，触发动画
-			document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+			/*document.querySelector('.mui-slider').addEventListener('slide', function(event) {
 			 	//注意slideNumber是从0开始的；
 			 	var index = event.detail.slideNumber+1;
 			 	if(index==2||index==3){
@@ -265,7 +165,7 @@
 			 			item.classList.add("guide-show");
 			 		}
 			 	}
-			});
+			});*/
 			
 		</script>
 	</body>
