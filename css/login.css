@@ -1,0 +1,31 @@
+html,body{height: 100%;}
+body{
+ background: #fff;
+}
+header.mui-bar-nav{
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border: none;
+  background: #222222;
+}
+.mui-title{
+  color:#fff;
+  font-weight: bold;
+}
+.login-div{
+ text-align: center;
+ margin: 20% 0;
+}
+.login-logo{
+  height: 300px;
+  width: 300px;
+}
+.mui-input-group{
+  margin-top: 10%;
+}
+.mui-content{
+ background: #fff;
+}
+.mui-content-padded{
+ margin-top: 10%;
+}
