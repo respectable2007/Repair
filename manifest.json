@@ -42,7 +42,7 @@
 	"plus": {
 		"splashscreen": {
 			"autoclose": true,/*是否自动关闭程序启动界面，true表示应用加载应用入口页面后自动关闭；false则需调plus.navigator.closeSplashscreen()关闭*/
-			"waiting": true
+			"waiting": true,"delay":"2000"
 		},
 		"runmode": "liberate",/*应用的首次启动运行模式，可取liberate或normal，liberate模式在第一次启动时将解压应用资源（Android平台File API才可正常访问_www目录）*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
@@ -130,7 +130,7 @@
 				"ios": {
 					"iphone": {
 						"default": "", /*iPhone3启动图片选，分辨率：320x480*/
-						"retina35": "",/*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
+						"retina35": "img/start.png",/*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
 						"retina40": ""
 					},
 					"ipad": {
@@ -167,14 +167,14 @@
 				],
 				"priority": 0,
 				"refer": [
-					"guide.html"
+					"guide.html",
+					"index.html"
 				]
 			}
 		},
 		"idle": {
 			"resources": [
 				"js/common/global.js",
-				"index.html",
 				"js/common/config.js",
 				"css/app.css",
 				"img/irChatStart.png",

@@ -6,7 +6,8 @@
       "js/mui.min.js"
     ],
     "refer": [
-      "guide.html"
+      "guide.html",
+      "index.html"
     ],
     "priority": 0
   }
