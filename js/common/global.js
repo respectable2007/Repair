@@ -50,8 +50,8 @@
    * 获取菜单
    * @param {Object} id
    */
-  owner.getMenu = function(){
-  	var jsonStr = plus.localStorage.getItem('$menu');
+  owner.getMenus = function(){
+  	var jsonStr = plus.storage.getItem('$menu');
   	return jsonStr ? JSON.parse(jsonStr).data: null;
   }
   /**
@@ -126,6 +126,85 @@
   	  }
   	})
   }
+  
+  owner.getCount = function(list , fn){
+    if(config.isMock){
+      var _database = new smpWebSql();
+      _database.counts('tb_repairbill_g', "where STATE<>'E", function(res){
+      	var data = {
+  	      "StatusCode": 200,
+	      "Message": null,
+	      "Data": {
+	        "cCount": 0,
+	        "mCount": 0,
+	        "rCount": 2,
+	        "allCount": 0 + 0 + res,
+	        "cRob": false,
+	        "mRob": false,
+	        "rRob": true
+	      }
+      	}
+      	if(data.StatusCode === 200) {
+	  	  	for(var i = 0; i < list.length; i++) {
+	  	  	  if(list[i].name === TaskType.repair.value){
+	  	  	  	list[i].taskNum = data.Data.rCount;
+	  	  	  	list[i].rad = data.Data.rRob;
+	  	  	  }else if(list[i].name === TaskType.polling.value){
+	  	  	  	list[i].taskNum = data.Data.cCount;
+	  	  	  	list[i].rad = data.Data.cRob;
+	  	  	  }else if(list[i].name === TaskType.maintain.value){
+	  	  	  	list[i].taskNum = data.Data.mCount;
+	  	  	  	list[i].rad = data.Data.mRob;
+	  	  	  }
+	  	  	}
+	  	  	localStorage.setItem('$EXE_COUNT', data.Data);
+	  	  	if(fn){
+	  	  	  fn(data.Data.allCount);
+	  	  	}
+	  	  return list;
+	  	}else{
+	  	  mui.toast(data.Message)
+	  	}
+      })
+    }else{
+      g.ajax(config.BillWorkbench,{
+      	data: {
+      	  orgCode: config.ORG_CODE,
+      	  userId: config.USER_ID
+      	},
+      	success: function(data){
+      	  if(data.StatusCode === 200) {
+      	  	for(var i = 0; i < list.length; i++) {
+      	  	  if(list[i].name === TaskType.repair.value){
+      	  	  	list[i].taskNum = data.Data.rCount;
+      	  	  	list[i].rad = data.Data.rRob;
+      	  	  }else if(list[i].name === TaskType.polling.value){
+      	  	  	list[i].taskNum = data.Data.cCount;
+      	  	  	list[i].rad = data.Data.cRob;
+      	  	  }else if(list[i].name === TaskType.maintain.value){
+      	  	  	list[i].taskNum = data.Data.mCount;
+      	  	  	list[i].rad = data.Data.mRob;
+      	  	  }
+      	  	}
+      	  	localStorage.setItem('$EXE_COUNT', data.Data);
+      	  	if(fn){
+      	  	  fn(data.Data.allCount);
+      	  	}
+      	  	return list;
+      	  }else{
+      	  	mui.toast(data.Message)
+      	  }
+      	},
+      	error: function(e){
+      	  if(fn) {
+      	  	fn()
+      	  }
+      	}
+      })
+    }
+  }
+  
+  
   /*
    * 获取网络状态
    */
@@ -167,6 +246,141 @@
     * 绘制内容支持font（文本，字体图标），图片img，矩形区域rect
     */
   owner.drawNative = function(id, styles, tags) {
-  	return plus.nativeObj.View(id, styles, tags);
+  	return new plus.nativeObj.View(id, styles, tags);
+  }
+  
+  /*
+   * 打开新页面
+   */
+  owner.openWindow = function(jsonData) {
+    mui.openWindow({
+      url:jsonData.url,
+      id:jsonData.id,
+      extras: jsonData.extras || {},
+      styles: jsonData.styles || {},
+      show: jsonData.show || {},
+      waiting: jsonData.waiting || {}
+    })
+  }
+  owner.openWindowWithTitle = function(webviewOptions, title) {
+  	webviewOptions.styles = {
+  	  titleNView: {
+  	  	titleText: title,
+  	  	titleColor: '#fff',
+  	  	titleSize: '17px',
+  	  	backgroundColor: '#449DED',
+  	  	progress: {
+  	  	  color: '#56CF87',
+  	  	  height: '2px'
+  	  	},
+  	  	splitLine: {
+  	  	  color: '#ccc',
+  	  	  height: '0'
+  	  	},
+  	  	autoBackButton:true
+  	  }
+  	};
+  	mui.openWindowWithTitle(webviewOptions)
   }
 }(mui, window.g = window.g || {}));
+/**
+ * ------------------------------------------------菜单权限----------------------------------------
+ */
+var defaultInfo = '监控运行状态';
+(function (m) {
+    function getSmpMenus() {
+        return g.getMenus() == '{}' ? {} : g.getMenus(); //GloabMenus
+    }
+    //获取一级菜单
+    m.getFrstLevelMenus = function () {
+        ////console.log('获取一级菜单')
+        var smpMenus = getSmpMenus();
+        //console.log(JSON.stringify(smpMenus[0]))
+        if (smpMenus == undefined || smpMenus == null || smpMenus[0] == {}) {
+            localStorage.removeItem('$loginstate');
+            mui.openWindow({
+                id: 'login',
+                url: 'login.html'
+            })
+            return;
+        }
+        if (config.isTest) {
+            var frstLevelMenus = [];
+            var length = smpMenus.length;
+            if (length > 0) {
+                var _menu = null;
+                for (var i = 0; i < length; i++) {
+                    var temp = {};
+                    _menu = smpMenus[i];
+                    temp.id = _menu.id;
+                    temp.icon = _menu.icon;
+                    temp.title = _menu.title;
+                    temp.url = _menu.url;
+                    frstLevelMenus.push(temp);
+                }
+            }
+            return frstLevelMenus;
+        }
+        var frstLevelMenus = [];
+        ////console.log(JSON.stringify(smpMenus))
+        var length = smpMenus.length;
+        ////console.log('一级菜单长度:' + length)
+        if (length > 0) {
+            var _menu = {};
+            for (var i = 0; i < length; i++) {
+                _menu = smpMenus[i];
+                ////console.log('LEVEL:' + _menu.LEVEL)
+                if (_menu.LEVEL == 1) {
+                    var temp = {};
+                    temp.id = _menu.URIGHT_ID;
+                    temp.icon = _menu.ICON;
+                    temp.title = _menu.URIGHT_NAME;
+                    temp.url = _menu.FUNC;
+                    temp.name = _menu.MODULE_NAME;
+                    frstLevelMenus.push(temp);
+                }
+            }
+        }
+        ////console.log('一级菜单：' + JSON.stringify(frstLevelMenus))
+        return frstLevelMenus;
+    };
+    //获取二级菜单
+    m.getTwoLevelMenus = function (id) {
+        var smpMenus = getSmpMenus();
+        if (config.isTest) {
+            var twoLevelMenus = [];
+            var length = smpMenus.length;
+            if (length > 0) {
+                var _menu = null;
+                for (var i = 0; i < length; i++) {
+                    _menu = smpMenus[i];
+                    if (id == _menu.id) {
+                        twoLevelMenus = _menu.children;
+                        break;
+                    }
+                }
+            }
+            return twoLevelMenus;
+        }
+        var twoLevelMenus = [];
+        var length = smpMenus.length;
+        //console.log('length:' + length);
+        //console.log(JSON.stringify(smpMenus[0]))
+        if (length > 0) {
+            for (var i = 0; i < length; i++) {
+                var _menu = smpMenus[i];
+                if (id == _menu.PARENT_ID) {
+                    var temp = {};
+                    temp.id = _menu.URIGHT_ID;
+                    temp.icon = _menu.ICON;
+                    temp.title = _menu.URIGHT_NAME;
+                    temp.url = _menu.FUNC;
+                    temp.bgColor = _menu.BACKGROUND_COLOR;
+                    temp.name = _menu.MODULE_NAME;
+                    twoLevelMenus.push(temp);
+                }
+            }
+        }
+        return twoLevelMenus;
+    }
+}(window.smp_menu = {}));

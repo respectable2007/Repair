@@ -42,6 +42,7 @@
 		  var nwaiting = null;
 		  function launchScreen() {
 		    var showGuide = localStorage.getItem('lauchFlag');
+		    showGuide = true;
 		    if (showGuide) {
 		      plus.navigator.closeSplashscreen();
 		      plus.navigator.setFullscreen(false);

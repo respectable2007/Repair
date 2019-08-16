@@ -170,6 +170,26 @@
 					"guide.html",
 					"index.html"
 				]
+			},
+			"index.html": {
+				"resources": [
+					"pages/home.html"
+				],
+				"refer": [
+					"pages/my.html"
+				],
+				"priority": 0
+			},
+			"pages/home.html": {
+				"resources": [],
+				"refer": [
+					"pages/home/alarm/order-detail.html",
+					"pages/home/maintain/order-detail.html",
+					"pages/home/polling/order-detail.html",
+					"pages/home/task-main.html",
+					"pages/home/waitdo-task-main.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

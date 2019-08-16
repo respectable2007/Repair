@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title></title>
     <link href="css/mui.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="css/app.css"/>
+    <link rel="stylesheet" href="css/iconfont.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body>
   <nav id='app' class="mui-bar mui-bar-tab mui-bar-footer">
   	<a class="mui-tab-item" :class= '{"mui-active":!index}'
   		v-for='(item,index) in tabbar'
   		:id='item.id'
-  		:href="item.url">
-  	  <span class="mui-icon" :class="item.con"></span>
+  		:key='item.id'
+  		:data-id="item.url">
+  	  <span class="mui-icon" :class="item.icon"></span>
   	  <span class="mui-tab-label">{{item.title}}</span>
   	</a>
   </nav>  
@@ -23,11 +25,19 @@
   <script src="js/common/config.js" type="text/javascript"></script>
   <script src="js/common/global.js" type="text/javascript"></script>
   <script src="js/common/mockdata.js" type="text/javascript"></script>
-  <script type="text/javascript" charset="utf-8">
-    var app = new Vue({
+  <script type="text/javascript">
+   var firstTabbar = null,
+    aniShow = {},
+    activeTab = '',
+    views = {},
+    app = new Vue({
       el:'#app',
       data: {
-      	tabbar: []
+      	tabbar: [],
+      	subStyle: {
+      	  top: '0',
+      	  bottom: '51px'
+      	}
       },
       mounted: function() {
         mui.init({
@@ -36,7 +46,182 @@
         var self = this;
         //初始化
         mui.plusReady(function(){
-        
+          /*-------底部导航栏start--------*/
+          views = plus.webview.currentWebview();
+          self.tabbar = smp_menu.getFrstLevelMenus();//获取当前角色菜单列表
+          if(smp_menu == undefined 
+          	 || self.tabbar == undefined
+          	 || self.tabbar == null
+          	 || self.tabbar == ''
+          	 || JSON.stringify(self.tabbar[0]) == '{}'
+            ){
+              localStorage.removeItem('$loginstate');
+              return;
+            }
+            var length = self.tabbar.length,
+                _tabbar = self.tabbar[0],
+                sub = plus.webview.create(_tabbar.url, _tabbar.url,self.subStyle),//生成一个窗口，窗口、id、窗口样式
+                temp = {},
+                active_color = '#f5f5f5';
+            firstTabbar = sub;
+            temp[0] = "true";
+            mui.extend(aniShow, temp);//对象合并
+            views.append(sub);//当前webview窗口添加子窗口
+            activeTab = self.tabbar[0].url;
+            localStorage.removeItem('$EXE_COUNT');
+            /*
+             * 底部凸起按钮，绘制带边框的半圆
+             * bg-带边框的圆
+             * bg2-创建白色矩形遮住圆下半部分，只显示凸起带边框部分
+             * iconBg-背景图
+             * icon-字体图标
+             * 注意先后顺序，创建越晚层级越高
+             */
+            var leftPos = Math.ceil((window.innerWidth - 60)/2),
+                drawNativeIcon = g.drawNative('icon',{
+                  bottom: '5px',
+                  left:leftPos + 'px',
+                  width: '60px',
+                  height: '60px'
+                },[{
+                  tag: 'rect',
+                  id: 'bg',
+                  position: {
+                  	top: '1px',
+                  	left: '0',
+                  	width: '100%',
+                  	height: '100%'
+                  },
+                  rectStyles: {
+                  	color: '#fff',
+                  	radius: '50%',
+                  	borderColor: '#ccc',
+                  	borderWidth: '1px'
+                  }
+                }, {
+				    tag: 'rect',
+				    id: 'bg2',
+				    position: {
+				        bottom: '-0.5px',
+				        left: '0px',
+				        width: '100%',
+				        height: '45px'
+				    },
+				    rectStyles: {
+				        color: '#F5F5F5'
+				    }
+				}, {
+				    tag: 'rect',
+				    id: 'iconBg',
+				    position: {
+				        top: '5px',
+				        left: '5px',
+				        width: '50px',
+				        height: '50px'
+				    },
+				    rectStyles: {
+				        color: '#66B96A',
+				        radius: '50%'
+				    }
+				}, {
+				    tag: 'font',
+				    id: 'icon',
+				    text: '\ue625', //此为字体图标Unicode码'\e600'转换为'\ue600'
+				    position: {
+				        top: '0px',
+				        left: '5px',
+				        width: '50px',
+				        height: '100%'
+				    },
+				    textStyles: {
+				        fontSrc: '_www/fonts/iconfont.ttf',
+				        align: 'center',
+				        color: '#F5F5F5',
+				        size: '30px'
+				    }
+				}]);
+            views.append(drawNativeIcon);
+            drawNativeIcon.addEventListener('click', function(e){
+              if(firstTabbar != null
+              	&& (activeTab == 'pages/home.html'
+              	  || activeTab == 'pages/action-home.html'
+              	  || activeTab == 'pages/repair-home.html'
+              	)
+              ){
+              	firstTabbar.evalJS('showRepair()')
+              }
+              if(active_color == '#fff'){
+              	drawNativeIcon.drawText('\ue625',{},{
+              	  fontSrc: '_www/fonts/iconfont.ttf',
+              	  align: 'center',
+              	  color: '#000',
+              	  size: '30px'
+              	},'icon');
+              	active_color = '#000';
+              }else{
+              	drawNativeIcon.drawText('\ue625',{},{
+              	  fontSrc: '_www/fonts/iconfont.ttf',
+              	  align: 'center',
+              	  color: '#fff',
+              	  size: '30px'
+              	},'icon');
+              	active_color = '#fff';
+              }
+            })
+          //底部凸起按钮end
+         //底部导航栏绑定点击事件
+         mui('.mui-bar-tab').on('tap','a',function(e){
+           var _self = this,
+               targetTab = _self.getAttribute('data-id');
+           if(targetTab == activeTab) {
+           	 return;
+           }
+           showPage(targetTab);//显示子窗口
+           plus.webview.hide(activeTab);//隐藏子窗口
+           activeTab = targetTab;
+         })
+         //自定义事件，模拟单击‘首页选项卡’
+         document.addEventListener('gohome',function(){
+           var defaultTab = document.getElementById('home');
+           mui.trigger(defaultTab,'tap');
+           var current = document.querySelector('.mui-bar-tab > .mui-tab-item.mui-active');
+           if(defaultTab !== current) {
+           	 current.classList.remove('mui-active');
+           	 defaultTab.classList.add('mui-active');
+           }
+         })
+         //显示要激活窗口
+         function showPage(tab){
+           var currentWebview = plus.webview.getWebviewById(tab);//获取要激活子窗口id
+           if(!currentWebview) {
+           	
+             currentWebview = plus.webview.create(tab, tab, app.subStyle);//生成子窗口,app.subStyle-vue实例
+             views.append(currentWebview);//添加到当前主窗口
+           }
+           if(mui.os.ios || aniShow[tab]) {
+           	 plus.webview.show(currentWebview);
+           } else {
+           	 plus.webview.show(currentWebview, "fade-in", 300);
+           }
+         }        
+         /*-------底部导航栏end--------*/
+         /*
+          * 连续点击两下Home键，App自动退出
+          */
+          var first = null;
+          mui.back = function(){
+          	if(!first) {
+          	  first = new Date().getTime();
+          	  plus.nativeUI.toast('再按一次退出应用');
+          	  setTimeout(function(){
+          	  	first = null;
+          	  },1000)
+          	}else{
+      		  if(new Date().getTime() - first <= 1000) {
+      			plus.runtime.quit()
+      		  }
+          	}
+          }
         })
       }
     })

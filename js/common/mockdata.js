@@ -567,7 +567,20 @@ if (config.isMock) {
             "P": [],
             "R": false
         }
+  },
+  BillWorkbenchData = {
+  	"StatusCode": 200,
+    "Message": null,
+    "Data": {
+        "cCount": 0,
+        "mCount": 0,
+        "rCount": 2,
+        "cRob": false,
+        "mRob": false,
+        "rRob": true
+    }
   };
+  
   //登录
   Mock.mock(config.loginUrl, null, function(options){
   	var _body = JSON.parse(options.body),
@@ -614,4 +627,6 @@ if (config.isMock) {
       "CREATE-TIME": "2018-09-19T11:04:06"
     }]
   });
+  //获取列表条码数
+  Mock.mock(config.BillWorkbench, BillWorkbenchData);
 }

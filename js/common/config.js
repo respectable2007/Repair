@@ -38,6 +38,8 @@
   owner.GetFaultType = apiDomain + 'api/Repair/GetFaultType';
   //登录
   owner.loginUrl = apiDomain + 'api/Base/LoginApp';
+  /*工单类*/
+  owner.BillWorkbench = apiDomain + '/api/Maintain/BillWorkbench'; //工作台
 }(window.config = {}));
 
 //APP角色类型
@@ -47,3 +49,21 @@
   owner.repairman = 'repairman';//维修人员
   owner.customer = 'customer';//报修人员
 })(window.comm = {})
+/** 
+ * 任务类型 -工作台模块
+ */
+var TaskType = {
+    //维修
+    repair: {
+        value: 'repair',
+        name: 'repair'
+    },
+    polling: {
+        value: 'polling',
+        name: 'polling'
+    },
+    maintain: {
+        value: 'maintain',
+        name: 'maintain'
+    }
+}
