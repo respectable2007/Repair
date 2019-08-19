@@ -187,7 +187,8 @@
 					"pages/home/maintain/order-detail.html",
 					"pages/home/polling/order-detail.html",
 					"pages/home/task-main.html",
-					"pages/home/waitdo-task-main.html"
+					"pages/home/waitdo-task-main.html",
+					"pages/home/add-repair-content.html"
 				],
 				"priority": 0
 			}

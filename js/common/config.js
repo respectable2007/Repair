@@ -27,10 +27,10 @@
   	//是否开启日志，控制台日志开关
   	owner.OpenLog = false;
   } else {
-  	apiDomain = 'http://www.repairtest.com';
-  	owner.apkUrl = apiDomain + '/App/android.apk';
   	owner.isMock = true;
   	owner.OpenLog = true;
+  	apiDomain = 'http://www.repairtest.com';
+  	owner.apkUrl = apiDomain + '/app/android.apk';
   }
   /*
    * 接口
@@ -40,6 +40,8 @@
   owner.loginUrl = apiDomain + 'api/Base/LoginApp';
   /*工单类*/
   owner.BillWorkbench = apiDomain + '/api/Maintain/BillWorkbench'; //工作台
+  /*基础类*/
+  owner.GetBuildsPage = apiDomain + '/api/Base/GetBuildsPage'; //建筑信息列表	
 }(window.config = {}));
 
 //APP角色类型

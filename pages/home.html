@@ -102,26 +102,26 @@
 	  	      methods: {
 	  	      	//跳转到待修页面
 	  	      	toWaitDoTask: function(item,index){
-	  	      	  g.openWindow({
-	  	      	  	url: 'home/waitdo-task-main.html',
-	  	      	  	id: 'waitdo-task-main',
-	  	      	  	extras: {
-	  	      	  	  typeid: item.name,
-	  	      	  	  index: index,
-	  	      	  	  headData: this.result.list
-	  	      	  	}
-	  	      	  })
+//	  	      	  g.openWindow({
+//	  	      	  	url: 'home/waitdo-task-main.html',
+//	  	      	  	id: 'waitdo-task-main',
+//	  	      	  	extras: {
+//	  	      	  	  typeid: item.name,
+//	  	      	  	  index: index,
+//	  	      	  	  headData: this.result.list
+//	  	      	  	}
+//	  	      	  })
 	  	      	},
 	  	      	//跳转到模块详情页面
 	  	      	goTaskType: function(name, title, url){
-	  	      	  g.openWindow({
-	  	      	    url:url,
-	  	      	    id:url,
-	  	      	    extras: {
-	  	      	      typeid: name,
-	  	      	      title: title
-	  	      	    }
-	  	      	  })
+//	  	      	  g.openWindow({
+//	  	      	    url:url,
+//	  	      	    id:url,
+//	  	      	    extras: {
+//	  	      	      typeid: name,
+//	  	      	      title: title
+//	  	      	    }
+//	  	      	  })
 	  	      	},
 	  	      	//点击立即处理按钮，跳转到待修任务页面
 	  	      	handleTap: function(){
@@ -129,7 +129,8 @@
 	  	      	},
 	  	      	//任务数
 	  	      	loadTaskNum: function(){
-	  	      	  this.result.list = g.getCount(app.result.list, app.getNumber);
+	  	      	  this.result.list = [];
+//	  	      	  this.result.list = g.getCount(app.result.list, app.getNumber);
 	  	      	},
 	  	      	//总任务数
 	  	      	getNumber: function(number){

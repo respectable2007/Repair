@@ -42,7 +42,7 @@
 		  var nwaiting = null;
 		  function launchScreen() {
 		    var showGuide = localStorage.getItem('lauchFlag');
-		    showGuide = true;
+//		    showGuide = true;
 		    if (showGuide) {
 		      plus.navigator.closeSplashscreen();
 		      plus.navigator.setFullscreen(false);
@@ -100,7 +100,6 @@
 		  	  	  password: passwordBox.value.trim()
 		  	  	};
 		  	  	u.login(loginInfo, function(err) {
-		  	  	  console.log('start');
 		  	  	  mui.toast(err);
 		  	  	  if (err) {
 		  	  	  	plus.nativeUI.toast(err);
