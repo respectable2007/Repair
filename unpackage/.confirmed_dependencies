@@ -1,33 +1,33 @@
 {
-	"login.html": {
-		"href": "login.html",
-		"resources": [
-			"css/mui.min.css",
-			"js/mui.min.js"
-		],
-		"refer": [
-			"guide.html",
-			"index.html"
-		],
-		"priority": 0
-	},
-	"index.html": {
-		"resources": [
-			"pages/home.html"
-		],
-		"refer": [
-			"pages/my.html",
-			"pages/home.html"
-		]
-	},
-	"pages/home.html": {
-		"refer": [
-			"pages/home/alarm/order-detail.html",
-			"pages/home/maintain/order-detail.html",
-			"pages/home/polling/order-detail.html",
-			"pages/home/task-main.html",
-			"pages/home/waitdo-task-main.html",
-			"pages/home/add-repair-content.html"
-		]
-	}
+  "login.html": {
+    "href": "login.html",
+    "resources": [
+      "css/mui.min.css",
+      "js/mui.min.js"
+    ],
+    "refer": [
+      "guide.html",
+      "index.html"
+    ],
+    "priority": 0
+  },
+  "index.html": {
+    "resources": [
+      "pages/home.html"
+    ],
+    "refer": [
+      "pages/my.html",
+      "pages/home.html"
+    ]
+  },
+  "pages/home.html": {
+    "refer": [
+      "pages/home/alarm/order-detail.html",
+      "pages/home/maintain/order-detail.html",
+      "pages/home/polling/order-detail.html",
+      "pages/home/task-main.html",
+      "pages/home/waitdo-task-main.html",
+      "pages/home/add-repair-content.html"
+    ]
+  }
 }

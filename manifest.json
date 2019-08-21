@@ -37,7 +37,13 @@
 		"Maps": {
 			"description": "管理地图插件"
 		},
-		"Speech": {}
+		"Speech": {},
+		"Zip": {
+		  "description": "压缩与解压"
+		},
+		"Camera": {
+		  "description": "摄像头"
+		}
 	},
 	"plus": {
 		"splashscreen": {

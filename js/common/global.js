@@ -46,6 +46,19 @@
   	})
   	plus.storage.setItem('$menu', m);
   }
+  function pad2(n) {
+    return n < 10 ? '0' + n : n
+  }
+  /**
+   * 获取当前时间
+   * @param {Object} id
+   */
+  owner.getCurrentTimeFormat = function(){
+  	var oDate = new Date();
+  	return oDate.getFullYear().toString() + pad2(oDate.getMonth() + 1)
+  	       +  pad2(oDate.getDay()) + pad2(oDate.getHours())
+  	       + pad2(oDate.getMinutes()) + pad2(oDate.getSeconds());
+  }
   /**
    * 获取菜单
    * @param {Object} id
@@ -65,7 +78,7 @@
   	var _uuid = config.uuid;
   	mui.ajax(url, {
   	  async: json.async || true,
-  	  data: json.data,
+  	  data: json.data || '',
   	  dataType: 'json',
   	  type: json.type,
   	  timeout: 20000,
