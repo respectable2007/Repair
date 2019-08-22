@@ -100,10 +100,13 @@
                         var _value = _me.split(arr[s]);
                         //sql += 'INSERT INTO ' + tableName + ' (' + _key + ') VALUES (' + _value + ')';
                         //console.log("sql:" + sql);
+                        console.log(_key)
+                        console.log(_value)
                         tx.executeSql('INSERT INTO '+tableName+' ('+_key+') VALUES ('+_value+')',[],function (tx, result) {
-                            callback(result.rowsAffected);
                             //console.log('添加成功'+result.rowsAffected);
+                            callback(result.rowsAffected);
                         },function (tx, error) {
+                        	console.log(error)
                             console.error('添加失败');
                             callback(false);
                         });

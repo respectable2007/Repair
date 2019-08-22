@@ -36,6 +36,9 @@
   	})
   	window.localStorage.setItem(key.toString(), value);
   }
+  owner.getUserInfo = function() {
+  	return g.getItem('$userinfo');
+  }
   /**
    * 设置菜单
    * @param {Object} id
@@ -53,12 +56,76 @@
    * 获取当前时间
    * @param {Object} id
    */
+  //日期格式化处理
   owner.getCurrentTimeFormat = function(){
   	var oDate = new Date();
   	return oDate.getFullYear().toString() + pad2(oDate.getMonth() + 1)
   	       +  pad2(oDate.getDay()) + pad2(oDate.getHours())
   	       + pad2(oDate.getMinutes()) + pad2(oDate.getSeconds());
   }
+  owner.formatDate = function(value, type) {
+    if (value == undefined || value == null || value == 'null') {
+        return '';
+    }
+
+    var dataTime = "";
+    var date;
+    if (!value) {
+        return dataTime;
+    }
+    else if (value == 'D') {
+        date = new Date();
+    }
+    else if (value.toString().indexOf('T') >= 0) {
+        value = value.toString().replace('T', ' ');
+        date = new Date(value);
+    } else {
+        date = new Date(value);
+    }
+    if (date.toString() == 'Invalid Date') {
+        if (type == 'YMDHMS') {
+            return value;
+        }
+        else if (type == 'YMDHM') {
+            //console.log(type + ':' + value.split(':')[0] + value.split(':')[1]);
+            return value.split(':')[0] + ':' + value.split(':')[1];
+        }
+        else if (type == 'YMD') {
+            return value.split(' ')[0];
+        }
+    }
+    ////console.log('data:' + value + ',' + date);
+    var year = date.getFullYear();
+    var month = addZero(parseInt(date.getMonth()) + 1);
+    var day = addZero(date.getDate());
+    var hour = addZero(date.getHours());//getUTCHours
+    var minute = addZero(date.getMinutes());
+    var second = addZero(date.getSeconds());
+
+    if (type == "YMD") {
+        dataTime = year + "-" + month + "-" + day;
+    } else if (type == "YMDHMS") {
+        dataTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+    } else if (type == "YMDHM") {
+        dataTime = year + "-" + month + "-" + day + " " + hour + ":" + minute;
+    }
+    else if (type == "HMS") {
+        dataTime = hour + ":" + minute + ":" + second;
+    } else if (type == "YM") {
+        dataTime = year + "-" + month;
+    } else if (type == "MD") {
+        dataTime = month + "-" + day;
+    }
+    ////console.log('dataTime;' + dataTime);
+    return dataTime;
+  }
+  function addZero(val) {
+    if (val < 10) {
+      return "0" + val;
+    } else {
+      return val;
+    }
+   };
   /**
    * 获取菜单
    * @param {Object} id

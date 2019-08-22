@@ -4,6 +4,33 @@
  
  
 /*------------------------------用户登录权限start-------------------------------------*/
+var _database = new smpWebSql();
+//生成一个GUID（取16位）伪随机数
+function newGuid() {
+    var guid = "";
+    for (var i = 1; i <= 16; i++) {
+        var n = Math.floor(Math.random() * 16.0).toString(16);
+        guid += n;
+        if ((i == 8) || (i == 12))
+            guid += "-";
+    }
+    console.log(guid)
+    return guid;
+}
+function getNamebyTypeId(typeId) {
+    var result = "";
+    switch (typeId) {
+        case "GZDT01":
+            result = "电梯故障";
+            break;
+        case "GZDT02":
+            result = "水表坏了";
+            break;
+        default:
+            break;
+    }
+    return result;
+}
 //项目经理菜单权限
 var pmObj = {
     "StatusCode": 200,
@@ -795,4 +822,73 @@ if (config.isMock) {
   Mock.mock(config.BillWorkbench, BillWorkbenchData);
   //获取建筑数据列表
   Mock.mock(config.GetBuildsPage, GetBuildsPageData);
+  //提交维修工单
+  Mock.mock(config.AddRepairBill, null, function(option){
+  	var _body = JSON.parse(option.body),
+  	    no = newGuid(),
+  	    obj = {
+            "NO": no,
+            "ORG_CODE": _body.ORG_CODE,
+            "EQT_WORK_ID": "0",
+            "IS_URGENCY": _body.IS_URGENCY,
+            "STATE": _body.STATE,
+            "REPORT_USER_CODE": _body.REPORT_USER_CODE,
+            "CREATE_USER_ID": _body.CREATE_USER_ID,
+            "REPORT_USER_NAME": _body.REPORT_USER_NAME,
+            "REPORT_ROLE_ID": _body.REPORT_ROLE_ID,
+            "PHONE": _body.PHONE,
+            "DEPT_CODE": _body.DEPT_CODE,
+            "FAULT_INFO": _body.FAULT_INFO,
+            "ADDRESS": _body.ADDRESS,
+            "SOURCE": "C",
+            "FAULT_TYPE": _body.FAULT_TYPE,
+            "LABOR_COST": 0,
+            "PART_COST": 0,
+            "SUMMARY": null,
+            "RECEIVE_TYPE": 0,
+            "BOOK_TIME": null,
+            "EQ_ID": null,
+            "EQP_NAME": null,
+            "ACCEPT_USER_ID": "1",
+            "SIGN_TIME": null,
+            "ACCEPT_TIME": null,
+            "DISPATCH_USER_ID": null,
+            "FINISH_SIGN": null,
+            "FINISH_TIME": null,
+            "FINISH_INFO": null,
+            "DISPATCH_TIME": null,
+            "NEED_HELP": false,
+            "NEED_DISPATCH": false,
+            //"HELP_SEND_USER_ID": null,
+            "HELP_SEND_TIME": null,
+            "CONFIRM_USER_ID": null,
+            "CONFIRM_TIME": null,
+            "CONFIRM_STATUS": 0,
+            "CONFIRM_SIGN": null,
+            "REPORT_TIME": _body.REPORT_TIME,
+            "PRESS_NUM": 0,
+            "PRESS_FIRST_TIME": "2018-10-11T15:40:40",
+            "PRESS_LAST_TIME": "2018-10-11T15:40:40",
+            "MEMO": null,
+            //"DEPT_CODE_NAME": "",
+            //"FAULT_NAME": getNamebyTypeId(_body.FAULT_TYPE),
+            //"REPAIR_USER_NAME": null,
+            //"REPAIR_DEPT_NAME": null,
+            //"MONEY": 2,
+            //"HOURS": 1,
+            "IS_WAITING": 0,
+            "OTHER_DEV_NAME": null,
+            "BUILD_ID": _body.BUILD_ID,
+            "LIMIT_TIME": _body.LIMIT_TIME || null,
+            "BUILD_NAME": _body.BUILD_NAME,
+            "DIST_ID": "440303",
+            //"IsOverTime": 0,
+            "sys_updatetime": new Date().toLocaleString()
+        };
+    _database.add('tb_repairbill_g', [obj],function(res){
+      console.log(res);
+      console.log('添加维修工单成功');
+    });
+    return {"StatusCode": 200,"Message":null,"Data":no};
+  });
 }

@@ -42,6 +42,8 @@
   owner.BillWorkbench = apiDomain + '/api/Maintain/BillWorkbench'; //工作台
   /*基础类*/
   owner.GetBuildsPage = apiDomain + '/api/Base/GetBuildsPage'; //建筑信息列表	
+  /*维修*/
+  owner.AddRepairBill = apiDomain + '/api/Repair/AddRepairBill'; //维修报修
 }(window.config = {}));
 
 //APP角色类型

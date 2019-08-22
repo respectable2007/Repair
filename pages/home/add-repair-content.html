@@ -120,7 +120,10 @@
 	  	<!--主页表单部分-->
 	  	<div class="mui-inner-wrap">
 	  	  <nav class="mui-bar mui-bar-tab">
-	  	  	<button id='btnSubmit' type="button" class="mui-btn mui-btn-primary mui-btn-block">
+	  	  	<button id='btnSubmit' 
+	  	  		    type="button" 
+	  	  		    class="mui-btn mui-btn-primary mui-btn-block"
+	  	  		    @tap='handleSubmit()'>
 	  	  	  提交
 	  	  	</button>
 	  	  </nav>
@@ -171,8 +174,7 @@
 	  	  	  	  	   :id='"Img"+item.name+item.divid'>
 	  	  	  	  	<img id='picBig' 
 	  	  	  	  		 class="file"
-	  	  	  	  		 data-preview-src=''
-	  	  	  	  		 data-preview-group="1"
+	  	  	  	  		 :id='index'
 	  	  	  	  		 :src='item.url'/>
 	  	  	  	  	<span class="del image-close"
 	  	  	  	  		  @tap='handleClearImg(item, index)'>
@@ -195,12 +197,13 @@
 	  	  	  	<label>限定时间</label>
 	  	  	  	<input type="text" id="date"
 	  	  	  		   class="mui-navigate-right" placeholder="请选择时间"
-	  	  	  		   readonly="readonly" />
+	  	  	  		   readonly="readonly"
+	  	  	  		   :value="limitTime" />
 	  	  	  	<i class="mui-icon mui-icon-arrowright"></i>
 	  	  	  </div>
 	  	  	  <div class="mui-input-row">
 	  	  	  	<label>是否紧急</label>
-	  	  	  	<div class="mui-switch mui-switch-blue">
+	  	  	  	<div id='isUrgency' class="mui-switch mui-switch-blue">
 	  	  	  	  <div class="mui-switch-handle"></div>
 	  	  	  	</div>
 	  	  	  </div>
@@ -209,16 +212,20 @@
 	  	</div>
 	  </div>
 	  <script src="../../js/mui.min.js" type  ="text/javascript"></script>
-	  <script src="../../js/libs/mui.picker.min.js" type  ="text/javascript"></script>
 	  <script src="../../js/libs/vue.min.js" type  ="text/javascript"></script>
+	  <script src="../../js/libs/mui.picker.min.js" type  ="text/javascript"></script>
+	  <!--<script src="../../js/libs/mui.zoom.js" type  ="text/javascript"></script>
+	  <script src="../../js/libs/mui.previewimage.js" type  ="text/javascript"></script>-->
 	  <script src="../../js/common/config.js" type  ="text/javascript"></script>
 	  <script src="../../js/libs/mock-min.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/global.js" type  ="text/javascript"></script>
+	  <script src="../../js/common/webSql.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/mockdata.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/web-storage-cache.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/json.js" type  ="text/javascript"></script>
 	  <script type="text/javascript">
 	  	mui.init();
+//	  	mui.previewImage();
         var defaultTxt = "搜索建筑名称（必填）",
             //分页
             pageSize = 1000,
@@ -241,12 +248,15 @@
 		      data: {
 		      	repairType:0,//文字报修
 		      	faultName: '',
+		      	limitTime: '',
 		      	data_v: {
 		      	  BUILD_NAME: defaultTxt,
 		      	  ADDRESS: '',
 		      	  BUILD_ID: '',
 		      	  FAULT_INFO: '',
-		      	  FAULT_TYPE: ''
+		      	  FAULT_TYPE: '',
+		      	  LIMIT_TIME: '',
+		      	  IS_URGENCY: 0
 		      	},
 		      	search: '',
 		      	autoSearchList: [],
@@ -283,6 +293,16 @@
 			      	id: 'mui-content',
 			        h: g.getScreenInfo('width')
 			      })
+		      	})
+		      	//图片预览
+		      	mui.plusReady(function(){
+		      	  mui('body').on('tap', 'img', function(e) {
+		      	  	plus.nativeUI.previewImage(smpImgArray,{
+		      	  	  current: e.target.id,
+		      	  	  loop: true,
+		      	  	  indicator:'number'
+		      	  	})
+		      	  })
 		      	})
 		      },
 		      methods: {
@@ -336,6 +356,7 @@
 		      	//删除照片
 		      	handleClearImg: function(item, index){
 		      	  this.imgItemList.splice(index, 1);
+		      	  smpImgArray.splice(index, 1);
 		      	},
 		      	//故障类型选择
 		      	handlePicker: function(){
@@ -345,7 +366,7 @@
 		      	  g.ajax(config.GetFaultType,{
 		      	    type: 'get',
 		      	    success: function(data){
-		      	      if(data.StatusCode === '200') {
+		      	      if(data.StatusCode === 200) {
 		      	      	for(var i = 0, lens = data.Data.length; i < lens; i++) {
 		      	      	  dv.push({
 		      	      	  	value: data.Data[i].CODE,
@@ -355,7 +376,7 @@
 		      	      }
 		      	      picker.setData(dv);
 		      	      picker.show(function(item){
-		      	      	self.faultName = item[0].value;
+		      	      	self.faultName = item[0].text;
 		      	      	self.data_v.FAULT_TYPE = item[0].value;
 		      	      })
 		      	    }
@@ -363,10 +384,66 @@
 		      	},
 		      	//日期选择
 		      	handleDatePicker: function(){
-		      	  
+		      	  var dtPicker = new mui.DtPicker(),
+		      	      self = this;
+		      	  dtPicker.show(function(item){
+		      	  	self.limitTime = item.text;
+		      	  	self.data_v.LIMIT_TIME = item.text;
+		      	  })
+		      	},
+		      	//提交工单
+		      	handleSubmit: function(){
+		      	 if(!this.data_v.BUILD_NAME || this.data_v.BUILD_NAME == defaultTxt) {
+		      	   mui.toast('建筑名称不能为空！')
+//		      	   return;
+		      	 }
+		      	 if(!this.data_v.ADDRESS) {
+		      	   mui.toast('建筑地址不能为空！')
+		      	   return;
+		      	 }
+		      	 if(!this.data_v.FAULT_INFO) {
+		      	   mui.toast('故障描述不能为空！')
+		      	   return;
+		      	 }
+		      	  //是否紧急
+	      	  	  this.data_v.IS_URGENCY = document.getElementById('isUrgency').classList.contains("mui-active")
+	      	  	                         ? 1 : 0;
+                  this.data_v.REPORT_TIME = g.formatDate('D', 'YMDHMS');
+                  var userInfo = g.getUserInfo();
+                  this.data_v.REPORT_USER_NAME = userInfo.NAME;
+                  this.data_v.PHONE = userInfo.PHONE;
+                  this.data_v.REPORT_USER_NAME = 'userInfo.NAME';
+                  this.data_v.PHONE = '12345678';
+//                document.getElementById('btnSubmit').setAttribute('disabled', true);
+                  var str = '{ "StatusCode": 200, "Message": "上传成功", "Data": [';
+                  if(this.imgItemList.length > 0 ) {
+                  	for(var j = 0, len = this.imgItemList.length; j < len; j++){
+                  	  var key = this.imgItemList[j];
+                  	  str +='{"Name":"' + key +'","code:""' + key + '"}';
+                  	}
+                  	str += ']}';
+                  } else {
+                  	str += '{ "Name": "", "code": "" }] }';
+                  }
+                  upData(str);
 		      	}
 		      }
 		    });
+	  function upData(s) {
+	  	if(s == null || s == '' || JSON.parse(s).Data.length < 1) {
+	  	  return;
+	  	}
+	  	mui.plusReady(function(){
+	  	  console.log(1);
+	  	  g.ajax(config.AddRepairBill,{
+		  	data: JSON.stringify(app.data_v),
+		  	success: function(data) {
+		  	  console.log(data);
+              document.getElementById('btnSubmit').setAttribute('disabled', false);
+		  	}
+		 })
+	  	})
+	  }
 	  //获取建筑列表
 	  function getListAll() {
 	  	pageIndex = 0;
@@ -481,7 +558,7 @@
 	  	}
 	  	return false;
 	  }
-      //图片上传
+      //相册选择或拍照
       function showActionSheet(item) {
       	var divid = item.id,
       	   imgCount = item.imgCount || 5,
