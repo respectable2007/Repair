@@ -3,6 +3,91 @@
  * 公共方法
  */
 (function($, owner){
+	owner.AppRoleType = localStorage.getItem('$appRoleType');
+	//订单生成时的初始化状态名称
+    owner.getOrderInitStatusText = function () {
+        var txt = '';
+        var roleType = g.AppRoleType;
+        //console.log('roleType:' + roleType)
+        switch (roleType) {
+            case comm.repairman: //运维人员
+            case comm.leader: //班组
+                txt = '待抢单';
+                break;
+            case comm.customer:
+                txt = '待接受';
+                break;
+            case comm.pm:
+                txt = '待派工';
+                break;
+            default:
+                txt = '待抢单';
+                break;
+        }
+        ////console.log('角色ID:' + roleid)
+        return txt;
+    }
+	/**
+	 * 工单状态
+	 */
+	var WorkOrderStatus = {
+	    waitOrder: {
+	        value: 'A',
+	        text: g.getOrderInitStatusText()
+	    },
+	    waitSignin: {
+	        value: 'B',
+	        text: '待签到'
+	    },
+	    waitOver: {
+	        value: 'C',
+	        text: '待完工'
+	    },
+	    waitAudit: {
+	        value: 'D',
+	        text: '待评价'
+	    },
+	    Revoke: {
+	        value: 'F',
+	        text: '已撤单'
+	    },
+	    Over: {
+	        value: 'E',
+	        text: '已结束'
+	    }
+	}
+	/**
+	 * 获取工单状态
+	 */
+    owner.getOrderStatusPicker = function (typeid, tag) {
+        var picker = new mui.PopPicker(),
+            aVal = { value: 'A', text: '待接受' }, //巡检保养初始化状态
+            aInitVal = { value: 'A', text: g.getOrderInitStatusText() }; //维修初始化状态
+        switch (typeid) {
+            case TaskType.repair.value:
+                if (tag == "action") {
+                    picker.setData([{
+                        value: null,
+                        text: '全部'
+                    }, aInitVal, WorkOrderStatus.waitSignin, WorkOrderStatus.waitOver, WorkOrderStatus.Revoke, WorkOrderStatus.Over]);
+                } else if (tag == "manage") {
+                    picker.setData([{
+                        value: null,
+                        text: '全部'
+                    }, aInitVal, WorkOrderStatus.waitSignin, WorkOrderStatus.waitOver, WorkOrderStatus.Revoke, WorkOrderStatus.Over]);
+                }
+                else {
+                    picker.setData([{
+                        value: null,
+                        text: '全部'
+                    }, aInitVal, WorkOrderStatus.waitSignin, WorkOrderStatus.waitOver, WorkOrderStatus.waitAudit, WorkOrderStatus.Revoke, WorkOrderStatus.Over]);
+                }
+                break;
+            default:
+                break;
+        }
+        return picker;
+    }
   /**
    * 根据id获取dom节点
    * @param {Object} id

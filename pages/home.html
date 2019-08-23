@@ -23,13 +23,13 @@
 	      <div class="divBtn">
 	      	<button type="button" 
 	      		    class="mui-btn mui-btn-primary"
-	      		    :tap='handleTap'>立即处理</button>
+	      		    @tap='handleTap'>立即处理</button>
 	      </div>
 	      <div class="user-header-bottom" id='user-header-bottom'>
 	      	<a href="javascript:void(0);"
 	      	   v-for="(item,index) in result.list"
 	      	   class="vertical-bar"
-	      	   :tap='toWaitDoTask(item,index)'
+	      	   @tap='toWaitDoTask(item,index)'
 	      	   :id='item.id'
 	      	   :key='item.id'
 	      	   :style="{width:100/(result.list.length) + '%'}">
@@ -49,7 +49,7 @@
 	       	   v-for='(item,index) in menus'
 	       	   :key = 'item.id'>
 	           <a href="javascript:void(0);" 
-	       	      :tap='goTaskType(item.name, item.title, item.url)'>
+	       	      @tap='goTaskType(item.name, item.title, item.url)'>
 	               <span class="mui-icon " :class="item.icon" :style="{background:item.bgColor}"></span>
 	               <div class="mui-media-body">{{item.title}}</div>
 	           </a>
@@ -102,26 +102,26 @@
 	  	      methods: {
 	  	      	//跳转到待修页面
 	  	      	toWaitDoTask: function(item,index){
-//	  	      	  g.openWindow({
-//	  	      	  	url: 'home/waitdo-task-main.html',
-//	  	      	  	id: 'waitdo-task-main',
-//	  	      	  	extras: {
-//	  	      	  	  typeid: item.name,
-//	  	      	  	  index: index,
-//	  	      	  	  headData: this.result.list
-//	  	      	  	}
-//	  	      	  })
+	  	      	  g.openWindow({
+	  	      	  	url: 'home/waitdo-task-main.html',
+	  	      	  	id: 'waitdo-task-main',
+	  	      	  	extras: {
+	  	      	  	  typeid: item.name,
+	  	      	  	  index: index,
+	  	      	  	  headData: this.result.list
+	  	      	  	}
+	  	      	  })
 	  	      	},
 	  	      	//跳转到模块详情页面
 	  	      	goTaskType: function(name, title, url){
-//	  	      	  g.openWindow({
-//	  	      	    url:url,
-//	  	      	    id:url,
-//	  	      	    extras: {
-//	  	      	      typeid: name,
-//	  	      	      title: title
-//	  	      	    }
-//	  	      	  })
+	  	      	  g.openWindowWithTitle({
+	  	      	    url:url,
+	  	      	    id:url,
+	  	      	    extras: {
+	  	      	      typeid: name,
+	  	      	      title: title
+	  	      	    }
+	  	      	  }, title);
 	  	      	},
 	  	      	//点击立即处理按钮，跳转到待修任务页面
 	  	      	handleTap: function(){

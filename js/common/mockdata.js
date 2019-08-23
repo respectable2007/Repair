@@ -817,7 +817,64 @@ if (config.isMock) {
       "MODIFY_USER_ID": null,
       "CREATE-TIME": "2018-09-19T11:04:06"
     }]
-  });
+  }),
+  QueryAllDistrictTreeData = {
+    "StatusCode": 200,
+    "Message": null,
+    "Data": [{
+        "value": "440000",
+        "text": "广东省",
+        "children": [{
+            "value": "440100",
+            "text": "广州市",
+            "children": [{
+                "value": "440100",
+                "text": "全区",
+                "children": null
+            }, {
+                "value": "440101",
+                "text": "天河区",
+                "children": null
+            }]
+        }, {
+            "value": "440300",
+            "text": "深圳市",
+            "children": [{
+                "value": "440300",
+                "text": "全区",
+                "children": null
+            }, {
+                "value": "440303",
+                "text": "罗湖区",
+                "children": null
+            }, {
+                "value": "440304",
+                "text": "福田区",
+                "children": null
+            }, {
+                "value": "440305",
+                "text": "南山区",
+                "children": null
+            }, {
+                "value": "440306",
+                "text": "宝安区",
+                "children": null
+            }, {
+                "value": "440307",
+                "text": "龙岗区",
+                "children": null
+            }, {
+                "value": "440308",
+                "text": "盐田区",
+                "children": null
+            }, {
+                "value": "440309",
+                "text": "龙华区",
+                "children": null
+            }]
+        }]
+    }]
+    };
   //获取列表条码数
   Mock.mock(config.BillWorkbench, BillWorkbenchData);
   //获取建筑数据列表
@@ -891,4 +948,6 @@ if (config.isMock) {
     });
     return {"StatusCode": 200,"Message":null,"Data":no};
   });
+  //行政区域
+  Mock.mock(config.QueryAllDistrictTree, QueryAllDistrictTreeData);
 }

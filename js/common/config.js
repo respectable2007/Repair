@@ -41,7 +41,8 @@
   /*工单类*/
   owner.BillWorkbench = apiDomain + '/api/Maintain/BillWorkbench'; //工作台
   /*基础类*/
-  owner.GetBuildsPage = apiDomain + '/api/Base/GetBuildsPage'; //建筑信息列表	
+  owner.GetBuildsPage = apiDomain + '/api/Base/GetBuildsPage'; //建筑信息列表
+  owner.QueryAllDistrictTree = apiDomain + '/api/Base/QueryAllDistrictTree'; //获取行政区域树
   /*维修*/
   owner.AddRepairBill = apiDomain + '/api/Repair/AddRepairBill'; //维修报修
 }(window.config = {}));
@@ -70,4 +71,12 @@ var TaskType = {
         value: 'maintain',
         name: 'maintain'
     }
+}
+//websql 数据表 （离线存储数据表）
+var smp_tb = {
+    repair_tb: 'tb_repair_order', //维修工单表
+    img_tb: 'tb_img_order', //工单图片表
+    signin_tb: 'tb_signin', //拍照签到表
+    over_tb: 'tb_over',//完工表
+    fault_type_tb: 'tb_faultType', //故障类型
 }
