@@ -2,8 +2,91 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no">
 		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/app.css"/>
+		<style type="text/css">
+		  .bages .mui-badge{
+		  	padding: 6px 9px;
+		  }
+		  .mui-card{
+		    box-shadow: 0 0 2px rgba(0,0,0,0.4);
+		  }
+		</style>
 	</head>
 	<body>
+	  <div id='app'>
+	  	<header class="mui-bar mui-bar-nav">
+	  	  <a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back"></a>
+	  	  <h1 class="mui-title">待处理任务</h1>
+	  	  <div class="mui-segmented-control">
+	  	  	<div class="divHeader">
+	  	  	  <a v-for='(item,index) in menu'
+	  	  	  	 class="mui-control-item">
+	  	  	    <span></span>
+	  	  	    <span class="round"></span>
+	  	  	  </a>
+	  	  	</div>
+	  	  </div>
+	  	</header>
+	  	<div class="mui-content" id='pullRefresh'>
+	  	  <div v-show='list.length'>
+	  	  	<ul v-for='(item,index) in list'
+	  	  		class="mui-table-view">
+	  	  	  <li class="mui-table-view-cell">
+	  	  	  	<div class="mui-card">
+	  	  	  	  <div class="mui-card-header">
+	  	  	  	  	工单号：{{item.orderNumber}}
+	  	  	  	  </div>
+	  	  	  	  <div class="mui-card-content">
+	  	  	  	  	<div class="mui-card-content-inner">
+	  	  	  	  	  <div class="bages">
+	  	  	  	  	  	<span class="mui-badge mui-badge-green">奖励2{{item.money}}￥</span>
+	  	  	  	  	  	<span class="mui-badge mui-badge-blue">1{{item.hour}}小时完成</span>
+	  	  	  	  	  	<span class="mui-badge mui-badge-danger" v-if='item.IS_URGENCY'>紧急</span>
+	  	  	  	  	  </div>
+	  	  	  	  	  <div class="middle">
+	  	  	  	  	  	<p>{{item.title}}</p>
+	  	  	  	  	  	<p>{{item.msg}}</p>
+	  	  	  	  	  </div>
+	  	  	  	  	</div>
+	  	  	  	  </div>
+	  	  	  	  <div class="mui-card-footer">
+	  	  	  	  	{{item.datetime}}
+	  	  	  	  	<button type="button" class="mui-btn mui-btn-default">派工</button>
+	  	  	  	  	<button type="button" class="mui-btn mui-btn-danger">抢单</button>
+	  	  	  	  </div>
+	  	  	  	</div>
+	  	  	  </li>
+	  	  	</ul>
+	  	  </div>
+	  	  <div v-show='!list.lengt'
+	  	  	   class="empty-container">
+	  	  	<div class="nodata-info">
+	  	  	  暂无任务处理
+	  	  	</div>
+	  	  </div>
+	  	</div>
+	  </div>
+	  <script src="../../js/mui.min.js" type="text/javascript"></script>
+	  <script src="../../js/libs/vue.min.js" type="text/javascript"></script>
+	  <script type="text/javascript">
+	    var ow = null,
+	        app = new Vue({
+	          el: '#app',
+	          data: {
+	          	menu: [],
+	          	list: [{
+	  	          orderNumber: 'afb1bc58-d829-89e3',
+	  	          IS_URGENCY: true,
+	  	          title: 'xx小区6栋1705号',
+	  	          msg: '锁坏了',
+	  	          datetime:'2018-11-25 13:05:35',
+	  	          status: true
+	  	        }]
+	          }
+	        })
+	  </script>
 	</body>
 </html>

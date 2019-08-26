@@ -21,6 +21,32 @@
 		  .mui-inner-wrap .mui-content{
 		  	padding-top: 46px;
 		  }
+		  .mui-table-view{
+		  	background: transparent;
+		  }
+		  .mui-card{
+		    box-shadow: 0 0 2px rgba(0,0,0,0.4);
+		  }
+		  .bages .mui-badge{
+		  	padding: 6px 9px;
+		  }
+		  .triangle-topright{
+		  	width: 0;
+		  	height: 0;
+		  	border-top:40px solid red;
+		  	border-left:40px solid transparent;
+		  	margin-top: -10px;
+            margin-right: -14px;
+		  }
+		  .triangle-topright:after{
+		  	content: '待抢单';
+		    font-size: 1px;
+		    position: absolute;
+		    top: 6px;
+		    transform: rotate(45deg);
+		    right: 0;
+		    color: #fff;
+		  }
 		</style>
 	</head>
 	<body>
@@ -102,10 +128,45 @@
 		  	</header>
 		  	<div class="mui-content mui-scroll-wrapper" id='pullRefresh'>
 		  	  <div class="mui-scroll">
-		  	  	<ul class="mui-table-view">
+		  	  	<ul class="mui-table-view" v-if='list.length'>
 		  	  	  <li class="mui-table-view-cell"
-		  	  	  	  v-for='item in list'></li>
+		  	  	  	  v-for='item in list'>
+		  	  	    <div class="mui-card">
+		  	  	      <div class="mui-card-header"
+		  	  	           @tap='handleOpenDetail(item)'>
+		  	  	      	工单号:{{item.orderNumber}}
+		  	  	      	<div class="triangle-topright" v-if='item.status'></div>
+		  	  	      </div>
+		  	  	      <div class="mui-card-content">
+		  	  	      	<div class="mui-card-content-inner">
+		  	  	      	  <div class="bages">
+		  	  	      	  	<span class="mui-badge mui-badge-green">奖励￥2{{item.money}}</span>
+		  	  	      	  	<span class="mui-badge mui-badge-blue">{{item.hour}}1小时完成</span>
+		  	  	      	  	<span class="mui-badge mui-badge-danger" v-show='item.IS_URGENCY'>紧急</span>
+		  	  	      	  </div>
+		  	  	      	  <div class="middle">
+		  	  	      	  	<p>{{item.title}}</p>
+		  	  	      	  	<p>{{item.msg}}</p>
+		  	  	      	  </div>
+		  	  	      	</div>
+		  	  	      </div>
+		  	  	      <div class="mui-card-footer">
+		  	  	      	{{item.datetime}}
+		  	  	      	<button class="mui-btn mui-btn-outlined">派工</button>
+		  	  	      	<button class="mui-btn mui-btn-danger">立即抢单</button>
+		  	  	      	<!--<button class="mui-btn mui-btn-outlined">转单</button>
+		  	  	      	<button class="mui-btn mui-btn-outlined">签到</button>
+		  	  	      	<button class="mui-btn mui-btn-outlined">完工</button>
+		  	  	      	<button class="mui-btn mui-btn-outlined">评价</button>-->
+		  	  	      </div>
+		  	  	    </div>
+		  	  	  </li>
 		  	  	</ul>
+		  	  	<div class="empty-container" v-else>
+		  	  		<div class="nodata-info">
+		  	  		   暂无工单信息
+		  	  		</div> 
+		  	  	</div>
 		  	  </div>
 		  	</div>
 	  	</div>	  	
@@ -151,24 +212,31 @@
 				  start: 0,
 				  pageSize: pageSize
 	  	        },
-	  	        list: []
+	  	        list: [{
+	  	          orderNumber: 'afb1bc58-d829-89e3',
+	  	          IS_URGENCY: true,
+	  	          title: 'xx小区6栋1705号',
+	  	          msg: '锁坏了',
+	  	          datetime:'2018-11-25 13:05:35',
+	  	          status: true
+	  	        }]
 	  	      },
 	  	      mounted: function() {
 	  	      	var self = this;
-	  	      	mui.init({
-	  	      	  pullRefresh: {
-	  	      	    container: '#pullRefresh',
-		  	      	down: {
-		  	      	  style: 'circle',
-		  	      	  callback: self.down
-		  	      	},
-		  	      	up: {
-		  	      	  auto: true,
-		  	      	  contentrefresh: '正在加载',
-		  	      	  callback: self.up
-		  	      	}
-	  	      	  }
-	  	      	})
+//	  	      	mui.init({
+//	  	      	  pullRefresh: {
+//	  	      	    container: '#pullRefresh',
+//		  	      	down: {
+//		  	      	  style: 'circle',
+//		  	      	  callback: self.down
+//		  	      	},
+//		  	      	up: {
+//		  	      	  auto: true,
+//		  	      	  contentrefresh: '正在加载',
+//		  	      	  callback: self.up
+//		  	      	}
+//	  	      	  }
+//	  	      	})
 	  	      	mui.ready(function() {
 	  	      	  getAllList();
 	  	      	})
@@ -275,6 +343,9 @@
 	  	      	  	that.w_repair.start = ++ pageNum ;
 	  	      	  	getList();
 	  	      	  },1500)
+	  	      	},
+	  	      	handleOpenDetail:function(item){
+	  	      	  console.log(1);
 	  	      	}
 	  	      }
 	  	    });
@@ -282,14 +353,14 @@
 	   function getList(){
 	   	if(config.isMock) {
 	   	  var _where = 'where 1=1';
-	   	  if(this.w_repair.buildId) {
-	   	    _where += ' and BUILD_ID="'+ this.w_repair.buildId +'"';
+	   	  if(app.w_repair.buildId) {
+	   	    _where += ' and BUILD_ID="'+ app.w_repair.buildId +'"';
 	   	  }
-	   	  if(this.w_repair.districtId) {
-	   	    _where += ' and DIST_ID="'+ this.w_repair.districtId +'"'; 
+	   	  if(app.w_repair.districtId) {
+	   	    _where += ' and DIST_ID="'+ app.w_repair.districtId +'"'; 
 	   	  }
-	   	  if(this.w_repair.state) {
-            _where += ' and STATE="'+ this.w_repair.state +'"';	   	  	
+	   	  if(app.w_repair.state) {
+            _where += ' and STATE="'+ app.w_repair.state +'"';	   	  	
 	   	  }
 	   	  _where += ' ORDER BY REPORT_TIME DESC limit ' + pageSize + ' offset ' + (pageNum - 1) * pageSize;
 	   	  _database.read(smp_tb.repair_tb, _where, function(res) {
@@ -324,9 +395,9 @@
 	   	  	  	}
 	   	  	  }
 	   	  	  if(!refresh) {
-	   	  	    this.list = dv;
+	   	  	    app.list = dv;
 	   	  	  }else{
-	   	  	  	this.list = all;
+	   	  	  	app.list = all;
 	   	  	  }
 
 	   	  })

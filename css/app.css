@@ -11,3 +11,8 @@ header.mui-bar .mui-icon-plus {
 .mui-content > .mui-table-view:first-child{
  margin-top: 0;
 }
+.empty-container{
+ 	text-align: center;
+ 	padding: 20px;
+ 	color:gray;
+}
