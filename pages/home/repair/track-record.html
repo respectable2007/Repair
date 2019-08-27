@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+		<title>跟踪记录</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.min.css"/>
+		<style type="text/css">
+		  .mui-contianer{
+		  	background: #fff;
+		  }
+		  .mui-pull-left{
+		  	width: 20%;
+		  	padding: 31px;
+		  	position: relative;
+		  }
+		  .circle{
+		  	width: 15px;
+		  	height: 15px;
+		  	border-radius: 15px;
+		  	background: #60B2FB;
+		  }
+		  .circleBig{
+		  	width: 20px;
+		  	height: 20px;
+		  	border-radius: 20px;
+		  	margin-left: -3px;
+		  	box-shadow: 0px 0px 0px 5px #DDEEFE;
+		  	background: #60B3FC;
+		  }
+		  .line{
+		  	border-left: 2px solid #60B2FB;
+            height: 64px;
+            margin-top: -78px;
+            margin-left: 6px;
+		  }
+		  .mui-pull-right{
+		  	width: 80%;
+		  	border-bottom: 1px solid #dfdfdf;
+		  	padding: 15px 0 0 2px;
+		  }
+		</style>
+	</head>
+	<body>
+	  <div id='app'>
+	  	<header class="mui-bar mui-bar-nav">
+	  	  <i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></i>
+	  	  <span class="mui-title">跟踪记录</span>
+	  	</header>
+	    <section class="mui-content">
+	      <div class="mui-clearfix mui-contianer"
+	      	   v-for='(item,index) in list'>
+	      	<div class="mui-pull-left">
+	      	  <div :class="[!index ? 'circleBig' : 'circle']"></div>
+	      	  <div class="line" v-show='index > 0'></div>
+	      	</div>
+	      	<div class="mc-content mui-pull-right">
+	      	  <p v-text="item.text"></p>
+	      	  <p v-text="item.time"></p>
+	      	</div>
+	      </div>
+	    </section>
+	  </div>
+	  <script src="../../../js/mui.min.js" type="text/javascript"></script>
+	  <script src="../../../js/libs/vue.min.js" type="text/javascript"></script>
+	  <script type="text/javascript">
+	  	var app = new Vue({
+	  	  el: '#app',
+	  	  data: {
+	  	    list: [{
+	  	      text: 'zzh，工单结束',
+	  	      time: '2019-11-18 18:45:32'
+	  	    },{
+	  	      text: 'zzh，工作人员到场签到',
+	  	      time: '2019-11-21 18:45:32'
+	  	    },{
+	  	      text: 'zzz，分配工作人员',
+	  	      time: '2019-11-21 18:45:32'
+	  	    },{
+	  	      text: 'zz，提交报修单',
+	  	      time: '2019-11-18 18:45:32'
+	  	    }]
+	  	  }
+	  	})
+	  </script>
+	</body>
+</html>

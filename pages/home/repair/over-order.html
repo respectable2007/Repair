@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,maximum-scale=1,minimum-scale=1,initial-scale=1,user-scalable=no"/>
+		<title>工单详情</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/app.css"/>
+		<style type="text/css">
+		  .blank{
+		  	padding: 11px 8px;
+		  }
+		  .form-label-title{
+		    background: #efefef;
+		    color: #999;
+		  }
+		  .paizhao{
+		  	font-size: 65px;
+		  }
+		  .consume{
+		  	background: #fff;
+		  	border-bottom: 1px solid #dfdfdf;
+		  	padding: 11px 8px;
+		  }
+		</style>
+	</head>
+	<body>
+	  <div id='app'>
+	  	<div class="mui-bar mui-bar-nav">
+	  	  <a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back"
+	  	  	 href="javascript:void(0)"></a>
+	  	  <h1 class="mui-title">填写维修完工内容</h1>
+	  	</div>
+	    <div class="mui-content">
+	      <form class="mui-input-group">
+	      	<div id='F_SMPS' class="mui-input-row" style="height: 135px;">
+	      	  <div class="row image-list">
+	      	  	<a id='F_SMP' style="padding: 10px;">
+	      	  	  <i class="mui-icon mui-icon-camera paizhao"></i>
+	      	  	</a>
+	      	  	<div class="image-item space"
+	  	  	  	  	   v-show='imgItemList.length'
+	  	  	  	  	   v-for='(item,index) in imgItemList'
+	  	  	  	  	   :id='"Img"+item.name+item.divid'>
+	  	  	  	  	<img id='picBig' 
+	  	  	  	  		 class="file"
+	  	  	  	  		 :id='index'
+	  	  	  	  		 :src='item.url'/>
+	  	  	  	  	<span class="del image-close"  
+	  	  	  	  		  @tap='handleClearImg(item, index)'>
+	  	  	  	  	  <i class="mui-icon mui-icon-close" ></i>
+	  	  	  	  	</span>
+	  	  	  	  </div>
+	      	  </div>
+	      	</div>
+	      	<div class="mui-input-row"
+	      		 @tap='handleShowSlt()'>
+	      	  <label>*故障类型</label>
+	      	  <input type="text"  readonly="readonly"
+	      	  	     placeholder="请选择故障类型"
+	      	  	     :value="type"/>
+	      	  <i class="mui-icon mui-icon-arrowright"></i>
+	      	</div>
+	      	<div class="consume">
+	      	  <div class="con-list mui-scroll-wrapper">
+	      	  	<ul class="mui-table-view mui-scroll">
+	      	  		<li class="mui-table-view-cell"
+	      	  			v-for='(item,index) in conList'>
+	      	  		  {{item.name}}
+	      	  		  {{item.count}}
+	      	  		  {{item.code}}
+	      	  		  {{item.unitprice}}
+	      	  		</li>
+	      	  	</ul>
+	      	  </div>
+	      	  <div class="con-btn"
+	      	  	   @tap='handleAddConsume()'>
+	      	  	<i class="mui-icon mui-icon-plus"></i>
+	      	  	添加耗材
+	      	  </div>
+	      	</div>
+	        <button type="button" class="mui-btn mui-btn-block mui-btn-primary"
+	        	    @tap='handleSubmit()'>提交</button>
+	      </form>
+	    </div>
+	  </div>
+	  <script src="../../../js/mui.min.js" type="text/javascript"></script>
+	  <script src="../../../js/libs/vue.min.js" type="text/javascript"></script>
+	  <script src="../../../js/libs/mui.picker.min.js" type="text/javascript"></script>
+	  <script type="text/javascript">
+	  	var app = new Vue({
+	  	  el:'#app',
+	  	  data: {
+	  	  	imgItemList: [],//图片列表
+	  	  	conList: [],//耗材列表
+	  	  	type: '',//故障类型
+	  	  	typeId: ''//故障id
+	  	  },
+	  	  methods: {
+	  	  	handleShowSlt: function(){
+	  	  	  var sPicker = new mui.PopPicker(),
+	  	  	      that = this;
+	  	  	  sPicker.setData([{
+	  	  	  	text: '1',
+	  	  	  	value: 0
+	  	  	  }]);
+	  	  	  sPicker.show(function(item){
+	  	  	  	that.type = item[0].text;
+	  	  	  	that.typeId = item[0].value;
+	  	  	  })
+	  	  	},
+	  	  	handleAddConsume: function(){
+	  	  	  mui.openWindow({
+	  	  	  	id: 'repair-consumable.html',
+	  	  	  	url: 'repair-consumable.html',
+	  	  	  	extras: {
+	  	  	  	  list: app.conList
+	  	  	  	}
+	  	  	  })
+	  	  	},
+	  	  	handleSubmit: function() {
+	  	  	  console.log(1);
+	  	  	}
+	  	  }
+	  	}),
+	  	back = mui.back;
+	  	mui.back = function(){
+	  	  mui.confirm('完工内容未提交，确认离开吗？', '离开确认', ['取消','确认'], function(e) {
+	  	    if(e.index == 1) {
+	  	      back();
+	  	    }
+	  	  })
+	  	}
+	  	
+	  </script>
+	</body>
+</html>

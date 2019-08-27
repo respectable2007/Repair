@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,maximum-scale=1,minimum-scale=1,initial-scale=1,user-scalable=no"/>
+		<title>工单详情</title>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/app.css"/>
+		<style type="text/css">
+		  .blank{
+		  	padding: 11px 8px;
+		  }
+		  .form-label-title{
+		    background: #efefef;
+		    color: #999;
+		  }
+		  .mui-bar .mui-title {
+            right: 110px;
+            left: 110px;
+          }
+		</style>
+	</head>
+	<body>
+	  <div id='app'>
+	  	<div class="mui-bar mui-bar-nav">
+	  	  <a class="mui-icon mui-icon-left-nav mui-pull-left"
+	  	  	 href="javascript:void(0)"></a>
+	  	  <h1 class="mui-title">工单详情</h1>
+	  	  <a class="mui-pull-right"
+	  	  	 href="javascript:void(0)"
+	  	  	 @tap='handleOpenTrack()'>
+	  	       跟踪记录
+	  	    <i class="mui-icon mui-icon-arrowright"></i>
+	  	  </a>
+	  	</div>
+	    <div class="mui-content">
+	      <form class="mui-input-group">
+	      	<div class="blank">
+	      	  <label>工单号：</label>
+	      	  <span>{{orderNumber}}</span>
+	      	  <div class="bages">
+	      	    <div class="mui-badge mui-badge-green">奖励￥2</div>
+	      	    <div class="mui-badge mui-badge-blue">1H完成</div>
+	      	  </div>
+	      	</div>
+	      	<div class="form-label-title blank">
+	      	  <span style="border-right: 4px solid #348D7F;margin-right: 5px;"></span>
+	      	    报修信息
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>故障类型</label>
+	      	  <span>水表坏了</span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>故障描述</label>
+	      	  <span>水表坏了</span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>故障照片</label>
+	      	  <span>
+	      	  	<span v-for='(item) in files'>
+	      	  	  <img :src='item.url' />
+	      	  	</span>
+	      	  </span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>建筑名称</label>
+	      	  <span>xx小区6栋1705号</span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>维修地址</label>
+	      	  <span>西单元[1705]号</span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>限定时间</label>
+	      	  <span>2018-11-25 13:16:00</span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>备注信息</label>
+	      	  <span>无</span>
+	      	</div>
+	      	<div class="form-label-title blank">
+	      	  <span style="border-right: 4px solid #348D7F;margin-right: 5px;"></span>
+	      	    报修人信息
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>报修来源</label>
+	      	  <span>PC来源</span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>报修人</label>
+	      	  <span>周周</span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>报修部门</label>
+	      	  <span>无</span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>报修电话</label>
+	      	  <span>18265889456</span>
+	      	</div>
+	      	<div class="mui-input-row">
+	      	  <label>报修单号</label>
+	      	  <span>1234567890</span>
+	      	</div>
+	      </form>
+	    </div>
+        <div class="mui-bar mui-bar-footer" style="position: fixed;">
+	      <button type="button" class="mui-btn mui-btn-default">退单</button>
+	      <button type="button" class="mui-btn mui-btn-blue" style="width: 85%;">签到</button>
+	    </div>
+	  </div>
+	  <script src="../../../js/mui.min.js" type="text/javascript"></script>
+	  <script src="../../../js/libs/vue.min.js" type="text/javascript"></script>
+	  <script type="text/javascript">
+	  	var app = new Vue({
+	  	  el:'#app',
+	  	  data: {
+	  	  	orderNumber:'afb1bc58-d829-89e3',
+	  	  	files:[]
+	  	  },
+	  	  methods: {
+	  	  	handleOpenTrack: function(){
+	  	  	  mui.openWindow({
+	  	  	  	id: 'track-record.html',
+	  	  	  	url: 'track-record.html',
+	  	  	  	extras: {
+	  	  	  	  orderNumber: this.orderNumber
+	  	  	  	}
+	  	  	  })
+	  	  	}
+	  	  }
+	  	})
+	  </script>
+	</body>
+</html>
