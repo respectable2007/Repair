@@ -2,9 +2,134 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/mui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/feedback.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/iconfont.css"/>
+		<style type="text/css">
+		  .mui-scroll-wrapper{
+		  	top:44px;
+		  }
+		</style>
 	</head>
 	<body>
-		my
+	  <div id='app' class="mui-page">
+	  	<div class="mui-navbar-inner mui-bar mui-bar-nav">
+	  	  <a href="javascript:void(0)"
+	  	  	 class="mui-icon mui-icon-gear mui-pull-right"
+	  	  	 @tap='handleOpenSetting()'></a>
+	  	</div>
+	  	<div class="mui-page-content">
+  	  	 <div class="mui-scroll-wrapper">
+  	  	  <div class="mui-scroll">
+  	  	  	<ul class="mui-table-view mui-table-view-chevron">
+  	  	  	  <li class="mui-table-view-cell">
+  	  	  	   <img src="../img/avatar.jpg"
+  	  	  	 	  class="mui-media-object mui-pull-left"/>
+  	  	  	   <div class="mui-media-body">
+  	  	  	   	  卷卷
+  	  	  	   	 <p class="mui-ellipsis">
+  	  	  	   	 运维班组
+  	  	  	   	 </p>
+  	  	  	   </div>
+  	  	  	  </li>
+  	  	  	  <li class="mui-table-view-cell">
+  	  	  	  	<a href="javascript:void(0)"
+  	  	  	  	   class="mui-navigate-right"
+  	  	  	  	   @tap='handleOpenPrize()'>
+  	  	  	  	  <i class="mui-icon iconfont icon-jinqian"></i>
+  	  	  	  	   <span class="title">奖励金额</span>
+  	  	  	  	   <span>4.00元</span>
+  	  	  	  	</a>
+  	  	  	  </li>
+  	  	  	  <li class="mui-table-view-cell">
+  	  	  	  	<a href="javascript:void(0)"
+  	  	  	  	   class="mui-navigate-right"
+  	  	  	  	   @tap='handleOpenData()'>
+  	  	  	  	  <i class="mui-icon iconfont icon-shujutongji"></i>
+  	  	  	  	   <span class="title">数据中心</span>
+  	  	  	  	</a>
+  	  	  	  </li>
+  	  	  	  <li class="mui-table-view-cell">
+  	  	  	  	<a href="javascript:void(0)"
+  	  	  	  	   class="mui-navigate-right"
+  	  	  	  	   @tap='handleOpenBook()'>
+  	  	  	  	  <i class="mui-icon iconfont icon-tongxunlu"></i>
+  	  	  	  	   <span class="title">通讯录</span>
+  	  	  	  	</a>
+  	  	  	  </li>
+  	  	  	  <li class="mui-table-view-cell">
+  	  	  	  	<a href="javascript:void(0)"
+  	  	  	  	   class="mui-navigate-right"
+  	  	  	  	   @tap='handleOpenHelp()'>
+  	  	  	  	  <i class="mui-icon iconfont icon-help"></i>
+  	  	  	  	   <span class="title">帮助</span>
+  	  	  	  	</a>
+  	  	  	  </li>
+  	  	  	  <li class="mui-table-view-cell">
+  	  	  	  	<a href="javascript:void(0)"
+  	  	  	  	   class="mui-navigate-right"
+  	  	  	  	   @tap='handleOpenFeedback()'>
+  	  	  	  	  <i class="mui-icon iconfont icon-icon18"></i>
+  	  	  	  	   <span class="title">反馈</span>
+  	  	  	  	</a>
+  	  	  	  </li>
+  	  	  	</ul>
+  	  	  </div>
+  	  	 </div>
+	  	</div>
+	  </div>
+	  <script src="../js/mui.min.js" type="text/javascript"></script>
+	  <script src="../js/libs/vue.min.js" type="text/javascript"></script>
+	  <script type="text/javascript">
+	  	var app = new Vue({
+	  	  el: '#app',
+	  	  methods: {
+	  	  	handleOpenSetting: function(){
+	  	  	  mui.openWindow({
+	  	  	    id: 'setting.html',
+	  	  	    url: 'my/setting.html',
+	  	  	    extra: {}
+	  	  	  })
+	  	  	},
+	  	  	handleOpenPrize: function(){
+	  	  	  mui.openWindow({
+	  	  	    id: 'prize.html',
+	  	  	    url: 'my/prize.html',
+	  	  	    extra: {}
+	  	  	  })
+	  	  	},
+	  	  	handleOpenData: function(){
+	  	  	  mui.openWindow({
+	  	  	    id: 'data-center.html',
+	  	  	    url: 'my/data-center.html',
+	  	  	    extra: {}
+	  	  	  })
+	  	  	},
+	  	  	handleOpenBook: function(){
+	  	  	  mui.openWindow({
+	  	  	    id: 'address-book.html',
+	  	  	    url: 'my/address-book.html',
+	  	  	    extra: {}
+	  	  	  })
+	  	  	},
+	  	  	handleOpenHelp: function(){
+	  	  	  mui.openWindow({
+	  	  	    id: 'help.html',
+	  	  	    url: 'my/help.html',
+	  	  	    extra: {}
+	  	  	  })
+	  	  	},
+	  	  	handleOpenFeedback: function(){
+	  	  	  mui.openWindow({
+	  	  	    id: 'feedback.html',
+	  	  	    url: 'my/feedback.html',
+	  	  	    extra: {}
+	  	  	  })
+	  	  	}
+	  	  }
+	  	})
+	  </script>
 	</body>
 </html>

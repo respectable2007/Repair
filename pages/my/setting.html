@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	  <title></title>
+	  <link rel="stylesheet" type="text/css" href="../../css/mui.min.css"/>
+	  <link rel="stylesheet" type="text/css" href="../../css/feedback.css"/>
+	  <style type="text/css">
+		html,body {background-color: #F5F5F5;}			
+		.mui-views,.mui-view,.mui-pages,
+		.mui-page,.mui-page-content {
+		position: absolute;left: 0;right: 0;top: 0;
+		bottom: 0;width: 100%;height: 100%;background-color: #efeff4;}		
+		.mui-pages {top: 44px;height: auto;}		
+		.mui-scroll-wrapper,.mui-scroll {background-color: #efeff4;}
+		/*.mui-table-view-cell span{float: right;}*/
+		.mui-page.mui-transitioning {
+		-webkit-transition: -webkit-transform 300ms ease;transition: transform 300ms ease;
+		}			
+		.mui-page-left {-webkit-transform: translate3d(0, 0, 0);transform: translate3d(0, 0, 0);}			
+		.mui-ios .mui-page-left {
+		-webkit-transform: translate3d(-20%, 0, 0);transform: translate3d(-20%, 0, 0);}				
+		.mui-android .mui-navbar-inner.mui-navbar-left {opacity: 0;}		
+		.mui-ios .mui-navbar-left .mui-left,
+		.mui-ios .mui-navbar-left .mui-center,
+		.mui-ios .mui-navbar-left .mui-right {
+			opacity: 0;
+		}
+		.mui-bar .mui-btn-link{color: #FFFFFF;}			
+		.mui-navbar .mui-btn-nav {
+			-webkit-transition: none;transition: none;-webkit-transition-duration: .0s;transition-duration: .0s;
+		}			
+		.mui-navbar .mui-bar .mui-title {display: inline-block;width: auto;}
+		.mui-bar-nav{text-align: center;}
+		.mui-page-shadow {
+			position: absolute;right: 100%;top: 0;width: 16px;
+			height: 100%;z-index: -1;content: '';
+		}			
+		.mui-page-shadow {
+			background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+			background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+		}		
+		.mui-navbar-inner.mui-transitioning,
+		.mui-navbar-inner .mui-transitioning {
+			-webkit-transition: opacity 300ms ease, -webkit-transform 300ms ease;
+			transition: opacity 300ms ease, transform 300ms ease;
+		}			
+		.mui-page {display: none;}		
+		.mui-pages .mui-page {display: block;}			
+		.mui-page .mui-table-view:first-child {margin-top: 0px;}		
+		.mui-page .mui-table-view:last-child {margin-bottom: 30px;}			
+		.mui-table-view {margin-top: 20px;}		
+		.mui-table-view span.mui-pull-right {color: #999;}
+		.mui-table-view-cell:after{left: 0px;}			
+		.mui-table-view-divider {background-color: #efeff4;font-size: 14px;}			
+		.mui-table-view-divider:before,
+		.mui-table-view-divider:after {height: 0;}			
+		
+	  </style>
+	</head>
+	<body class="mui-fullscreen">
+	    <!--页面主结构开始-->
+		<div id="app" class="mui-views">
+			<div class="mui-view">
+				<div class="mui-navbar">
+				</div>
+				<div class="mui-pages">
+				</div>
+			</div>
+		</div>
+		<!--页面主结构结束-->
+		<div id='setting' class="mui-page">
+		  <div class="mui-navbar-inner mui-bar mui-bar-nav">
+		  	<a href="javascript:void(0)"
+		  	   class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left">
+		  	</a>
+		  	<span class="mui-title">设置</span>
+		  </div>
+		  <div class="mui-page-content">
+		  	<div class="mui-scroll-wrapper">
+		  	  <div class="mui-scroll">
+		  	  	<ul class="mui-table-view mui-table-view-chevron">
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	<a href='javascript:void(0)'>
+		  	  	  	  <img src="../../img/avatar.jpg" class="mui-pull-right"
+		  	  	  	  	   style='height: 20px;border-radius: 50%;'>
+		  	  	  	  <span class="title">头像</span>
+		  	  	  	</a>
+		  	  	  </li>
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	<a href='javascript:void(0)'>
+		  	  	  	  <span class="title">姓名</span>
+		  	  	  	  <span class="title mui-pull-right">卷卷</span>
+		  	  	  	</a>
+		  	  	  </li>
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	<a href='#resetPwd'
+		  	  	  	   class="mui-navigate-right">
+		  	  	  	  <span class="title">修改密码</span>
+		  	  	  	</a>
+		  	  	  </li>
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	<a href='#notifications'
+		  	  	  	   class="mui-navigate-right">
+		  	  	  	  <span class="title">新消息通知</span>
+		  	  	  	</a>
+		  	  	  </li>
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	<a href='javascript:void(0)'
+		  	  	  	   class="mui-navigate-right">
+		  	  	  	  <span class="title">消息缓存</span>
+		  	  	  	</a>
+		  	  	  </li>
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	<a href='javascript:void(0)'
+		  	  	  	   class="mui-navigate-right">
+		  	  	  	  <span class="title">关于我们</span>
+		  	  	  	</a>
+		  	  	  </li>
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	<a href='javascript:void(0)'
+		  	  	  	   class="mui-navigate-right">
+		  	  	  	   当前版本
+		  	  	  	 <i class="mui-pull-right">V1.0.0</i>
+		  	  	  	</a>
+		  	  	  </li>
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	<a href='javascript:void(0)' style="text-align: center;">
+		  	  	  	  退出
+		  	  	  	</a>
+		  	  	  </li>
+		  	  	</ul>
+		  	  </div>
+		  	</div>
+		  </div>
+		</div>
+		<div id='resetPwd' class="mui-page">
+		  <div class="mui-navbar-inner mui-bar mui-bar-nav">
+		  	<a class="mui-action-back mui-icon mui-icon-left-nav  mui-pull-left"></a>
+		  	<span class="mui-title">修改密码</span>
+		  </div>
+		  <div class="mui-page-content">
+		  	<div class="mui-scroll-wrapper">
+		  	  <div class="mui-scroll">
+		  	  	<div class="mui-content-padded">
+		  	  	  <form class="mui-input-group">
+		  	  	  	<div class="mui-input-row">
+		  	  	  	   <input type="password"
+		  	  	  	   	      class="mui-input-password"
+		  	  	  	   	      maxlength="20"
+		  	  	  	   	      placeholder="请输入旧密码"/>
+		  	  	  	</div>
+		  	  	  	<div class="mui-input-row">
+		  	  	  	   <input type="password"
+		  	  	  	   	      class="mui-input-password"
+		  	  	  	   	      maxlength="20"
+		  	  	  	   	      placeholder="请输入新密码"/>
+		  	  	  	</div>
+		  	  	  	<div class="mui-input-row">
+		  	  	  	  <button type="button"
+		  	  	  	  	      class="mui-btn-primary mui-btn-block">提交</button>
+		  	  	  	</div>
+		  	  	  </form>
+		  	  	</div>
+		  	  </div>
+		  	</div>
+		  </div>
+		</div>
+		<div id='notifications' class="mui-page">
+		  <div class="mui-navbar-inner mui-bar mui-bar-nav">
+		  	<a class="mui-action-back mui-icon mui-icon-left-nav  mui-pull-left">
+		  	  <span style='font-size: 16px;'>设置</span>
+		  	</a>
+		  	<span class="mui-title">新消息通知</span>
+		  </div>
+		  <div class="mui-page-content">
+		  	<div class="mui-scroll-wrapper">
+		  	  <div class="mui-scroll">
+		  	  	<ul class="mui-table-view">
+		  	  		<li class="mui-table-view-cell">
+		  	  		  <a>接收新消息通知
+		  	  		    <span class="mui-pull-right">已开启</span>
+		  	  		  </a>
+		  	  		</li>
+		  	  	</ul>
+		  	  	<ul class="mui-table-view">
+		  	  		<li class="mui-table-view-cell">
+		  	  		  通知显示消息详情
+		  	  		 <div class="mui-switch mui-active mui-switch-mini">
+		  	  		 	<div class="mui-switch-handle">
+		  	  		 	</div>
+		  	  		 </div>
+		  	  		</li>
+		  	  	</ul>
+		  	  	<div class="mui-content-padded">
+		  	  	  <p>若关闭，当收到消息时，通知提示将不显示发信人和内容摘要</p>
+		  	  	</div>
+		  	  	<ul class="mui-table-view">
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	<a href="#notifications-disturb"
+		  	  	  	   class="mui-navigate-right">
+		  	  	          功能消息免打扰
+		  	  	  	</a>
+		  	  	  </li>
+		  	  	</ul>
+		  	  	<div class="mui-content-padded">
+		  	  	  <p>设置系统功能消息提示声音和震动的时段</p>
+		  	  	</div>
+		  	  	<ul class="mui-table-view">
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	接收新消息通知
+		  	  	  	<span class="mui-pull-right">已开启</span>
+		  	  	  </li>
+		  	  	</ul>
+		  	  	<ul class="mui-table-view">
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	声音
+		  	  	  	<div class="mui-switch mui-switch-mini mui-active">
+		  	  	  	  <div class="mui-switch-handle">
+		  	  	  	  </div>
+		  	  	  	</div>
+		  	  	  </li>
+		  	  	  <li class="mui-table-view-cell">
+		  	  	  	震动
+		  	  	  	<div class="mui-switch mui-switch-mini mui-active">
+		  	  	  	  <div class="mui-switch-handle">
+		  	  	  	  </div>
+		  	  	  	</div>
+		  	  	  </li>
+		  	  	</ul>
+		  	  	<div class="mui-content-padded">
+		  	  	  <p>当程序在运行时，你可以设置是否需要声音或震动</p>
+		  	  	</div>
+		  	  </div>
+		  	</div>
+		  </div>
+		</div>
+		<div id='notifications-disturb' class="mui-page">
+		  <div class="mui-navbar-inner">
+		  	<i class="mui-icon-back mui-icon mui-navbar-left mui-pull-left">
+		  	  新消息通知
+		  	</i>
+		  </div>
+		  <div class="mui-page-content">
+		  	<ul class="mui-table-view">
+		  		<li class="mui-table-view-cell">开启</li>
+		  		<li class="mui-table-view-cell">只在夜间开启</li>
+		  		<li class="mui-table-view-cell">关闭</li>
+		  	</ul>
+		  </div>
+		</div>
+	  <script src="../../js/mui.min.js" type="text/javascript"></script>
+	  <script src="../../js/libs/vue.min.js" type="text/javascript"></script>
+	  <script src="../../js/mui.view.js" type="text/javascript"></script>
+	  <script type="text/javascript">
+	  	mui.init();
+	  	var v = mui('#app').view({
+	  	  defaultPage: '#setting'
+	  	});
+	  	mui('.mui-scroll-wrapper').scroll();
+	  	(function(m, v){
+	  	  var oldBack = m.back,
+	  	      view = v.view;
+	  	  m.back = function() {
+	  	  	if(v.canBack()) {
+	  	  	  v.back();
+	  	  	} else {
+	  	  	  oldBack();
+	  	  	}
+	  	  }
+	  	})(mui, v);
+	  </script>
+	</body>
+</html>
