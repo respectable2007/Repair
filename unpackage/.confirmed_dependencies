@@ -27,7 +27,18 @@
       "pages/home/polling/order-detail.html",
       "pages/home/task-main.html",
       "pages/home/waitdo-task-main.html",
-      "pages/home/add-repair-content.html"
+      "pages/home/add-repair-content.html",
+      "pages/home/barcode-scan.html"
+    ]
+  },
+  "pages/my.html": {
+    "refer": [
+      "pages/my/data-center.html",
+      "pages/my/prize.html",
+      "pages/my/setting.html",
+      "pages/my/address-book.html",
+      "pages/my/feedback.html",
+      "pages/my/help.html"
     ]
   }
 }

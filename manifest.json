@@ -43,6 +43,9 @@
 		},
 		"Camera": {
 		  "description": "摄像头"
+		},
+		"Barcode": {
+		  "description": "二维码"
 		}
 	},
 	"plus": {
@@ -194,7 +197,20 @@
 					"pages/home/polling/order-detail.html",
 					"pages/home/task-main.html",
 					"pages/home/waitdo-task-main.html",
-					"pages/home/add-repair-content.html"
+					"pages/home/add-repair-content.html",
+					"pages/home/barcode-scan.html"
+				],
+				"priority": 0
+			},
+			"pages/my.html": {
+				"resources": [],
+				"refer": [
+					"pages/my/data-center.html",
+					"pages/my/prize.html",
+					"pages/my/setting.html",
+					"pages/my/address-book.html",
+					"pages/my/feedback.html",
+					"pages/my/help.html"
 				],
 				"priority": 0
 			}

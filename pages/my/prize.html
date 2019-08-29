@@ -7,11 +7,133 @@
 		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css"/>
 	</head>
 	<body>
-		prize
+	  <div id='app' class="mui-content">
+	  	<div class="mui-content">
+	  	  <div class="">
+	  	  	<span class="">10</span>
+	  	  	<span class="">￥金额</span>
+	  	  </div>
+	  	  <div class="mui-segmented-control"
+	  	  	   @tap='handleChangeTab($event)'>
+	  	  	<a class="mui-control-item mui-active" href="#item1">
+	  	  	  ￥10今日奖金明细
+	  	  	</a>
+	  	  	<a class="mui-control-item" href="#item2">
+	  	  	  ￥120今年累计金额
+	  	  	</a>
+	  	  </div>
+	  	  <div class="mui-control-content mui-active  mui-content mui-slider-item" id='item1'>
+	  	  	 <div v-if='!tList.length' class="empty-container">
+	  	  	 	今日暂无工单奖励，加油努力哦！
+	  	  	 </div>
+	  	  	 <div class="mui-scroll-wrapper" v-else>
+	  	  	 	<div class="mui-scroll">
+	  	  	 	  <ul class="mui-table-view">
+	  	  	 	  	<li class="mui-table-view-cell mui-media">
+	  	  	 	  	  <div class="mui-media-body">
+	  	  	 	  	  	<span>￥2</span>
+	  	  	 	  	  	<span class="mui-ellipsis">
+	  	  	 	  	  	  单号：12345678
+	  	  	 	  	  	</span>
+	  	  	 	  	  </div>
+	  	  	 	  	</li>
+	  	  	 	  </ul>
+	  	  	 	</div>
+	  	  	 </div>
+	  	  </div>
+	  	  <div class="mui-control-content" id='item2'>
+	  	  	<div v-if='!money' class="empty-container">
+	  	  	 	暂无相关内容
+	  	  	 </div>
+	  	  	 <div class="" v-else>
+	  	  	 	<div id='chart' style="height: 400px;width: 400px;">
+	  	  	 	</div>
+	  	  	 </div>
+	  	  </div>
+	  	</div>
+	  </div>
 	  <script src="../../js/mui.min.js" type="text/javascript"></script>
 	  <script src="../../js/libs/vue.min.js" type="text/javascript"></script>
+	  <script src="../../js/libs/echarts.min.js" type="text/javascript"></script>
+	  <script src="../../js/common/global.js" type="text/javascript"></script>
 	  <script type="text/javascript">
-	  	
+	  	var app = new Vue({
+	  	  el: '#app',
+	  	  data: {
+	  	  	tList: [],
+	  	  	money: 1
+	  	  },
+	  	  mounted: function() {
+	  	  	mui.init();
+//	  	  	g.initScroll({
+//	  	  	  h: '200px'
+//	  	  	})
+	  	  },
+	  	  methods: {
+	  	  	handleChangeTab: function(e){
+	  	  	  var lens = e.target.href.length,
+	  	  	      index = e.target.href[lens - 1];
+	  	  	  if(index === '2' && this.money) {
+	  	  	  	this.initChart();
+	  	  	  }
+	  	  	},
+	  	  	initChart: function() {
+	  	  	  var chart = echarts.init(document.getElementById('chart'));
+	  	  	  chart.setOption({
+	  	  	  	legend: {
+	  	  	  	  show: true,
+	  	  	  	  data: [{
+	  	  	  	  	name: '已完工工单',
+	  	  	  	  	icon: 'rect',
+	  	  	  	  	textStyle: {
+	  	  	  	  	  color:'red'
+	  	  	  	  	}
+	  	  	  	  },{
+	  	  	  	  	name: '未完工工单',
+	  	  	  	  	icon: 'rect',
+	  	  	  	  	textStyle: {
+	  	  	  	  	  color:'red'
+	  	  	  	  	}
+	  	  	  	  }]
+	  	  	  	},
+	  	  	  	tooltip : {
+                  trigger: 'axis',
+                  triggerOn: 'mousemove',
+                  axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
+                    orient: 'horizontal'
+                  },
+                  orient: 'horizontal'
+               },
+	  	  	  	 xAxis : [
+			        {
+			            type : 'category',
+			            data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+			            axisTick: {
+			                alignWithLabel: true
+			            }
+			        }
+			    ],
+			     yAxis : [
+			        {
+			            type : 'value'
+			        }
+			     ],
+			     series : [
+			        {
+			            name:'已完工工单',
+			            type:'bar',
+			            data:[10, 52, 200, 334, 390, 330, 220]
+			        },
+			        {
+			            name:'未完工工单',
+			            type:'bar',
+			            data:[10, 52, 200, 334, 390, 330, 220]
+			        }]
+	  	  	   });
+	  	  	}
+	  	  }
+	  	})
 	  </script>
 	</body>
 </html>

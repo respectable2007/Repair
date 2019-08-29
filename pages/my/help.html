@@ -7,11 +7,38 @@
 		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css"/>
 	</head>
 	<body>
-		help
+	  <div id='app' class="mui-content">
+	  	<div class="empty-container" v-if='!list.length'>
+	  	    暂无相关内容
+	  	</div>
+	  	<ul class="mui-table-view" v-else>
+	  	  <li class="mui-table-view-cell mui-collapse"
+	  	  	  v-for='(item,index) in list'>
+	  	  	<a class="mui-navigate-right">
+	  	  	   <span>{{index + 1}}</span>
+	  	  	   <span>{{item.title}}</span>
+	  	  	</a>
+	  	  	<div class="mui-collapse-content">
+	  	  	  <div v-html='item.sys_updatetime'></div>
+	  	  	</div>
+	  	  </li>
+	  	</ul>
+	  </div>
 	  <script src="../../js/mui.min.js" type="text/javascript"></script>
 	  <script src="../../js/libs/vue.min.js" type="text/javascript"></script>
 	  <script type="text/javascript">
-	  	
+	  	var app = new Vue({
+	  	  el: '#app',
+	  	  data: {
+	  	  	list: [{
+	  	  	  title: '11111',
+	  	  	  sys_updatetime: '20120812 16:42:56'
+	  	  	}]
+	  	  },
+	  	  created: function() {
+	  	  	
+	  	  }
+	  	})
 	  </script>
 	</body>
 </html>

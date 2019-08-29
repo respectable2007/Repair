@@ -5,35 +5,35 @@
 (function($, owner){
 	owner.AppRoleType = localStorage.getItem('$appRoleType');
 	//订单生成时的初始化状态名称
-    owner.getOrderInitStatusText = function () {
-        var txt = '';
-        var roleType = g.AppRoleType;
-        //console.log('roleType:' + roleType)
-        switch (roleType) {
-            case comm.repairman: //运维人员
-            case comm.leader: //班组
-                txt = '待抢单';
-                break;
-            case comm.customer:
-                txt = '待接受';
-                break;
-            case comm.pm:
-                txt = '待派工';
-                break;
-            default:
-                txt = '待抢单';
-                break;
-        }
-        ////console.log('角色ID:' + roleid)
-        return txt;
-    }
+//  owner.getOrderInitStatusText = function () {
+//      var txt = '';
+//      var roleType = g.AppRoleType;
+//      //console.log('roleType:' + roleType)
+//      switch (roleType) {
+//          case comm.repairman: //运维人员
+//          case comm.leader: //班组
+//              txt = '待抢单';
+//              break;
+//          case comm.customer:
+//              txt = '待接受';
+//              break;
+//          case comm.pm:
+//              txt = '待派工';
+//              break;
+//          default:
+//              txt = '待抢单';
+//              break;
+//      }
+//      ////console.log('角色ID:' + roleid)
+//      return txt;
+//  }
 	/**
 	 * 工单状态
 	 */
 	var WorkOrderStatus = {
 	    waitOrder: {
 	        value: 'A',
-	        text: g.getOrderInitStatusText()
+//	        text: g.getOrderInitStatusText()
 	    },
 	    waitSignin: {
 	        value: 'B',
@@ -445,7 +445,7 @@
   	  	autoBackButton:true
   	  }
   	};
-  	mui.openWindowWithTitle(webviewOptions)
+  	mui.openWindow(webviewOptions)
   }
   owner.getScreenInfo = function(option) {
   	if(option === 'width') {
@@ -462,8 +462,8 @@
       if(_scroll_wrapper === (undefined || null)) {
       	return;
       }
-      var  _h = _scroll_wrapper.style.height;
-      _scroll_wrapper.style.height = options.h || (_h ? _h : '200px');
+      var  _h = _scroll_wrapper[0].style.height;
+      _scroll_wrapper[0].style.height = options.h || (_h ? _h : '200px');
       mui('.mui-scroll-wrapper').scroll({
       	bounce: false,
         indicators: true,
