@@ -62,13 +62,13 @@
 	  	function startRecognize() {
             scan = new plus.barcode.Barcode('bcid');
 //          scan.onmarked = onmarked;
-            scan.setStyles({
-              background: '#000',
-              frameColor: '#afafaf',
-              scanbarColor: 'green',
-              top: '20%',
-              left: '20%'
-            });
+//          scan.setStyles({
+//            background: '#000',
+//            frameColor: '#afafaf',
+//            scanbarColor: 'green',
+//            top: '20%',
+//            left: '20%'
+//          });
             scan.start({
                 conserve: true,
                 filename: '_doc/barcode/'

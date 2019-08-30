@@ -43,6 +43,9 @@
   /*基础类*/
   owner.GetBuildsPage = apiDomain + '/api/Base/GetBuildsPage'; //建筑信息列表
   owner.QueryAllDistrictTree = apiDomain + '/api/Base/QueryAllDistrictTree'; //获取行政区域树
+  owner.QueryAddrList = apiDomain + '/api/Base/QueryAddrList'; //获取通讯录
+  owner.QueryAppHelpPage = apiDomain + '/api/Base/QueryAppHelpPage'; //帮助分页查询
+  owner.QueryWorkLoadQty = apiDomain + '/api/Base/QueryWorkLoadQty'; //工作量
   /*维修*/
   owner.AddRepairBill = apiDomain + '/api/Repair/AddRepairBill'; //维修报修
 }(window.config = {}));

@@ -120,8 +120,8 @@
 		  	  		<i class="mui-icon mui-icon-arrowdown"></i>
 		  	  	</a>
 		  	  	<a class="mui-control-item"
-		  	  		@tap='handleSatus()'>
-		  	  		<span >工单状态</span>
+		  	  		@tap='handleStatus()'>
+		  	  		<span v-text='state'>工单状态</span>
 		  	  		<i class="mui-icon mui-icon-arrowdown"></i>
 		  	  	</a>
 		  	  </form>
@@ -198,12 +198,13 @@
 	  	      	historyList: [],
 	  	      	buildName: '建筑名称',
 	  	      	address: '行政区域',
+	  	      	state: '工单状态',
 	  	      	districtList: [],
 	  	      	typeid: '',
 	  	        w_repair: {
   	              orgCode: config.ORG_CODE,
 				  userId: config.USER_ID,
-				  state: null,
+				  state: '工单状态',
 				  deptCode: null,
 				  districtId: null,
 				  buildId: '',
@@ -317,12 +318,13 @@
 	  	      	  	}
 	  	      	  })
 	  	      	},
-	  	      	handleSatus: function(){
+	  	      	handleStatus: function(){
 	  	      	  var typeid = this.typeid,
 	  	      	      picker = g.getOrderStatusPicker(typeid, typeid === 'repair' ? 'manage': undefined),
 	  	      	      that = this;
 	  	      	  picker.show(function(item) {
-	  	      	  	that.w_repair.stat = item[0].value;
+	  	      	  	that.w_repair.state = item[0].value;
+	  	      	  	that.state = item[0].text;
 	  	      	  })
 	  	      	},
 	  	      	//下拉刷新

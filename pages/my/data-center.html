@@ -94,6 +94,11 @@
 	  <script src="../../js/libs/vue.min.js" type="text/javascript"></script>
 	  <script src="../../js/libs/echarts.min.js" type="text/javascript"></script>
 	  <script src="../../js/libs/mui.picker.min.js" type="text/javascript"></script>
+	  <script src="../../js/libs/mock-min.js" type="text/javascript"></script>
+	  <script src="../../js/common/config.js" type="text/javascript"></script>
+	  <script src="../../js/common/global.js" type="text/javascript"></script>
+	  <script src="../../js/common/webSql.js" type="text/javascript"></script>
+	  <script src="../../js/common/mockdata.js" type="text/javascript"></script>
 	  <script type="text/javascript">
 	  	var app = new Vue({
 	  	  el:'#app',
@@ -121,7 +126,7 @@
 	  	  	  	that.endTime = item.value;
 	  	  	  })
 	  	  	},
-	  	  	initCharts: function(){
+	  	  	initCharts: function(data){
 	  	  	  var charts = echarts.init(this.curDom);
 	  	  	  charts.setOption({
 	  	  	  	legend: {
@@ -148,37 +153,45 @@
                     orient: 'horizontal'
                   },
                   orient: 'horizontal'
-               },
-	  	  	  	 xAxis : [
-			        {
-			            type : 'category',
-			            data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-			            axisTick: {
-			                alignWithLabel: true
-			            }
+                },
+	  	  	  	xAxis : [
+			      {
+			        type : 'category',
+			        data : ['维修', '模块2', '模块3'],
+			        axisTick: {
+			          alignWithLabel: true
 			        }
+			      }
 			    ],
 			    yAxis : [
-			        {
-			            type : 'value'
-			        }
+			      {
+			        type : 'value'
+			      }
 			    ],
 			    series : [
-			        {
-			            name:'已完工工单',
-			            type:'bar',
-			            data:[10, 52, 200, 334, 390, 330, 220]
-			        },
-			        {
-			            name:'未完工工单',
-			            type:'bar',
-			            data:[10, 52, 200, 334, 390, 330, 220]
-			        }
+			      {
+			        name:'已完工工单',
+			        type:'bar',
+			        data:[data[0].FinishQty, data[1].FinishQty, data[2].FinishQty]
+			      },
+			      {
+			        name:'未完工工单',
+			        type:'bar',
+			        data:[data[0].NoFinishQty, data[1].NoFinishQty, data[2].NoFinishQty]
+			      }
 			    ]
 	  	  	  });
 	  	  	},
 	  	  	handleShowCharts: function(){
-	  	  	  this.initCharts();
+	  	  	  var that = this;
+	  	  	  g.ajax(config.QueryWorkLoadQty, {
+	  	  	  	data: {},
+	  	  	  	success: function(res) {
+	  	  	  	  if(res.StatusCode == 200) {
+	  	  	        that.initCharts(res.Data);
+	  	  	  	  }
+	  	  	  	}
+	  	  	  })
 	  	  	},
 	  	  	handleChangeTab: function(e){
 	  	  	  this.startTime = '';

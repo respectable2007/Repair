@@ -874,7 +874,98 @@ if (config.isMock) {
             }]
         }]
     }]
-    };
+    },
+    QueryAddrList = {
+        "StatusCode": 200,
+        "Message": null,
+        "Data": [{
+            "DEP_NAME": "维修一部",
+            "LSTUSER": [{
+                "NAME": "报修人A",
+                "PHONE": "15243641131"
+            },{
+                "NAME": "李存孝",
+                "PHONE": "13249838340"
+            }, {
+                "NAME": "李星云",
+                "PHONE": "18688837771"
+            }]
+        }, {
+            "DEP_NAME": "维修二部",
+            "LSTUSER": [{
+                "NAME": "班组A",
+                "PHONE": "13200000002"
+            }, {
+                "NAME": "狄仁杰",
+                "PHONE": "13537872524"
+            }, {
+                "NAME": "李茂贞",
+                "PHONE": "13923804430"
+            }]
+        }, {
+            "DEP_NAME": "运维三部",
+            "LSTUSER": [{
+                "NAME": "邹玉杰",
+                "PHONE": "13249838332"
+            }, {
+                "NAME": "钟哲颖",
+                "PHONE": "13249838332"
+            }, {
+                "NAME": "邹琼俊",
+                "PHONE": "18673126640"
+            }]
+        }]
+    },
+    QueryAppHelpPage = {
+    	"StatusCode":200,
+    	"Message":null,
+    	"Data":{
+    	  "List":[{
+    	  	"_id":"5a4afdb73e652c16506e8f0e",
+    	  	"ID":null,
+    	  	"TITLE":"APP操作流程",
+    	  	"CONTENT":"<p>&nbsp; &nbsp;维修：报修 —&gt;接单 —&gt;签到 —&gt;完工 —&gt;评价<br></p><p>&nbsp;&nbsp; 保养： 接单 —&gt;签到 —&gt;完工&nbsp;<br></p><p>&nbsp;&nbsp; 巡检： 接单 —&gt;签到 —&gt;完工&nbsp;<br></p><p>&nbsp;&nbsp; 报警： 接单 —&gt;签到 —&gt;完工</p>",
+    	  	"CREATE_USER_ID":"admin",
+    	  	"CREATE_TIME":"2018-01-02T03:34:15Z",
+    	  	"MODIFY_USER_ID":null,
+    	  	"MODIFY_TIME":"0001-01-01T00:00:00Z",
+    	  	"sys_updatetime":"0001-01-01T00:00:00Z"},{
+    	  	"_id":"5a41e730fc5ead4234a15f56",
+    	  	"ID":"5a41e730fc5ead4234a15f56",
+    	  	"TITLE":"APP驾驶舱使用方法",
+    	  	"CONTENT":"<p>APP驾驶舱使用方法</p>",
+    	  	"CREATE_USER_ID":"admin",
+    	  	"CREATE_TIME":"2017-12-25T06:07:44Z",
+    	  	"MODIFY_USER_ID":"admin",
+    	  	"MODIFY_TIME":"2017-12-26T06:21:26Z",
+    	  	"sys_updatetime":"0001-01-01T00:00:00Z"},{
+    	  	"_id":"5a3cc64b3e652d0224a59455",
+    	  	"ID":"5a3cc64b3e652d0224a59455",
+    	  	"TITLE":"操盘流程",
+    	  	"CONTENT":"<p>1.医护人员</p><p>&nbsp;&nbsp; 报修—&gt;催单\r\n—&gt;评价</p><p>2.运维人员</p><p>&nbsp;&nbsp; 维修：报修\r\n—&gt;接单\r\n—&gt;签到\r\n—&gt;完工\r\n—&gt;评价</p><p>&nbsp;&nbsp; 保养：\r\n接单\r\n—&gt;签到\r\n—&gt;完工 <br></p><p>&nbsp;&nbsp; 巡检：\r\n接单\r\n—&gt;签到\r\n—&gt;完工 <br></p><p>&nbsp;&nbsp; 报警：\r\n接单\r\n—&gt;签到\r\n—&gt;完工 <br></p><p>3.班组人员</p><p>\r\n</p><p>&nbsp;&nbsp; 维修：派工-报修\r\n—&gt;接单\r\n—&gt;签到\r\n—&gt;完工\r\n—&gt;评价</p><p>&nbsp;&nbsp; 保养：\r\n\r\n派工-\r\n\r\n接单\r\n—&gt;签到\r\n—&gt;完工\r\n—&gt;评价 <br></p><p>&nbsp;&nbsp; 巡检：\r\n派工-\r\n\r\n\r\n接单\r\n—&gt;签到\r\n—&gt;完工 <br></p><p>&nbsp;&nbsp; 报警：\r\n派工-\r\n\r\n\r\n接单\r\n—&gt;签到\r\n—&gt;完工 \r\n\r\n—&gt;评价 <br></p><p>4.项目经理</p><p>\r\n</p><p>&nbsp;&nbsp; 维修：派工-报修&nbsp;\r\n—&gt;评价</p><p>&nbsp;&nbsp; 保养：\r\n\r\n派工-\r\n\r\n接单\r\n—&gt;签到\r\n—&gt;完工\r\n—&gt;评价 <br></p><p>&nbsp;&nbsp; 巡检：\r\n派工-\r\n\r\n\r\n接单\r\n—&gt;签到\r\n—&gt;完工 <br></p><p>&nbsp;&nbsp; 报警：\r\n派工-\r\n\r\n\r\n接单\r\n—&gt;签到\r\n—&gt;完工 \r\n\r\n—&gt;评价 </p>\r\n\r\n\r\n\r\n<p><br></p><p><br></p>",
+    	  	"CREATE_USER_ID":"admin",
+    	  	"CREATE_TIME":"2017-12-22T00:46:03Z",
+    	  	"MODIFY_USER_ID":"admin",
+    	  	"MODIFY_TIME":"2017-12-26T06:21:33Z",
+    	  	"sys_updatetime":"0001-01-01T00:00:00Z"}],
+    	"recc":3}},
+    QueryWorkLoadQty = {
+    	"StatusCode":200,
+    	"Message":null,
+    	"Data":[{
+    		"BusinessType":"R",
+    		"NoFinishQty":4,
+    		"FinishQty":2},{
+    		"BusinessType":"C",
+    		"NoFinishQty":2,
+    		"FinishQty":1},{
+    		"BusinessType":"M",
+    		"NoFinishQty":3,
+    		"FinishQty":1},{
+    		"BusinessType":"A",
+    		"NoFinishQty":2,
+    		"FinishQty":0
+    	}]};
   //获取列表条码数
   Mock.mock(config.BillWorkbench, BillWorkbenchData);
   //获取建筑数据列表
@@ -950,4 +1041,10 @@ if (config.isMock) {
   });
   //行政区域
   Mock.mock(config.QueryAllDistrictTree, QueryAllDistrictTreeData);
+  //通讯录
+  Mock.mock(config.QueryAddrList, QueryAddrList);
+  //帮助列表
+  Mock.mock(config.QueryAppHelpPage, QueryAppHelpPage);
+  //工作量
+  Mock.mock(config.QueryWorkLoadQty, QueryWorkLoadQty);
 }
