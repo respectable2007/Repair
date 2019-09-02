@@ -48,6 +48,9 @@
   owner.QueryWorkLoadQty = apiDomain + '/api/Base/QueryWorkLoadQty'; //工作量
   /*维修*/
   owner.AddRepairBill = apiDomain + '/api/Repair/AddRepairBill'; //维修报修
+  
+  /*统计信息*/
+  owner.BillRewardForUser = apiDomain + '/api/Maintain/BillRewardForUser'; //奖励金额
 }(window.config = {}));
 
 //APP角色类型

@@ -965,7 +965,28 @@ if (config.isMock) {
     		"BusinessType":"A",
     		"NoFinishQty":2,
     		"FinishQty":0
-    	}]};
+    	}]},
+    BillRewardForUser = { 
+      "StatusCode": 200, 
+      "Message": null, 
+      "Data": { 
+      	"Amount_ToDay": "0", 
+      	"Amount_Month": "4.00", 
+      	"Amount_Month_One": "0.00", 
+      	"Amount_Month_Two": "0.00", 
+      	"Amount_Month_Three": "0.00", 
+      	"Amount_Month_Four": "0.00", 
+      	"Amount_Month_Five": "0.00", 
+      	"Amount_Month_Six": "0.00", 
+      	"Amount_Month_Seven": "0.00", 
+      	"Amount_Month_Eight": "0.00", 
+      	"Amount_Month_Nine": "1.00", 
+      	"Amount_Month_Ten": "4.00", 
+      	"Amount_Month_Eleven": "0.00", 
+      	"Amount_Month_Twelve": "0.00", 
+      	"Detail_List": [] 
+       }
+    };
   //获取列表条码数
   Mock.mock(config.BillWorkbench, BillWorkbenchData);
   //获取建筑数据列表
@@ -1047,4 +1068,6 @@ if (config.isMock) {
   Mock.mock(config.QueryAppHelpPage, QueryAppHelpPage);
   //工作量
   Mock.mock(config.QueryWorkLoadQty, QueryWorkLoadQty);
+  //奖励金额
+  Mock.mock(config.BillRewardForUser, BillRewardForUser);
 }

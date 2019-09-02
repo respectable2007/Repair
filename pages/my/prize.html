@@ -5,35 +5,36 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
 		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/app.css"/>
 	</head>
 	<body>
 	  <div id='app' class="mui-content">
 	  	<div class="mui-content">
-	  	  <div class="">
-	  	  	<span class="">10</span>
-	  	  	<span class="">￥金额</span>
-	  	  </div>
+	  	  <p  style="color:#CF2D28;font-size: 20px;padding-top:10px;">
+	  	  	本月:￥{{ward.Amount_Month}}
+	  	  </p>
 	  	  <div class="mui-segmented-control"
 	  	  	   @tap='handleChangeTab($event)'>
 	  	  	<a class="mui-control-item mui-active" href="#item1">
-	  	  	  ￥10今日奖金明细
+	  	  	  ￥{{ward.Amount_ToDay}}今日奖金明细
 	  	  	</a>
 	  	  	<a class="mui-control-item" href="#item2">
-	  	  	  ￥120今年累计金额
+	  	  	  ￥{{ward.Amount_Year}}今年累计金额
 	  	  	</a>
 	  	  </div>
 	  	  <div class="mui-control-content mui-active  mui-content mui-slider-item" id='item1'>
-	  	  	 <div v-if='!tList.length' class="empty-container">
+	  	  	 <div v-if='!ward.Detail_List.length' class="empty-container">
 	  	  	 	今日暂无工单奖励，加油努力哦！
 	  	  	 </div>
 	  	  	 <div class="mui-scroll-wrapper" v-else>
 	  	  	 	<div class="mui-scroll">
 	  	  	 	  <ul class="mui-table-view">
-	  	  	 	  	<li class="mui-table-view-cell mui-media">
+	  	  	 	  	<li class="mui-table-view-cell mui-media"
+	  	  	 	  		v-for='(item,index) in ward.Detail_List'>
 	  	  	 	  	  <div class="mui-media-body">
-	  	  	 	  	  	<span>￥2</span>
+	  	  	 	  	  	<span>￥{{item.Amount}}</span>
 	  	  	 	  	  	<span class="mui-ellipsis">
-	  	  	 	  	  	  单号：12345678
+	  	  	 	  	  	  单号：{{item.BillNo}}
 	  	  	 	  	  	</span>
 	  	  	 	  	  </div>
 	  	  	 	  	</li>
@@ -42,7 +43,7 @@
 	  	  	 </div>
 	  	  </div>
 	  	  <div class="mui-control-content" id='item2'>
-	  	  	<div v-if='!money' class="empty-container">
+	  	  	<div v-if='!ward.Amount_Year' class="empty-container">
 	  	  	 	暂无相关内容
 	  	  	 </div>
 	  	  	 <div class="" v-else>
@@ -61,20 +62,35 @@
 	  	var app = new Vue({
 	  	  el: '#app',
 	  	  data: {
-	  	  	tList: [],
-	  	  	money: 1
+	  	  	list: [],
+	  	  	ward: {
+	  	  	  Amount_Month: 0,
+	  	  	  Amount_Year: 0,
+	  	  	  Detail_List: []
+	  	  	}
 	  	  },
 	  	  mounted: function() {
 	  	  	mui.init();
 //	  	  	g.initScroll({
 //	  	  	  h: '200px'
 //	  	  	})
+            mui.plusReady(function(){
+              var view = plus.webview.currentWebview();
+              app.ward = view.ward;
+              app.ward.Amount_Year = 0;
+              for(var i in app.ward) {
+              	if(i.indexOf('Amount_Month_') > -1) {
+              	  app.list.push(app.ward[i]);
+              	  app.ward.Amount_Year += parseFloat(app.ward[i]);
+              	}
+              }
+            })
 	  	  },
 	  	  methods: {
 	  	  	handleChangeTab: function(e){
 	  	  	  var lens = e.target.href.length,
 	  	  	      index = e.target.href[lens - 1];
-	  	  	  if(index === '2' && this.money) {
+	  	  	  if(index === '2' && this.ward.Amount_Year) {
 	  	  	  	this.initChart();
 	  	  	  }
 	  	  	},
@@ -84,13 +100,7 @@
 	  	  	  	legend: {
 	  	  	  	  show: true,
 	  	  	  	  data: [{
-	  	  	  	  	name: '已完工工单',
-	  	  	  	  	icon: 'rect',
-	  	  	  	  	textStyle: {
-	  	  	  	  	  color:'red'
-	  	  	  	  	}
-	  	  	  	  },{
-	  	  	  	  	name: '未完工工单',
+	  	  	  	  	name: '奖励金额',
 	  	  	  	  	icon: 'rect',
 	  	  	  	  	textStyle: {
 	  	  	  	  	  color:'red'
@@ -107,30 +117,32 @@
                   orient: 'horizontal'
                },
 	  	  	  	 xAxis : [
-			        {
-			            type : 'category',
-			            data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-			            axisTick: {
-			                alignWithLabel: true
-			            }
-			        }
-			    ],
-			     yAxis : [
-			        {
-			            type : 'value'
-			        }
-			     ],
-			     series : [
-			        {
-			            name:'已完工工单',
-			            type:'bar',
-			            data:[10, 52, 200, 334, 390, 330, 220]
+			      {
+			        type : 'category',
+			        data : ['1月', '2月', '3月', '4月', '5月', '6月', '7月','8月','9月','10月','11月','12月'],
+			        axisTick: {
+			          alignWithLabel: true,
+			          interval: 0
 			        },
+			        axisLabel: {
+			          interval: 0
+			        },
+			        min: 1,
+			        max: 12
+			      }
+			    ],
+			    yAxis : [
+			      {
+			        type : 'value'
+			      }
+			    ],
+			    series : [
 			        {
-			            name:'未完工工单',
-			            type:'bar',
-			            data:[10, 52, 200, 334, 390, 330, 220]
-			        }]
+			            name:'奖励金额',
+			            type:'line',
+			            data: app.list
+			        }
+			    ]
 	  	  	   });
 	  	  	}
 	  	  }

@@ -431,16 +431,15 @@
   	webviewOptions.styles = {
   	  titleNView: {
   	  	titleText: title,
-  	  	titleColor: '#fff',
-  	  	titleSize: '17px',
-  	  	backgroundColor: '#449DED',
+  	  	titleColor: '#685a5a',
+  	  	titleSize: '18px',
+  	  	backgroundColor: '#f7f7f7',
   	  	progress: {
   	  	  color: '#56CF87',
   	  	  height: '2px'
   	  	},
   	  	splitLine: {
-  	  	  color: '#ccc',
-  	  	  height: '0'
+  	  	  color: '#fff'
   	  	},
   	  	autoBackButton:true
   	  }
@@ -493,7 +492,6 @@ var defaultInfo = '监控运行状态';
     m.getFrstLevelMenus = function () {
         ////console.log('获取一级菜单')
         var smpMenus = getSmpMenus();
-        //console.log(JSON.stringify(smpMenus[0]))
         if (smpMenus == undefined || smpMenus == null || smpMenus[0] == {}) {
             localStorage.removeItem('$loginstate');
             mui.openWindow({

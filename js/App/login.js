@@ -19,7 +19,7 @@ var nwaiting = null;
   	  type: 'post',
   	  data: _where,
   	  nwaiting: nwaiting,
-  	  success: function(data){
+  	  success: function(data){  
   	    if(nwaiting){
   	      nwaiting.close();
   	    }
@@ -33,7 +33,7 @@ var nwaiting = null;
   	      if(_GlobalMenus != null && _GlobalMenus.length > 0) {
   	        g.setMenu(_GlobalMenus);
   	        localStorage.setItem('$loginstate', true);
-  	        u.createUserInfo(_user, callback);
+	          u.createUserInfo(_user, callback);
   	      }
   	    }
   	  }

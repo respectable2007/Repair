@@ -1,3 +1,16 @@
+body,.mui-content{
+	background: #fff;
+}
+.mui-bar-nav{
+ box-shadow: none;
+ -webkit-box-shadow: none;
+}
+.mui-bar-nav a {
+	color: #685a5a;
+}
+.mui-bar-nav .mui-title{
+	color: #685a5a;
+}
 header.mui-bar{
   -webkit-box-shadow: 0 0 1px rgba(0,0,0,.85);
   box-shadow: 0 0 1px rgba(0,0,0,.85);
@@ -16,7 +29,7 @@ header.mui-bar .mui-icon-plus {
  	padding: 20px;
  	color:gray;
 }
-.mui-input-row span{
+/*.mui-input-row span{
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
     line-height: 1.1;
     float: right;
@@ -25,4 +38,16 @@ header.mui-bar .mui-icon-plus {
     padding-left: 0;
     border: 0;
     padding: 11px 0;
+}*/
+.mui-segmented-control{
+	border-radius: 0;
+}
+.mui-btn, button, input[type="button"], input[type="reset"], input[type="submit"]{
+	border-radius: 0;
+}
+input[type="color"], input[type="date"], input[type="datetime-local"], input[type="datetime"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"], select, textarea{
+ border-radius: 0;
+}
+.mui-btn-block{
+ padding: 10px 0;
 }

@@ -5,15 +5,30 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" type="text/css" href="css/login.css"/>
+		<style type="text/css">
+		  .login-div{
+		  	margin-top: 35%;
+		  	margin-left: 35%;
+		  }
+		  .mui-input-group{
+		  	background: rgba(0,0,0,0);
+		  	margin-top: 30px;
+		  }
+		  .mui-input-group:after,.mui-input-group:before{
+		  	background: transparent;
+		  }
+		  .mui-content-padded {
+            margin: 50px 10px;
+          }
+          .mui-btn-block{
+          	padding: 10px 0;
+          }
+		</style>
 	</head>
 	<body>
-		<header class="mui-bar mui-bar-nav">
-		  <h1 class="mui-title">维修平台登录</h1>
-		</header>
 		<div class="mui-content">
 		  <div class="login-div">
-		  	<img src="img/logo.png" class="login-logo"/>
+		  	<img src="img/logo.png" class="login-logo" style='width: 40%;'/>
 		  </div>
 		  <form id='login-form' class="mui-input-group">
 		    <div class="mui-input-row">
@@ -22,14 +37,14 @@
 		    </div>
 		    <div class="mui-input-row">
 		        <label>密码</label>
-		        <input type="password" class="mui-input-password mui-iput" placeholder="密码" id='password' maxlength="20" value='123456'>
+		        <input type="password" class="mui-input-password mui-iput" placeholder="请填写密码" id='password' maxlength="20" value='123456'>
 		    </div>
+		  </form>
 		    <div class="mui-content-padded">
 		      <div class="center">
 		        <button type="button" class="mui-btn mui-btn-primary mui-btn-block" id='login'>登录</button>
 		      </div>
 		    </div>
-		  </form>
 		</div>
 		<script src="js/mui.min.js"></script>
      	<script src="js/libs/md5.min.js" type="text/javascript"></script>
@@ -101,7 +116,6 @@
 		  	  	  password: passwordBox.value.trim()
 		  	  	};
 		  	  	u.login(loginInfo, function(err) {
-		  	  	  mui.toast(err);
 		  	  	  if (err) {
 		  	  	  	plus.nativeUI.toast(err);
 		  	  	  	return;
