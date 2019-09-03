@@ -211,6 +211,28 @@
       return val;
     }
    };
+  //时间周期
+  owner.operationDate = function (d) {
+    var now = new Date();
+    now.setDate(now.getDate() + d);
+    var fmt = 'yyyy-MM-dd hh:mm:ss';
+    var o = {
+        "M+": now.getMonth() + 1, //月份
+        "d+": now.getDate(), //日
+        "h+": now.getHours(), //小时
+        "m+": now.getMinutes(), //分
+        "s+": now.getSeconds(), //秒
+        "q+": Math.floor((now.getMonth() + 3) / 3), //季度
+        "S": now.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt));
+    fmt = fmt.replace(RegExp.$1, (now.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    ////console.log(fmt)
+    return fmt;
+  }
   /**
    * 获取菜单
    * @param {Object} id
@@ -276,10 +298,13 @@
   	  	}
   	  	var _msg = '';
   	  	try{
+  	  	 console.log(xhr.response);
   	  	 if(xhr.response != null && JSON.parse(xhr.response)!= null){
+
   	  	   _msg = JSON.parse(xhr.response).Message;
   	  	 }
   	  	}catch(e){
+  	  		console.log(e)
   	  	 	mui.toast(e);
   	  	}
   	  	if(xhr.status == 400) {
@@ -292,10 +317,11 @@
   	})
   }
   
-  owner.getCount = function(list , fn){
+  owner.getCount = function(list, fn){
     if(config.isMock){
       var _database = new smpWebSql();
-      _database.counts('tb_repairbill_g', "where STATE<>'E", function(res){
+      _database.counts('tb_repairbill_g', "where STATE='E'", function(res){
+      	console.log(res);
       	var data = {
   	      "StatusCode": 200,
 	      "Message": null,
@@ -390,8 +416,8 @@
   	  	default:
   	  	  ret = false;
   	  	  break;
-  	  	return ret;
   	  }
+  	  return ret;
   	} else {
   	  return false;
   	}
@@ -580,3 +606,23 @@ var defaultInfo = '监控运行状态';
         return twoLevelMenus;
     }
 }(window.smp_menu = {}));
+
+//工单类型
+var BillType = {
+    bj: {
+        value: 'A',
+        text: '报警'
+    },
+    xj: {
+        value: 'C',
+        text: '巡检'
+    },
+    by: {
+        value: 'M',
+        text: '保养'
+    },
+    wx: {
+        value: 'R',
+        text: '维修'
+    }
+}

@@ -46,39 +46,40 @@
 	  	  <div class="mui-segmented-control">
 	  	  	<div class="divHeader">
 	  	  	  <a v-for='(item,index) in menu'
-	  	  	  	 class="mui-control-item">
-	  	  	    <span></span>
-	  	  	    <span class="round"></span>
+	  	  	  	 class="mui-control-item"
+	  	  	  	 :class= '{"mui-active": typeid === item.name}'>
+	  	  	    <span>{{item.title}}({{item.taskNum}})</span>
+	  	  	    <span class="round" v-if="item.rad"></span>
 	  	  	  </a>
 	  	  	</div>
 	  	  </div>
 	  	</header>
-	  	<div class="mui-content" id='pullRefresh'>
-	  	  <div v-show='list.length'>
+	  	<div class="mui-content">
+	  	  <div v-show='list.length' id='pullRefresh'>
 	  	  	<ul v-for='(item,index) in list'
 	  	  		class="mui-table-view">
 	  	  	  <li class="mui-table-view-cell">
 	  	  	  	<div class="mui-card">
 	  	  	  	  <div class="mui-card-header">
-	  	  	  	  	工单号：{{item.orderNumber}}
+	  	  	  	  	工单号：{{item.NO}}
 	  	  	  	  </div>
 	  	  	  	  <div class="mui-card-content">
 	  	  	  	  	<div class="mui-card-content-inner">
 	  	  	  	  	  <div class="bages">
-	  	  	  	  	  	<span class="mui-badge mui-badge-green">奖励2{{item.money}}￥</span>
-	  	  	  	  	  	<span class="mui-badge mui-badge-blue">1{{item.hour}}小时完成</span>
+	  	  	  	  	  	<span class="mui-badge mui-badge-green" v-if='item.MONEY'>奖励{{item.MONEY}}￥</span>
+	  	  	  	  	  	<span class="mui-badge mui-badge-blue" v-if='item.HOURS'>{{item.HOURS}}小时完成</span>
 	  	  	  	  	  	<span class="mui-badge mui-badge-danger" v-if='item.IS_URGENCY'>紧急</span>
 	  	  	  	  	  </div>
 	  	  	  	  	  <div class="middle">
-	  	  	  	  	  	<p>{{item.title}}</p>
-	  	  	  	  	  	<p>{{item.msg}}</p>
+	  	  	  	  	  	<p>{{item.ADDRESS}}</p>
+	  	  	  	  	  	<p>{{item.FAULT_INFO}}</p>
 	  	  	  	  	  </div>
 	  	  	  	  	</div>
 	  	  	  	  </div>
 	  	  	  	  <div class="mui-card-footer">
-	  	  	  	  	{{item.datetime}}
+	  	  	  	  	{{item.PRESS_FIRST_TIME}}
 	  	  	  	  	<button type="button" class="mui-btn mui-btn-default"
-	  	  	  	  		    @tap='handleDispatch(item)'>派工</button>
+	  	  	  	  		    @tap='handleDispatch(item, "P", true)'>派工</button>
 	  	  	  	  	<button type="button" class="mui-btn mui-btn-danger"
 	  	  	  	  		    @tap='handleGrab(item)'>抢单</button>
 	  	  	  	  </div>
@@ -96,19 +97,25 @@
 	  	<div id="pop" class="mui-popover mui-popover-bottom mui-popover-action">
 		  	<div class="pop-head">
 		  	  执行人员选择
-		  	  <a href="#pop"
-		  	  	 class="mui-icon mui-icon-close"></a>
+		  	  <a href="javascript:void(0)"
+		  	  	 class="mui-icon mui-icon-close"
+		  	  	 @tap='handleClose()'></a>
 		  	</div>
 		  	<div class="pop-body">
 		  	  <ul class="mui-table-view">
 		  	  	<li class="mui-table-view-cell"
 		  	  		v-for='(item, index) in staffs'>
-		  	  	  <span v-html='item.typeName'></span>
+		  	  	  <span v-html='item.NAME'></span>
 		  	  	   目前任务量：
-		  	  	  <span v-text='item.no'></span>
-		  	  	  <!--<div class="mui-radio mui-right">-->
-		  	  	  <input type="radio" :id='item.id' style="margin-right: 0;"/>
-		  	  	  <!--</div>-->
+		  	  	  <span v-text='item.TaskQty'></span>
+		  	  	  <div class="mui-radio mui-pull-right">
+		  	  	    <input type="radio"
+		  	  	    	   :id='item.USER_ID'
+		  	  	    	   :value='item.USER_ID'
+		  	  	    	   v-model='userId'
+		  	  	    	   name='id'
+		  	  	    	   style="margin-right: 0;"/>
+		  	  	  </div>
 		  	  	</li>
 		  	  </ul>
 		  	</div>
@@ -123,47 +130,157 @@
 	  </div>
 	  <script src="../../js/mui.min.js" type="text/javascript"></script>
 	  <script src="../../js/libs/vue.min.js" type="text/javascript"></script>
+	  <script src="../../js/libs/mock-min.js" type="text/javascript"></script>
+	  <script src="../../js/common/config.js" type="text/javascript"></script>
+	  <script src="../../js/common/global.js" type="text/javascript"></script>
+	  <script src="../../js/common/webSql.js" type="text/javascript"></script>
+	  <script src="../../js/common/mockdata.js" type="text/javascript"></script>
+	  <script src="../../js/app/pullRefresh.js" type="text/javascript"></script>
 	  <script type="text/javascript">
 	    var ow = null,
+	        pageSize = 10,
 	        app = new Vue({
 	          el: '#app',
 	          data: {
 	          	menu: [],
-	          	list: [{
-	  	          orderNumber: 'afb1bc58-d829-89e3',
-	  	          IS_URGENCY: true,
-	  	          title: 'xx小区6栋1705号',
-	  	          msg: '锁坏了',
-	  	          datetime:'2018-11-25 13:05:35',
-	  	          status: true
-	  	        }],//任务列表
-	  	        staffs: [{
-	  	          typeName: '周周',
-	  	          id: 1,
-	  	          no: 0
-	  	        }]//维修人员
+	          	typeid: '',
+	          	list: [],//任务列表
+	  	        staffs: [],//维修人员
+	  	        userId: '',//选择维修人员
+	  	        repair: {
+	  	          orgCode: config.ORG_CODE,
+				  userId: config.USER_ID,
+				  state: null,
+				  deptCode: null,
+				  districtId: null,
+				  buildId: '',
+				  reportTime_BT: g.operationDate(-365),
+				  reportTime_ET: g.operationDate(+1),
+				  start: 0,
+				  pageSize: pageSize
+	  	        },
+	  	        person: {}
 	          },
 	          mounted: function(){
-	          	mui.init();
+	          	var that = this;
+	          	that.getStaffList();
+	          	mui.init({
+	          	  pullRefresh: {
+	          	  	container: '#pullRefresh',
+	          	  	down: {
+	          	  	  style: 'circle',
+	          	  	  callback: that.down
+	          	  	},
+	          	  	up: {
+	          	  	  auto: true,
+	          	  	  contentrefresh: '正在加载',
+	          	  	  callback: that.up
+	          	  	}
+	          	  },
+	          	  beforeback: function(){
+	          	  	var homeVm = plus.webview.getWebviewById('pages/home.html');
+	          	  	mui.fire(homeVm, 'show');
+	          	  	that.userId = '';
+	          	  	mui('#pop').popover('toggle');
+	          	  	return true;
+	          	  }
+	          	});
 	          	mui.plusReady(function() {
+	          	  var vm = plus.webview.currentWebview();
+	          	  that.menu = vm.headData;
+	          	  that.typeid = vm.typeid;
 	          	  window.addEventListener('tap', function(e) {
-	          	  	console.log(e);
+//	          	  	console.log(e);
 	          	  })
-	          	})
+	          	});
 	          },
 	          methods: {
-	          	handleDispatch:function(item) {
+	          	//刷新
+	          	down: function(){
+	          	  var that = this;
+	          	  setTimeout(function(){
+	          	  	getList(that.repair, that, 1);
+	          	  }, 100);
+	          	},
+	          	//加载
+	          	up: function(){
+	          	  var that = this;
+	          	  setTimeout(function(){
+	          	  	getList(that.repair, that, 2);
+	          	  }, 100);
+	          	},
+	          	handleDispatch:function(item, tag, isDel) {
+	          	  if(this.staffs.length === 0){
+	          	  	mui.toast('暂无维修人员信息');
+	          	  	return;
+	          	  }
+	          	  this.person.NO = item.NO;
+	          	  this.person.typeid = this.typeid;
+	          	  this.person.isDel = isDel;
+	          	  if(tag) {
+	          	  	this.person.operatorType = tag;
+	          	  }
 	          	  mui('#pop').popover('toggle');
 	          	},
 	          	handleClose: function() {
-	          	  console.log(1);
-	          	  mui('#pop').popover('hide');
+	          	  var that = this;
+	          	  if(this.userId) {
+	          	  	mui.confirm('确定取消派工？', '确认', ['取消', '确定'], function(e) {
+	          	  	  if(e.index == 1) {
+	          	  	    mui('#pop').popover('hide');
+	          	  	    that.userId = '';
+	          	  	  }
+	          	    })
+	          	  } else {
+	          	  	mui('#pop').popover('hide');
+	          	  }
 	          	},
 	          	handleGrab: function(item) {
-	          	  console.log(2);
 	          	},
 	          	handleConfirm: function() {
+	          	  this.person.userId = this.userId;
+	          	  if(!this.userId) {
+	          	  	mui.toast('请选择执行人员');
+	          	  	return;
+	          	  } else {
+	          	  	var api = this.person.operatorType === 'P' ? config.AssignPersonRepair : config.TransferRepair;
+	          	  	g.ajax(api, {
+	          	  	  type: 'post',
+	          	  	  data: {
+	          	  	  	NO: this.person.NO,
+	          	  	  	BILL_NO: this.person.NO,
+	          	  	  	ACCEPT_USER_ID: this.userId,
+	          	  	  	USER_ID: this.userId,
+	          	  	  	USER_TYPE: 'B',
+	          	  	  	STATE: 'B',
+	          	  	  	CREATE_TIME: new Date(),
+	          	  	  	BUSINESS_TYPE: this.person.typeid === TaskType.repair.value ? BillType.wx.value : ''
+	          	  	  },
+	          	  	  success: function(data) {
+	          	  	  	if(data.StatusCode === 200) {
+	          	  	  	  mui.back();
+	          	  	  	}
+	          	  	  }
+	          	  	})
+	          	  }
 	          	  mui('#pop').popover('toggle');
+	          	},
+	          	getStaffList: function(){
+	          	  var that = this;
+	          	  if(config.isMock) {
+	          	  	getStaffsList(that);
+	          	  } else {
+	          	  	  g.ajax(config.QueryExecuteUserList, {
+		          	  	data: {
+		          	  	  orgCode: config.ORG_CODE
+		          	  	},
+		          	  	success: function(res) {
+		          	  	  if(res.StatusCode == 200) {
+		          	  	  	that.staffs = res.Data;
+		          	  	  }
+		          	  	}
+		          	  })
+	          	 }
 	          	}
 	          }
 	        });

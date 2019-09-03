@@ -256,7 +256,8 @@
 		      	  FAULT_INFO: '',
 		      	  FAULT_TYPE: '',
 		      	  LIMIT_TIME: '',
-		      	  IS_URGENCY: 0
+		      	  IS_URGENCY: 0,
+		      	  STATE: WorkOrderStatus.waitOrder.value
 		      	},
 		      	search: '',
 		      	autoSearchList: [],
@@ -271,6 +272,13 @@
 		      },
 		      mounted: function() {
 		      	var self = this;
+		      	mui.init({
+	          	  beforeback: function(){
+	          	  	var homeVm = plus.webview.getWebviewById('pages/home.html');
+	          	  	mui.fire(homeVm, 'show');
+	          	  	return true;
+	          	  }
+	          });
 		      	mui.ready(function(){
 		      	  document.getElementById('F_SMP').addEventListener('tap', function(){
 		      	  	showActionSheet({
@@ -412,7 +420,7 @@
                   var userInfo = g.getUserInfo();
                   this.data_v.REPORT_USER_NAME = userInfo.NAME;
                   this.data_v.PHONE = userInfo.PHONE;
-                  this.data_v.REPORT_USER_NAME = 'userInfo.NAME';
+                  this.data_v.REPORT_USER_NAME = userInfo.NAME;
                   this.data_v.PHONE = '12345678';
 //                document.getElementById('btnSubmit').setAttribute('disabled', true);
                   var str = '{ "StatusCode": 200, "Message": "上传成功", "Data": [';
@@ -434,12 +442,11 @@
 	  	  return;
 	  	}
 	  	mui.plusReady(function(){
-	  	  console.log(1);
 	  	  g.ajax(config.AddRepairBill,{
 		  	data: JSON.stringify(app.data_v),
 		  	success: function(data) {
-		  	  console.log(data);
               document.getElementById('btnSubmit').setAttribute('disabled', false);
+              mui.back();
 		  	}
 		 })
 	  	})

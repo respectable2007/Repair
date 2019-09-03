@@ -98,16 +98,11 @@
                     //var sql = "";
                     for(var s = 0 , _len = arr.length; s < _len ; s++){
                         var _value = _me.split(arr[s]);
-                        //sql += 'INSERT INTO ' + tableName + ' (' + _key + ') VALUES (' + _value + ')';
-                        //console.log("sql:" + sql);
-                        console.log(_key)
-                        console.log(_value)
                         tx.executeSql('INSERT INTO '+tableName+' ('+_key+') VALUES ('+_value+')',[],function (tx, result) {
                             //console.log('添加成功'+result.rowsAffected);
                             callback(result.rowsAffected);
                         },function (tx, error) {
-                        	console.log(error)
-                            console.error('添加失败');
+                        	console.log(error);
                             callback(false);
                         });
                     }
@@ -129,6 +124,7 @@
             var _db = this.database,
                 _value = this.splitU(obj);
             _db.transaction(function (tx) {
+            	console.log(key,value,_value);
                 //console.log('sql:' + 'UPDATE ' + tableName + ' set ' + _value + ' where ' + key + '="' + value + '"')
                 tx.executeSql('UPDATE '+tableName+' set '+_value+' where '+key+'="'+value+'"',[],function (tx, result) {
                     callback(result.rowsAffected);
@@ -226,7 +222,6 @@
                         }
                     }, function (tx, error) {
                         _callback(0);
-                        console.error('查询失败');
                     });
                 });
             } else {
@@ -243,7 +238,7 @@
                         }
                     }, function (tx, error) {
                         _callback(0);
-                        console.error('查询失败');
+                        console.error(error);
                     });
                 });
             }

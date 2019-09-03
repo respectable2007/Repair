@@ -238,6 +238,13 @@
 //		  	      	}
 //	  	      	  }
 //	  	      	})
+                mui.init({
+	          	  beforeback: function(){
+	          	  	var homeVm = plus.webview.getWebviewById('pages/home.html');
+	          	  	mui.fire(homeVm, 'show');
+	          	  	return true;
+	          	  }
+	          	});
 	  	      	mui.ready(function() {
 	  	      	  getAllList();
 	  	      	})

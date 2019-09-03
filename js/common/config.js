@@ -40,6 +40,7 @@
   owner.loginUrl = apiDomain + 'api/Base/LoginApp';
   /*工单类*/
   owner.BillWorkbench = apiDomain + '/api/Maintain/BillWorkbench'; //工作台
+  owner.QueryExecuteUserList = apiDomain + '/api/Bill/QueryExecuteUserList'; //查询执行人员列表
   /*基础类*/
   owner.GetBuildsPage = apiDomain + '/api/Base/GetBuildsPage'; //建筑信息列表
   owner.QueryAllDistrictTree = apiDomain + '/api/Base/QueryAllDistrictTree'; //获取行政区域树
@@ -48,6 +49,8 @@
   owner.QueryWorkLoadQty = apiDomain + '/api/Base/QueryWorkLoadQty'; //工作量
   /*维修*/
   owner.AddRepairBill = apiDomain + '/api/Repair/AddRepairBill'; //维修报修
+  owner.AssignPersonRepair = apiDomain + '/api/Repair/AssignPersonRepair'; //维修抢单、派工
+  owner.TransferRepair = apiDomain + '/api/Repair/TransferRepair';//转单
   
   /*统计信息*/
   owner.BillRewardForUser = apiDomain + '/api/Maintain/BillRewardForUser'; //奖励金额

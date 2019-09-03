@@ -31,6 +31,20 @@ function getNamebyTypeId(typeId) {
     }
     return result;
 }
+function initTableDataGlobal() {
+  var list_executeuser = [{
+        "USER_ID": "4403006",
+        "NAME": "邹琼俊",
+        "TaskQty": 0
+    }, {
+        "USER_ID": "4403007",
+        "NAME": "邹玉杰",
+        "TaskQty": 0
+    }];
+  _database.add('tb_executeuser_g', list_executeuser, function(res) {
+  	console.log('insert success');
+  })
+}
 //项目经理菜单权限
 var pmObj = {
     "StatusCode": 200,
@@ -770,55 +784,8 @@ if (config.isMock) {
             "COLLECTOR_ADDRESS": "2楼储物间"
         }]
     }
-  };
-  
-  //登录
-  Mock.mock(config.loginUrl, null, function(options){
-  	var _body = JSON.parse(options.body),
-  	    userid = _body.USER_ID,
-  	    result = null;
-  	if(_body.PASSWORD != 'e10adc3949ba59abbe56e057f20f883e') {
-  		return loginUrlErrorObj;
-  	}
-  	if(userid == '4403001') {
-  		result = pmObj;
-  	} else if(userid == '4403006') {
-  		result = leaderObj;
-  	} else if(userid == '4403007') {
-  		result = repairmanObj;
-  	} else if(userid == '4403010') {
-  		result = customerObj;
-  	} else {
-  		result = loginUrlErrorObj;
-  	}
-  	return result;  
-  });
-  Mock.mock(config.GetFaultType, {
-    "StatusCode": 200,
-    "Message": null,
-    "Data": [{
-      "CODE": "GZDT01",
-      "EQT_ID": "4403Z01",
-      "NAME": "设备故障",
-      "sys_updatetime": "2018-09-19T11:03:55.670795Z",
-      "STATE":1,
-      "CREATE_USER_ID": "zh",
-      "MODIFY_TIME": null,
-      "MODIFY_USER_ID": null,
-      "CREATE-TIME": "2018-09-19T11:03:55"
-    },{
-      "CODE": "GZDT02",
-      "EQT_ID": "4403Z01",
-      "NAME": "采集器掉线",
-      "sys_updatetime": "2018-09-19T11:04:06.984182Z",
-      "STATE":1,
-      "CREATE_USER_ID": "zh",
-      "MODIFY_TIME": null,
-      "MODIFY_USER_ID": null,
-      "CREATE-TIME": "2018-09-19T11:04:06"
-    }]
-  }),
-  QueryAllDistrictTreeData = {
+  },
+   QueryAllDistrictTreeData = {
     "StatusCode": 200,
     "Message": null,
     "Data": [{
@@ -987,6 +954,52 @@ if (config.isMock) {
       	"Detail_List": [] 
        }
     };
+    //登录
+  Mock.mock(config.loginUrl, null, function(options){
+  	var _body = JSON.parse(options.body),
+  	    userid = _body.USER_ID,
+  	    result = null;
+  	if(_body.PASSWORD != 'e10adc3949ba59abbe56e057f20f883e') {
+  		return loginUrlErrorObj;
+  	}
+  	if(userid == '4403001') {
+  		result = pmObj;
+  	} else if(userid == '4403006') {
+  		result = leaderObj;
+  	} else if(userid == '4403007') {
+  		result = repairmanObj;
+  	} else if(userid == '4403010') {
+  		result = customerObj;
+  	} else {
+  		result = loginUrlErrorObj;
+  	}
+  	return result;  
+  });
+  Mock.mock(config.GetFaultType, {
+    "StatusCode": 200,
+    "Message": null,
+    "Data": [{
+      "CODE": "GZDT01",
+      "EQT_ID": "4403Z01",
+      "NAME": "设备故障",
+      "sys_updatetime": "2018-09-19T11:03:55.670795Z",
+      "STATE":1,
+      "CREATE_USER_ID": "zh",
+      "MODIFY_TIME": null,
+      "MODIFY_USER_ID": null,
+      "CREATE-TIME": "2018-09-19T11:03:55"
+    },{
+      "CODE": "GZDT02",
+      "EQT_ID": "4403Z01",
+      "NAME": "采集器掉线",
+      "sys_updatetime": "2018-09-19T11:04:06.984182Z",
+      "STATE":1,
+      "CREATE_USER_ID": "zh",
+      "MODIFY_TIME": null,
+      "MODIFY_USER_ID": null,
+      "CREATE-TIME": "2018-09-19T11:04:06"
+    }]
+  });
   //获取列表条码数
   Mock.mock(config.BillWorkbench, BillWorkbenchData);
   //获取建筑数据列表
@@ -1070,4 +1083,18 @@ if (config.isMock) {
   Mock.mock(config.QueryWorkLoadQty, QueryWorkLoadQty);
   //奖励金额
   Mock.mock(config.BillRewardForUser, BillRewardForUser);
+  //派工
+  Mock.mock(config.AssignPersonRepair, null, function(options) {
+  	var body = JSON.parse(options.body);
+  	_database.update('tb_repairbill_g', 'NO', body.NO, {
+  	  "STATE": 'B',
+  	  "ACCEPT_TIME": g.operationDate(0),
+  	  "ACCEPT_USER_ID": body.ACCEPT_USER_ID,
+//	  "HELP_SEND_USER_ID": body.HELP_SEND_USER_ID,
+  	  "HELP_SEND_TIME": body.HELP_SEND_TIME
+  	},function(res){
+  	  console.log(res)
+  	})
+  	return { "StatusCode": 200, "Message": null, "Data": 1 };
+  });
 }
