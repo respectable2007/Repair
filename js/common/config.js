@@ -60,7 +60,7 @@
 (function(owner){
   owner.pm = 'pm';//项目经理
   owner.leader = 'leader';//维修组长
-  owner.repairman = 'repairman';//维修人员
+  owner.repair = 'repairman';//维修人员
   owner.customer = 'customer';//报修人员
 })(window.comm = {})
 /** 

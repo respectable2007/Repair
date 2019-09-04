@@ -257,7 +257,7 @@
 		      	  FAULT_TYPE: '',
 		      	  LIMIT_TIME: '',
 		      	  IS_URGENCY: 0,
-		      	  STATE: WorkOrderStatus.waitOrder.value
+		      	  STATE: g.WorkOrderStatus.waitOrder.value
 		      	},
 		      	search: '',
 		      	autoSearchList: [],
@@ -418,10 +418,9 @@
 	      	  	                         ? 1 : 0;
                   this.data_v.REPORT_TIME = g.formatDate('D', 'YMDHMS');
                   var userInfo = g.getUserInfo();
+                  this.data_v.CREATE_USER_ID = userInfo.USER_ID;
                   this.data_v.REPORT_USER_NAME = userInfo.NAME;
                   this.data_v.PHONE = userInfo.PHONE;
-                  this.data_v.REPORT_USER_NAME = userInfo.NAME;
-                  this.data_v.PHONE = '12345678';
 //                document.getElementById('btnSubmit').setAttribute('disabled', true);
                   var str = '{ "StatusCode": 200, "Message": "上传成功", "Data": [';
                   if(this.imgItemList.length > 0 ) {

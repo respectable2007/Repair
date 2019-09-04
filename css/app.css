@@ -51,3 +51,38 @@ input[type="color"], input[type="date"], input[type="datetime-local"], input[typ
 .mui-btn-block{
  padding: 10px 0;
 }
+.mui-badge.mui-badge-border{
+  padding:2px 4px;
+  border: 1px solid darkgray;
+  background: transparent;
+}
+.mui-badge-primary.mui-badge-border, .mui-badge-blue.mui-badge-border
+{
+    color: #007aff;
+    border: 1px solid #007aff;
+    background-color: transparent;
+}
+.mui-badge-success.mui-badge-border, .mui-badge-green.mui-badge-border
+{
+    color: #4cd964;
+    border: 1px solid #4cd964;
+    background-color: transparent;
+}
+.mui-badge-warning.mui-badge-border, .mui-badge-yellow.mui-badge-border
+{
+    color: #f0ad4e;
+    border: 1px solid #f0ad4e;
+    background-color: transparent;
+}
+.mui-badge-danger.mui-badge-border, .mui-badge-red.mui-badge-border
+{
+    color: #dd524d;
+    border: 1px solid #dd524d;
+    background-color: transparent;
+}
+.mui-badge-royal.mui-badge-border, .mui-badge-purple.mui-badge-border
+{
+    color: #8a6de9;
+    border: 1px solid #8a6de9;
+    background-color: transparent;
+}

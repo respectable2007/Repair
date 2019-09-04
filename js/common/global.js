@@ -3,7 +3,8 @@
  * 公共方法
  */
 (function($, owner){
-	owner.AppRoleType = localStorage.getItem('$appRoleType');
+	//角色类型
+	owner.AppRoleType = localStorage.getItem('$AppRoleType');
 	//订单生成时的初始化状态名称
     owner.getOrderInitStatusText = function () {
         var txt = '';
@@ -30,7 +31,7 @@
 	/**
 	 * 工单状态
 	 */
-	var WorkOrderStatus = {
+	owner.WorkOrderStatus = {
 	    waitOrder: {
 	        value: 'A',
 	        text: g.getOrderInitStatusText()
@@ -56,10 +57,42 @@
 	        text: '已结束'
 	    }
 	}
+	 /**
+	 * 根据状态ID获取状态名称
+	 * @param {string} id
+	 */
+    owner.getStatusNameById = function (id, isRepair) {
+        var name = '';
+        switch (id) {
+            case  g.WorkOrderStatus.waitOrder.value:
+                name = g.getOrderInitStatusText(); // WorkOrderStatus.waitOrder.text;
+                break;
+            case  g.WorkOrderStatus.waitSignin.value:
+                name =  g.WorkOrderStatus.waitSignin.text;
+                break;
+            case  g.WorkOrderStatus.waitOver.value:
+                name =  g.WorkOrderStatus.waitOver.text;
+                break;
+            case  g.WorkOrderStatus.waitAudit.value:
+                name =  g.WorkOrderStatus.waitAudit.text;
+                break;
+            case  g.WorkOrderStatus.Over.value:
+                name =  g.WorkOrderStatus.Over.text;
+                break;
+            case  g.WorkOrderStatus.Revoke.value:
+                name =  g.WorkOrderStatus.Revoke.text;
+                break;
+
+            default:
+                name = '';
+                break;
+        }
+        return name;
+    }
 	/**
 	 * 获取工单状态
 	 */
-    owner.getOrderStatusPicker = function (typeid, tag) {
+   owner.getOrderStatusPicker = function (typeid, tag) {
         var picker = new mui.PopPicker(),
             aVal = { value: 'A', text: '待接受' }, //巡检保养初始化状态
             aInitVal = { value: 'A', text: g.getOrderInitStatusText() }; //维修初始化状态
@@ -69,18 +102,18 @@
                     picker.setData([{
                         value: null,
                         text: '全部'
-                    }, aInitVal, WorkOrderStatus.waitSignin, WorkOrderStatus.waitOver, WorkOrderStatus.Revoke, WorkOrderStatus.Over]);
+                    }, aInitVal, owner.WorkOrderStatus.waitSignin, owner.WorkOrderStatus.waitOver, owner.WorkOrderStatus.Revoke, owner.WorkOrderStatus.Over]);
                 } else if (tag == "manage") {
                     picker.setData([{
                         value: null,
                         text: '全部'
-                    }, aInitVal, WorkOrderStatus.waitSignin, WorkOrderStatus.waitOver, WorkOrderStatus.Revoke, WorkOrderStatus.Over]);
+                    }, aInitVal, owner.WorkOrderStatus.waitSignin, owner.WorkOrderStatus.waitOver, owner.WorkOrderStatus.Revoke, owner.WorkOrderStatus.Over]);
                 }
                 else {
                     picker.setData([{
                         value: null,
                         text: '全部'
-                    }, aInitVal, WorkOrderStatus.waitSignin, WorkOrderStatus.waitOver, WorkOrderStatus.waitAudit, WorkOrderStatus.Revoke, WorkOrderStatus.Over]);
+                    }, aInitVal, owner.WorkOrderStatus.waitSignin, owner.WorkOrderStatus.waitOver, owner.WorkOrderStatus.waitAudit, owner.WorkOrderStatus.Revoke, owner.WorkOrderStatus.Over]);
                 }
                 break;
             default:
@@ -320,8 +353,7 @@
   owner.getCount = function(list, fn){
     if(config.isMock){
       var _database = new smpWebSql();
-      _database.counts('tb_repairbill_g', "where STATE='E'", function(res){
-      	console.log(res);
+      _database.counts('tb_repairbill_g', "where STATE<>'E'", function(res){
       	var data = {
   	      "StatusCode": 200,
 	      "Message": null,
@@ -625,4 +657,10 @@ var BillType = {
         value: 'R',
         text: '维修'
     }
+}
+//报修来源
+var SourceType = {
+    A: '电话报修',
+    B: '维修公众号',
+    C: 'App报修'
 }

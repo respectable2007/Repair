@@ -7,6 +7,17 @@
 		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/app.css"/>
 		<style type="text/css">
+		 .mui-bar{
+		  padding: 0;
+		 }
+		 .mui-bar .mui-segmented-control{
+		   top: 0;
+		   width: 100%;
+	       background-color: #FFFFFF;
+         }
+		  .mui-bar-nav~.mui-content {
+		  	padding-top: 84px;
+		  }
 		  .bages .mui-badge{
 		  	padding: 6px 9px;
 		  }
@@ -43,11 +54,13 @@
 	  	<header class="mui-bar mui-bar-nav">
 	  	  <a class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back"></a>
 	  	  <h1 class="mui-title">待处理任务</h1>
-	  	  <div class="mui-segmented-control">
+	  	  <div class="mui-segmented-control mui-segmented-control-inverted">
 	  	  	<div class="divHeader">
 	  	  	  <a v-for='(item,index) in menu'
 	  	  	  	 class="mui-control-item"
-	  	  	  	 :class= '{"mui-active": typeid === item.name}'>
+	  	  	  	 :class= '{"mui-active": typeid === item.name}'
+	  	  	  	 href='javascript:void(0)'
+	  	  	  	 @tap='handleTaskList(item)'>
 	  	  	    <span>{{item.title}}({{item.taskNum}})</span>
 	  	  	    <span class="round" v-if="item.rad"></span>
 	  	  	  </a>
@@ -58,7 +71,8 @@
 	  	  <div v-show='list.length' id='pullRefresh'>
 	  	  	<ul v-for='(item,index) in list'
 	  	  		class="mui-table-view">
-	  	  	  <li class="mui-table-view-cell">
+	  	  	  <li class="mui-table-view-cell"
+	  	  	  	  @tap.stop = 'handleOpenDetail(item)'>
 	  	  	  	<div class="mui-card">
 	  	  	  	  <div class="mui-card-header">
 	  	  	  	  	工单号：{{item.NO}}
@@ -78,10 +92,32 @@
 	  	  	  	  </div>
 	  	  	  	  <div class="mui-card-footer">
 	  	  	  	  	{{item.PRESS_FIRST_TIME}}
-	  	  	  	  	<button type="button" class="mui-btn mui-btn-default"
-	  	  	  	  		    @tap='handleDispatch(item, "P", true)'>派工</button>
-	  	  	  	  	<button type="button" class="mui-btn mui-btn-danger"
-	  	  	  	  		    @tap='handleGrab(item)'>抢单</button>
+	  	  	  	  		<button type="button" class="mui-btn mui-btn-default"
+	  	  	  	  		    @tap='handleDispatch(item, "P", true)'
+	  	  	  	  		    v-if='item.STATE == g.WorkOrderStatus.waitOrder.value && roleid == (comm.leader || comm.pm)'>派工</button>
+	  	  	  	  	  <button type="button"
+	  	  	  	  		       class="mui-btn mui-btn-danger"
+	  	  	  	  		       @tap='handleGrab(item)'
+	  	  	  	  		       v-if='item.STATE == g.WorkOrderStatus.waitOrder.value && (roleid == (comm.leader || comm.repair))&& item.CREATE_USER_ID == config.USER_ID'>
+	  	  	  	  		       抢单
+	  	  	  	  	  </button>
+	  	  	  	  	  <button type="button" class="mui-btn mui-btn-default"
+	  	  	  	  	  	    @tap.stop='handleDispatch(item, "Z", true)'
+	  	  	  	  		    v-if='(item.STATE == (g.WorkOrderStatus.waitSignin.value || g.WorkOrderStatus.waitOver.value))&& roleid == comm.pm'>
+	  	  	  	  		    转单
+	  	  	  	  	  </button>
+	  	  	  	  	  <button  type="button" class="mui-btn mui-btn-default"
+	  	  	  	  	  	v-if='(item.STATE == g.WorkOrderStatus.waitSignin.value) && item.ACCEPT_USER_ID == config.USER_ID'>
+	  	  	  	  	  	签到
+	  	  	  	  	  </button>
+	  	  	  	  	  <button  type="button" class="mui-btn mui-btn-default"
+	  	  	  	  	  	v-if='(item.STATE == g.WorkOrderStatus.waitOver.value) && item.ACCEPT_USER_ID == config.USER_ID'>
+	  	  	  	  	  	完工
+	  	  	  	  	  </button>
+	  	  	  	  	  <button  type="button" class="mui-btn mui-btn-default"
+	  	  	  	  	  	v-if='(item.STATE == g.WorkOrderStatus.waitAudit.value) && ((item.CREATE_USER_ID == config.USER_ID && typeid == TaskType.repair.value) || typeid != TaskType.repair.value)'>
+	  	  	  	  	  	评价
+	  	  	  	  	  </button>
 	  	  	  	  </div>
 	  	  	  	</div>
 	  	  	  </li>
@@ -143,7 +179,7 @@
 	          el: '#app',
 	          data: {
 	          	menu: [],
-	          	typeid: '',
+	          	typeid: 'repair',
 	          	list: [],//任务列表
 	  	        staffs: [],//维修人员
 	  	        userId: '',//选择维修人员
@@ -159,7 +195,12 @@
 				  start: 0,
 				  pageSize: pageSize
 	  	        },
-	  	        person: {}
+	  	        polling: {},
+	  	        maintain: {},
+	  	        alarm: {},
+	  	        person: {},
+	  	        roleid: g.AppRoleType,//角色类型
+	  	        curView: null//预加载页面视图
 	          },
 	          mounted: function(){
 	          	var that = this;
@@ -189,24 +230,54 @@
 	          	  var vm = plus.webview.currentWebview();
 	          	  that.menu = vm.headData;
 	          	  that.typeid = vm.typeid;
+	          	  var url = that.typeid + '/order-detail.html';
+	          	  	that.curView = mui.preload({
+	          	  	  id: url,
+	          	  	  url: url
+	          	  })
 	          	  window.addEventListener('tap', function(e) {
 //	          	  	console.log(e);
 	          	  })
 	          	});
 	          },
 	          methods: {
+	          	//打开详情页
+	          	handleOpenDetail: function(item){
+	          	  var that = this;
+	          	  mui.fire(that.curView, 'show', {
+	          	  	typeid: that.typeid,
+	          	  	detail: item
+	          	  })
+	          	  setTimeout(function(){
+	          	  	that.curView.show('slide-in-right', 300);
+	          	  }, 150)
+	          	},
+	          	handleTaskList: function(item){
+	          	  var typeid = item.name,
+	          	      that = this;
+	          	  that.typeid = item.name;
+	          	  that.list = []
+	          	  getList(that[typeid], this, 2);
+	          	  mui.plusReady(function(){
+	          	  	var url = typeid + '/order-detail.html';
+	          	  	that.curView = mui.preload({
+	          	  	  id: url,
+	          	  	  url: url
+	          	  	})
+	          	  })
+	          	},
 	          	//刷新
 	          	down: function(){
 	          	  var that = this;
 	          	  setTimeout(function(){
-	          	  	getList(that.repair, that, 1);
+	          	  	getList(that[that.typeid], that, 1);
 	          	  }, 100);
 	          	},
 	          	//加载
 	          	up: function(){
 	          	  var that = this;
 	          	  setTimeout(function(){
-	          	  	getList(that.repair, that, 2);
+	          	  	getList(that[that.typeid], that, 2);
 	          	  }, 100);
 	          	},
 	          	handleDispatch:function(item, tag, isDel) {

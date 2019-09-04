@@ -45,6 +45,31 @@ function initTableDataGlobal() {
   	console.log('insert success');
   })
 }
+function addExecuteBill(data){
+  _database.add('tb_billexecute_g', [data], function(res){
+//	console.log(111)
+  })
+}
+function getUserNameByUserId(userid) {
+    var result = '';
+    switch (userid) {
+        case '4403001':
+            result = '李经理';
+            break;
+        case '4403006':
+            result = '邹琼俊'; //班组长
+            break;
+        case '4403007':
+            result = '邹玉杰'; //运维人员
+            break;
+        case '4403010':
+            result = '业主丁某人';
+            break;
+        default:
+            break;
+    }
+    return result;
+}
 //项目经理菜单权限
 var pmObj = {
     "StatusCode": 200,
@@ -954,7 +979,7 @@ if (config.isMock) {
       	"Detail_List": [] 
        }
     };
-    //登录
+  //登录
   Mock.mock(config.loginUrl, null, function(options){
   	var _body = JSON.parse(options.body),
   	    userid = _body.USER_ID,
@@ -975,6 +1000,7 @@ if (config.isMock) {
   	}
   	return result;  
   });
+  //获取故障类型列表
   Mock.mock(config.GetFaultType, {
     "StatusCode": 200,
     "Message": null,
@@ -1071,6 +1097,24 @@ if (config.isMock) {
       console.log(res);
       console.log('添加维修工单成功');
     });
+    var record = {
+	     "ID": newGuid(),
+	    "CREATEDDATE": "",
+	    "BILL_NO": no,
+	    "BUSINESS_TYPE": "R",
+	    "STATE": 'A',
+	    "CREATE_USER_ID": _body.CREATE_USER_ID,
+	    "CREATE_TIME": _body.REPORT_TIME,
+	    "RESULT": "提交报修单",
+	    "MESSAGE": null,
+	    "CREATE_TIMEStr": _body.REPORT_TIME,
+	    "STATE_Text": g.getStatusNameById('A'),
+	    "USERNAME": _body.REPORT_USER_NAME,
+	    "ROLENAME": null,
+	    "OPETYPE": null,
+	    "sys_updatetime": "0001-01-01T00:00:00"
+    };
+    addExecuteBill(record);
     return {"StatusCode": 200,"Message":null,"Data":no};
   });
   //行政区域
@@ -1095,6 +1139,56 @@ if (config.isMock) {
   	},function(res){
   	  console.log(res)
   	})
+  	var record = {
+	    "ID": newGuid(),
+	    "CREATEDDATE": "",
+	    "BILL_NO": body.NO,
+	    "BUSINESS_TYPE": "R",
+	    "STATE": 'B',
+	    "CREATE_USER_ID": body.CREATE_USER_ID,
+	    "CREATE_TIME": body.REPORT_TIME,
+	    "RESULT": "分配工作人员",
+	    "MESSAGE": null,
+	    "CREATE_TIMEStr": g.operationDate(0),
+	    "STATE_Text": g.getStatusNameById('B'),
+	    "USERNAME": getUserNameByUserId(body.ACCEPT_USER_ID),
+	    "ROLENAME": null,
+	    "OPETYPE": null,
+	    "sys_updatetime": "0001-01-01T00:00:00"
+    };
+    addExecuteBill(record);
+  	return { "StatusCode": 200, "Message": null, "Data": 1 };
+  });
+  //转单
+  Mock.mock(config.TransferRepair, null, function(options) {
+  	var body = JSON.parse(options.body);
+  	_database.update('tb_repairbill_g', 'NO', body.NO, {
+  	  "STATE": 'B',
+  	  "ACCEPT_TIME": g.operationDate(0),
+  	  "ACCEPT_USER_ID": body.ACCEPT_USER_ID,
+//	  "HELP_SEND_USER_ID": body.HELP_SEND_USER_ID,
+  	  "HELP_SEND_TIME": body.HELP_SEND_TIME
+  	},function(res){
+  	  console.log(res)
+  	})
+  	var record = {
+	    "ID": newGuid(),
+	    "CREATEDDATE": "",
+	    "BILL_NO": body.NO,
+	    "BUSINESS_TYPE": "R",
+	    "STATE": 'B',
+	    "CREATE_USER_ID": body.CREATE_USER_ID,
+	    "CREATE_TIME": body.REPORT_TIME,
+	    "RESULT": "转单",
+	    "MESSAGE": null,
+	    "CREATE_TIMEStr": g.operationDate(0),
+	    "STATE_Text": g.getStatusNameById('B'),
+	    "USERNAME": getUserNameByUserId(body.ACCEPT_USER_ID),
+	    "ROLENAME": null,
+	    "OPETYPE": null,
+	    "sys_updatetime": "0001-01-01T00:00:00"
+    };
+    addExecuteBill(record);
   	return { "StatusCode": 200, "Message": null, "Data": 1 };
   });
 }

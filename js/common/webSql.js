@@ -124,7 +124,7 @@
             var _db = this.database,
                 _value = this.splitU(obj);
             _db.transaction(function (tx) {
-            	console.log(key,value,_value);
+//          	console.log(key,value,_value);
                 //console.log('sql:' + 'UPDATE ' + tableName + ' set ' + _value + ' where ' + key + '="' + value + '"')
                 tx.executeSql('UPDATE '+tableName+' set '+_value+' where '+key+'="'+value+'"',[],function (tx, result) {
                     callback(result.rowsAffected);
@@ -177,7 +177,7 @@
                         }
                     },function(tx,error){
                         _callback([]);
-                        console.error('查询失败');
+//                      console.error('查询失败');
                     });
                 });
                 return this;

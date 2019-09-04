@@ -1822,7 +1822,6 @@ input[type='submit']:enabled:active, input[type='submit'].mui-active:enabled,
     color: #929292;
     background-color: transparent;
 }
-
 .mui-badge-primary, .mui-badge-blue
 {
     color: #fff;

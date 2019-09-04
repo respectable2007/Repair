@@ -11,7 +11,7 @@ function initSearch(o) {
 
 //获取工单列表
 /*
- *operateType：操作类型，1是下拉刷新，2是上拉下载
+ *operateType：操作类型，1是下拉刷新，2是上拉加载
  */
 function getList(v, app, operateType) {
   initSearch(operateType);
@@ -73,3 +73,4 @@ function getStaffsList(app) {
   	app.staffs = data;
   })
 }
+
