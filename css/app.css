@@ -78,11 +78,35 @@ input[type="color"], input[type="date"], input[type="datetime-local"], input[typ
 {
     color: #dd524d;
     border: 1px solid #dd524d;
-    background-color: transparent;
+  background-color: transparent;
 }
 .mui-badge-royal.mui-badge-border, .mui-badge-purple.mui-badge-border
 {
-    color: #8a6de9;
-    border: 1px solid #8a6de9;
-    background-color: transparent;
+  color: #8a6de9;
+  border: 1px solid #8a6de9;
+  background-color: transparent;
 }
+.mui-popover .pop-head{
+  height: 40px;
+  background: #dfdfdf;
+  text-align: center;
+  position: relative;
+  padding:8px 0;
+}
+.mui-popover .pop-head a{
+  position: absolute;
+  right: 4px;
+  top: 6px;
+  color: #000;
+}
+.mui-popover .pop-body{
+  height: 260px;
+  background: #fff;
+}
+.mui-popover .pop-body .mui-table-view{
+  margin: 0;
+}
+.mui-popover .pop-body .mui-table-view .mui-table-view-cell{
+  text-align: left;
+}
+

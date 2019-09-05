@@ -26,6 +26,7 @@ function getList(v, app, operateType) {
   } else{
   	if(config.isMock) {
   	  var where = 'where 1=1';
+//	  console.log(JSON.stringify(v));
   	  if(v.buildId) {
   	  	where += ' and BUILD_ID="' + v.buildId + '"';
   	  }
@@ -37,6 +38,7 @@ function getList(v, app, operateType) {
   	  }
   	  where += ' ORDER BY REPORT_TIME DESC limit ' + pageIndex * v.pageSize + ',' + v.pageSize;
   	  database.read('tb_repairbill_g', where, function(res) {
+//	  	console.log(JSON.stringify(res))
   	  	var data = {
   	  	  "StatusCode": 200,
   	  	  "message": null,

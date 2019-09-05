@@ -51,7 +51,7 @@
   owner.AddRepairBill = apiDomain + '/api/Repair/AddRepairBill'; //维修报修
   owner.AssignPersonRepair = apiDomain + '/api/Repair/AssignPersonRepair'; //维修抢单、派工
   owner.TransferRepair = apiDomain + '/api/Repair/TransferRepair';//转单
-  
+  owner.SignRepair = apiDomain + '/api/Repair/SignRepair'; //维修签到
   /*统计信息*/
   owner.BillRewardForUser = apiDomain + '/api/Maintain/BillRewardForUser'; //奖励金额
 }(window.config = {}));

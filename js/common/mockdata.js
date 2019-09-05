@@ -14,7 +14,6 @@ function newGuid() {
         if ((i == 8) || (i == 12))
             guid += "-";
     }
-    console.log(guid)
     return guid;
 }
 function getNamebyTypeId(typeId) {
@@ -1183,6 +1182,38 @@ if (config.isMock) {
 	    "MESSAGE": null,
 	    "CREATE_TIMEStr": g.operationDate(0),
 	    "STATE_Text": g.getStatusNameById('B'),
+	    "USERNAME": getUserNameByUserId(body.ACCEPT_USER_ID),
+	    "ROLENAME": null,
+	    "OPETYPE": null,
+	    "sys_updatetime": "0001-01-01T00:00:00"
+    };
+    addExecuteBill(record);
+  	return { "StatusCode": 200, "Message": null, "Data": 1 };
+  });
+  //签到
+  Mock.mock(config.SignRepair, null, function(options) {
+  	var body = JSON.parse(options.body);
+  	_database.update('tb_repairbill_g', 'NO', body.NO, {
+  	  "STATE": 'C',
+  	  "SIGN_TIME": g.operationDate(0),
+  	  "ACCEPT_USER_ID": body.ACCEPT_USER_ID
+//	  "REPAIR_USER_NAME": getUserNameByUserId(body.ACCEPT_USER_ID),
+//	  "REPAIR_DEPT_NAME": body.DEPT_CODE
+  	},function(res){
+  	  console.log(res)
+  	})
+  	var record = {
+	    "ID": newGuid(),
+	    "CREATEDDATE": "",
+	    "BILL_NO": body.NO,
+	    "BUSINESS_TYPE": "R",
+	    "STATE": 'C',
+	    "CREATE_USER_ID": config.USER_ID,
+	    "CREATE_TIME": g.operationDate(0),
+	    "RESULT": "工作人员到场签到",
+	    "MESSAGE": null,
+	    "CREATE_TIMEStr": g.operationDate(0),
+	    "STATE_Text": g.getStatusNameById('C'),
 	    "USERNAME": getUserNameByUserId(body.ACCEPT_USER_ID),
 	    "ROLENAME": null,
 	    "OPETYPE": null,

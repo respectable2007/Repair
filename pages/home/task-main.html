@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>维修列表和详情</title>
 		<link rel="stylesheet" href="../../css/mui.min.css" />
+		<link rel="stylesheet" href="../../css/app.css" />
 		<link rel="stylesheet" type="text/css" href="../../css/iconfont.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
 		<style type="text/css">
@@ -20,6 +21,7 @@
 		  }
 		  .mui-inner-wrap .mui-content{
 		  	padding-top: 46px;
+		  	height: 100%;
 		  }
 		  .mui-table-view{
 		  	background: transparent;
@@ -47,12 +49,15 @@
 		    right: 0;
 		    color: #fff;
 		  }
+		  .mui-backdrop{
+			 z-index: 0;
+		  }
 		</style>
 	</head>
 	<body>
-	  <div id='app' class="mui-off-canvas-wrap mui-slide-in">
-	  	<aside class="mui-off-canvas-right"
-	  		   id='searchArea'>
+	  <div id='app' class="mui-off-canvas-wrap mui-draggable">
+	  	<aside id='offCanvasSide' 
+	  		   class="mui-off-canvas-right">
 	  	  <div class="mui-content">
 	  	  	<div class="mui-input-row">
 	  	  	  <input type="search" 
@@ -61,7 +66,7 @@
 	  	  	  	     v-model="search"
 	  	  	  	     @keyup="handleSearch($event)"/>
 	  	  	</div>
-	  	  	<div class="mui-scroll-wrapper">
+	  	  	<div id='offCanvasSideScroll' class="mui-scroll-wrapper">
 	  	  	  <div class="mui-scroll">
 	  	  	  	<div v-show='search.length'>
 	  	  	  	  <ul class="mui-table-view">
@@ -102,74 +107,127 @@
 	  	  	  </div>
 	  	  	</div>
 	  	  </div>
-	  	  <a href="#searchArea"
+	  	  <a href="javascript:void(0)"
 	  	  	@tap='handleCloseCanvas()'>取消</a>
 	  	</aside>
 	  	<div class="mui-inner-wrap">
-	  		<header class="mui-bar mui-bar-nav">
-		  	  <form class="mui-segmented-control">
-		  	  	<a class="mui-control-item">
-		  	  		<span v-text='address'
-		  	  			  @tap='handleShowPro()'></span>
-		  	  		<i class="mui-icon mui-icon-arrowdown"></i>
-		  	  	</a>
-		  	  	<a class="mui-control-item" 
-		  	  	   @tap='handleShowArea()'
-		  	  	   href="#searchArea">
-		  	  		<span v-text='buildName'></span>
-		  	  		<i class="mui-icon mui-icon-arrowdown"></i>
-		  	  	</a>
-		  	  	<a class="mui-control-item"
-		  	  		@tap='handleStatus()'>
-		  	  		<span v-text='state'>工单状态</span>
-		  	  		<i class="mui-icon mui-icon-arrowdown"></i>
-		  	  	</a>
-		  	  </form>
-		  	</header>
-		  	<div class="mui-content mui-scroll-wrapper" id='pullRefresh'>
-		  	  <div class="mui-scroll">
-		  	  	<ul class="mui-table-view" v-if='list.length'>
-		  	  	  <li class="mui-table-view-cell"
-		  	  	  	  v-for='item in list'>
-		  	  	    <div class="mui-card">
-		  	  	      <div class="mui-card-header"
-		  	  	           @tap='handleOpenDetail(item)'>
-		  	  	      	工单号:{{item.orderNumber}}
-		  	  	      	<div class="triangle-topright" v-if='item.status'></div>
-		  	  	      </div>
-		  	  	      <div class="mui-card-content">
-		  	  	      	<div class="mui-card-content-inner">
-		  	  	      	  <div class="bages">
-		  	  	      	  	<span class="mui-badge mui-badge-green">奖励￥2{{item.money}}</span>
-		  	  	      	  	<span class="mui-badge mui-badge-blue">{{item.hour}}1小时完成</span>
-		  	  	      	  	<span class="mui-badge mui-badge-danger" v-show='item.IS_URGENCY'>紧急</span>
-		  	  	      	  </div>
-		  	  	      	  <div class="middle">
-		  	  	      	  	<p>{{item.title}}</p>
-		  	  	      	  	<p>{{item.msg}}</p>
-		  	  	      	  </div>
-		  	  	      	</div>
-		  	  	      </div>
-		  	  	      <div class="mui-card-footer">
-		  	  	      	{{item.datetime}}
-		  	  	      	<button class="mui-btn mui-btn-outlined">派工</button>
-		  	  	      	<button class="mui-btn mui-btn-danger">立即抢单</button>
-		  	  	      	<!--<button class="mui-btn mui-btn-outlined">转单</button>
-		  	  	      	<button class="mui-btn mui-btn-outlined">签到</button>
-		  	  	      	<button class="mui-btn mui-btn-outlined">完工</button>
-		  	  	      	<button class="mui-btn mui-btn-outlined">评价</button>-->
-		  	  	      </div>
-		  	  	    </div>
-		  	  	  </li>
-		  	  	</ul>
-		  	  	<div class="empty-container" v-else>
-		  	  		<div class="nodata-info">
-		  	  		   暂无工单信息
-		  	  		</div> 
-		  	  	</div>
-		  	  </div>
+  		  <header class="mui-bar mui-bar-nav">
+	  	    <form class="mui-segmented-control">
+	  	  	<a class="mui-control-item">
+	  	  		<span v-text='address'
+	  	  			  @tap='handleShowPro()'></span>
+	  	  		<i class="mui-icon mui-icon-arrowdown"></i>
+	  	  	</a>
+	  	  	<a class="mui-control-item" 
+	  	  	   @tap='handleShowArea()'
+	  	  	   href="javascript:void(0)">
+	  	  		<span v-text='buildName'></span>
+	  	  		<i class="mui-icon mui-icon-arrowdown"></i>
+	  	  	</a>
+	  	  	<a class="mui-control-item"
+	  	  		@tap='handleStatus()'>
+	  	  		<span v-text='state'>工单状态</span>
+	  	  		<i class="mui-icon mui-icon-arrowdown"></i>
+	  	  	</a>
+	  	    </form>
+	  	  </header>
+	  	  <div id='offCanvasContentScroll' class="mui-content mui-scroll-wrapper">
+	  	   <div  id='pullRefresh' 
+	  	  	    v-show='list.length'
+	  	  	    class="mui-scroll">
+	  	  	<ul class="mui-table-view">
+	  	  	  <li class="mui-table-view-cell"
+	  	  	  	  v-for='item in list'
+	  	  	  	  @tap.top='handleOpenDetail(item)'>
+	  	  	    <div class="mui-card">
+	  	  	      <div class="mui-card-header">
+	  	  	      	工单号：{{item.NO}}
+	  	  	      	<div class="triangle-topright" v-if='item.status'></div>
+	  	  	      </div>
+	  	  	      <div class="mui-card-content">
+	  	  	      	<div class="mui-card-content-inner">
+	  	  	      	  <div class="bages">
+	  	  	      	  	<span class="mui-badge mui-badge-green">奖励{{item.MONEY}}</span>
+	  	  	      	  	<span class="mui-badge mui-badge-blue">{{item.HOURS}}小时完成</span>
+	  	  	      	  	<span class="mui-badge mui-badge-danger" v-show='item.IS_URGENCY'>紧急</span>
+	  	  	      	  </div>
+	  	  	      	  <div class="middle">
+	  	  	      	  	<p>{{item.ADDRESS}}</p>
+	  	  	      	  	<p>{{item.FAULT_INFO}}</p>
+	  	  	      	  </div>
+	  	  	      	</div>
+	  	  	      </div>
+	  	  	      <div class="mui-card-footer">
+	  	  	      	{{item.PRESS_FIRST_TIME}}
+	  	  	      	<button class="mui-btn mui-btn-outlined"
+	  	  	      	  v-if='item.STATE == g.WorkOrderStatus.waitOrder.value && roleid == (comm.leader || comm.pm)'
+	  	  	      	  @tap.stop='handleDispatch(item, "P", true)'>
+	  	  	      	  派工
+	  	  	      	</button>
+	  	  	      	<button class="mui-btn mui-btn-danger"
+	  	  	      	  v-if='item.STATE == g.WorkOrderStatus.waitOrder.value && (roleid == (comm.leader || comm.repair))&& item.CREATE_USER_ID == config.USER_ID'
+	  	  	      	  @tap.stop='handleGrap(item)'>抢单</button>
+	  	  	      	  <!---->
+	  	  	      	<button class="mui-btn mui-btn-outlined"
+	  	  	      	  @tap.stop='handleDispatch(item, "Z", true)'
+	  	  	      	  v-if='(item.STATE == (g.WorkOrderStatus.waitSignin.value || g.WorkOrderStatus.waitOver.value))&& roleid == comm.pm'>
+	  	  	      	   转单
+	  	  	      	</button>
+	  	  	      	<button class="mui-btn mui-btn-outlined"
+	  	  	      	  v-if='(item.STATE == g.WorkOrderStatus.waitSignin.value) && item.ACCEPT_USER_ID == config.USER_ID'
+	  	  	      	  @tap.stop='handleSign(item)'>签到</button>
+	  	  	      	<button class="mui-btn mui-btn-outlined"
+	  	  	      	  v-if='(item.STATE == g.WorkOrderStatus.waitOver.value) && item.ACCEPT_USER_ID == config.USER_ID'
+	  	  	      	  @tap.stop='handleFinish(item)'>完工</button>
+	  	  	      	<button class="mui-btn mui-btn-outlined"
+	  	  	      	  v-if='(item.STATE == g.WorkOrderStatus.waitAudit.value) && ((item.CREATE_USER_ID == config.USER_ID && typeid == TaskType.repair.value) || typeid != TaskType.repair.value)'>评价</button>
+	  	  	      </div>
+	  	  	    </div>
+	  	  	  </li>
+	  	  	</ul>
+	  	   </div>
+	  	   <div class="empty-container"  v-show='!list.length'>
+	  	  		<div class="nodata-info">
+	  	  		   暂无工单信息
+	  	  		</div> 
+	  	   </div>
+	  	</div>
+	  	  <div class="mui-off-canvas-backdrop"></div>
+	  	</div>
+	  	<!--<div class="mui-inner-wrap"></div>-->
+	  	<div id="pop" class="mui-popover mui-popover-bottom mui-popover-action">
+		    <div class="pop-head">
+		  	   执行人员选择
+		  	  <a href="javascript:void(0)"
+		  	  	 class="mui-icon mui-icon-close"
+		  	  	 @tap='handleClose()'></a>
 		  	</div>
-	  	</div>	  	
+		  	<div class="pop-body">
+		  	  <ul class="mui-table-view">
+		  	  	<li class="mui-table-view-cell"
+		  	  		v-for='(item, index) in staffs'>
+		  	  	  <span v-html='item.NAME'></span>
+		  	  	   目前任务量：
+		  	  	  <span v-text='item.TaskQty'></span>
+		  	  	  <div class="mui-radio mui-pull-right">
+		  	  	    <input type="radio"
+		  	  	    	   :id='item.USER_ID'
+		  	  	    	   :value='item.USER_ID'
+		  	  	    	   v-model='userId'
+		  	  	    	   name='id'
+		  	  	    	   style="margin-right: 0;"/>
+		  	  	  </div>
+		  	  	</li>
+		  	  </ul>
+		  	</div>
+		  	<div class="pop-footer">
+		  	   <button class="mui-btn mui-btn-block mui-btn-primary"
+		  	   	       id='confirmBtn'
+		  	   	       @tap='handleConfirm()'>
+		  	   	       确认
+		  	   </button>
+		  	</div>
+		 </div>
 	  </div>
 	  <script src="../../js/mui.min.js" type="text/javascript"></script>
 	  <script src="../../js/libs/mui.picker.min.js" type  ="text/javascript"></script>
@@ -181,18 +239,22 @@
 	  <script src="../../js/common/mockdata.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/web-storage-cache.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/json.js" type  ="text/javascript"></script>
+	  <script src="../../js/app/pullRefresh.js" type  ="text/javascript"></script>
 	  <script type="text/javascript">
-	  	var dvAll = [],
+	  	var dvBuildAll = [],
 	  	    key = 'BuildHistoryList',
 	  	    ws = new WebStorageCache(),
 	  	    findList = [],
 	  	    pageNum = 0,
 	  	    pageSize = 10,
-	  	    all = [],
+//	  	    all = [],
 	  	    refresh = 0,
 	  	    app = new Vue({
 	  	      el: '#app',
 	  	      data: {
+	  	      	roleid: g.AppRoleType,
+	  	      	userId: '',
+	  	      	person: {},
 	  	      	search: '',
 	  	      	searchList: [],
 	  	      	historyList: [],
@@ -204,80 +266,115 @@
 	  	        w_repair: {
   	              orgCode: config.ORG_CODE,
 				  userId: config.USER_ID,
-				  state: '工单状态',
+				  state: null,
 				  deptCode: null,
 				  districtId: null,
 				  buildId: '',
-				  //reportTime_BT: g.operationDate(-365),
-				  //reportTime_ET: g.operationDate(+1),
+				  reportTime_BT: g.operationDate(-365),
+				  reportTime_ET: g.operationDate(+1),
 				  start: 0,
 				  pageSize: pageSize
 	  	        },
-	  	        list: [{
-	  	          orderNumber: 'afb1bc58-d829-89e3',
-	  	          IS_URGENCY: true,
-	  	          title: 'xx小区6栋1705号',
-	  	          msg: '锁坏了',
-	  	          datetime:'2018-11-25 13:05:35',
-	  	          status: true
-	  	        }]
+	  	        list: [],
+	  	        staffs: [],//执行人员列表
+	  	        curView: null
+	  	      },
+	  	      created: function(){
+	  	      	this.getDistrictList();
+	  	      	this.getStaffs();
 	  	      },
 	  	      mounted: function() {
 	  	      	var self = this;
-//	  	      	mui.init({
-//	  	      	  pullRefresh: {
-//	  	      	    container: '#pullRefresh',
-//		  	      	down: {
-//		  	      	  style: 'circle',
-//		  	      	  callback: self.down
-//		  	      	},
-//		  	      	up: {
-//		  	      	  auto: true,
-//		  	      	  contentrefresh: '正在加载',
-//		  	      	  callback: self.up
-//		  	      	}
-//	  	      	  }
-//	  	      	})
                 mui.init({
+                  pullRefresh: {
+	  	      	    container: '#pullRefresh',
+		  	      	down: {
+		  	      	  style: 'circle',
+		  	      	  callback: self.down
+		  	      	},
+		  	      	up: {
+		  	      	  auto: true,
+		  	      	  contentrefresh: '正在加载',
+		  	      	  callback: self.up
+		  	      	}
+	  	      	  },
 	          	  beforeback: function(){
 	          	  	var homeVm = plus.webview.getWebviewById('pages/home.html');
 	          	  	mui.fire(homeVm, 'show');
 	          	  	return true;
 	          	  }
 	          	});
+                mui('#offCanvasSideScroll').scroll();
+			    mui('#offCanvasContentScroll').scroll();
 	  	      	mui.ready(function() {
 	  	      	  getAllList();
 	  	      	})
 	  	      	mui.plusReady(function(){
 	  	      	  var vm = plus.webview.currentWebview();
 	  	      	  self.typeid = vm.typeid;
+	  	      	  var url = self.typeid + '/order-detail.html';
+          	  	  self.curView = mui.preload({
+          	  	    id: url,
+          	  	    url: url
+          	  	  })
 	  	      	})
 	  	      },
 	  	      methods: {
+	  	      	//刷新
+	  	      	down: function(){
+                  var that = this;
+                  setTimeout(function(){
+	  	      	  	getList(that.w_repair, that, 1);
+                  },150)
+	  	      	},
+	  	      	//加载
+	  	      	up: function(){
+	  	      	  var that = this;
+	  	      	  setTimeout(function(){
+	  	      	  	getList(that.w_repair, that, 2);
+	  	      	  },150)
+	  	      	},
+	  	      	//显示侧滑菜单
 	  	      	handleShowArea: function(){
 	  	      	  getHistoryList();
+	  	      	  mui('#app').offCanvas('show');
 	  	      	},
+	  	      	//关闭侧滑菜单
 	  	      	handleCloseCanvas: function(){
 	  	      	   this.search = '';
-	  	      	   
+	  	      	   mui('#app').offCanvas('close');
+	  	      	   plus.key.hideSoftKeybord();
 	  	      	},
+	  	      	//获取搜索列表
 	  	      	handleSearch: function(e) {
 	  	      	  var key =  e.target.value
 	  	      	  this.search = key;
 	  	      	  getSearchList(key);
 	  	      	},
+	  	      	//选中搜索记录
 	  	      	handleSelected: function(item){
-	  	      	  addHistory(key, item);
 	  	      	  this.search = '';
+	  	      	  plus.key.hideSoftKeybord();
 	  	      	  this.goBack();
-	  	      	  this.buildName = item.TITLE;
-	  	      	  this.w_repair.buildId = item.ID;
+	  	      	  if(this.w_repair.buildId != item.ID) {
+	  	      	  	this.buildName = item.TITLE;
+	  	      	    this.w_repair.buildId = item.ID;
+	  	      	    getList(this.w_repair, this, 1);
+	  	      	  }
+	  	      	  addHistory(key, item);
 	  	      	},
+	  	      	//选中历史记录
 	  	      	handleSelectedHistory: function(item){
+	  	      	  this.search = '';
+	  	      	  plus.key.hideSoftKeybord();
 	  	      	  this.goBack();
-	  	      	  this.buildName = item.name;
-	  	      	  this.w_repair.buildId = item.id;
+	  	      	  if(this.w_repair.buildId != item.id) {
+	  	      	    this.buildName = item.name;
+	  	      	    this.w_repair.buildId = item.id;
+	  	      	    getList(this.w_repair, this, 1);
+	  	      	  }
 	  	      	},
+	  	      	//清空历史记录
 	  	      	handleClearHistory: function(){
 	  	      	  var that = this;
 	  	      	  mui.confirm('确认清空历史记录吗？', '确认', ['取消','确认'],function(e){
@@ -288,130 +385,185 @@
 	  	      	  })
 	  	      	},
 	  	      	goBack: function(){
-	  	      	  mui('#searchArea').offCanvas('close');
+	  	      	  mui('#app').offCanvas('close');
 	  	      	},
-	  	      	handleShowPro: function() {
-	  	      	  var pPicker = new mui.PopPicker({
-	  	      	  	layer: 3
-	  	      	  }),
-	  	      	  that = this;
-	  	      	  if(that.districtList.length > 0) {
-	  	      	    return;
-	  	      	  }
+	  	      	//获取行政区域列表
+	  	      	getDistrictList: function(){
+	  	      	  var that = this;
 	  	      	  g.ajax(config.QueryAllDistrictTree, {
 	  	      	  	success: function(data) {
 	  	      	  	  if(data.StatusCode == 200) {
 	  	      	  	  	if(data.Data.length > 0) {
-	  	      	  	  	  pPicker.setData([{"value":'000000',"text":'全国',"children":[]}].concat(data.Data));
-	  	      	  	  	  pPicker.pickers[0].setSelectedIndex(1);
-						  pPicker.pickers[1].setSelectedIndex(1);
-						  pPicker.show(function(item) {
-                            var i = null;
-                            if(item[2].value) {
-                              i = item[2];
-                            } else if(item[1].value){
-                              i = item[1];
-                            } else if(item[0].value) {
-                              i = item[0];
-                            }
-                            that.districtId = i.value;
-                            if(!i) {
-                              that.address = '行政区域';
-                            }
-                            that.address = i.text === '全区' ? item[1].text : i.text;
-						  })
+	  	      	  	  	  that.districtList = [{"value":'000000',"text":'全国',"children":[]}].concat(data.Data);
 	  	      	  	  	}
 	  	      	  	  }
 	  	      	  	}
 	  	      	  })
 	  	      	},
+	  	      	//行政区域变化
+	  	      	handleShowPro: function() {
+	  	      	  var pPicker = new mui.PopPicker({
+	  	      	  	layer: 3
+	  	      	  }),
+	  	      	  that = this;
+	  	      	  if(that.districtList.length <= 0) {
+	  	      	  	mui.toast('暂无行政区域数据')
+	  	      	    return;
+	  	      	  }
+	  	      	  pPicker.setData(that.districtList);
+      	  	  	  pPicker.pickers[0].setSelectedIndex(1);
+				  pPicker.pickers[1].setSelectedIndex(1);
+				  pPicker.show(function(item) {
+                    var i = null;
+                    if(item[2].value) {
+                      i = item[2];
+                    } else if(item[1].value){
+                      i = item[1];
+                    } else if(item[0].value) {
+                      i = item[0];
+                    }
+                    if(!i) {
+                      that.address = '行政区域';
+                    }
+                    if(that.w_repair.districtId != i.value) {
+                      that.w_repair.districtId = i.value;
+                      that.address = i.text === '全区' ? item[1].text : i.text;
+                      getList(that.w_repair, that, 1);
+                    }
+				  })
+	  	      	  
+	  	      	},
+	  	      	//工单状态变更
 	  	      	handleStatus: function(){
 	  	      	  var typeid = this.typeid,
 	  	      	      picker = g.getOrderStatusPicker(typeid, typeid === 'repair' ? 'manage': undefined),
 	  	      	      that = this;
 	  	      	  picker.show(function(item) {
-	  	      	  	that.w_repair.state = item[0].value;
-	  	      	  	that.state = item[0].text;
+	  	      	  	if(that.w_repair.state != item[0].value) {
+	  	      	  	  that.w_repair.state = item[0].value;
+	  	      	  	  that.state = item[0].text;
+	  	      	  	  getList(that.w_repair, that, 1);
+	  	      	  	}
 	  	      	  })
 	  	      	},
-	  	      	//下拉刷新
-	  	      	down: function(){
-//	  	      	  console.log(1);
-	  	      	  refresh = 0;
-	  	      	  setTimeout(function(){
-	  	      	  	mui('#pullRefresh').pullRefresh().endPulldownToRefresh(true);
-	  	      	  	console.log(1);
-	  	      	  }, 1500);
-	  	      	},
-	  	      	//上拉加载
-	  	      	up: function(){
-	  	      	  var that = this;
-	  	      	  refresh = 1;
-	  	      	  setTimeout(function(){
-	  	      	  	mui('#pullRefresh').pullRefresh().endPullupToRefresh();
-	  	      	  	that.w_repair.start = ++ pageNum ;
-	  	      	  	getList();
-	  	      	  },1500)
-	  	      	},
+	  	      	//查看工单详情
 	  	      	handleOpenDetail:function(item){
-	  	      	  console.log(1);
+	  	      	  var that = this;
+	          	  mui.fire(that.curView, 'show', {
+	          	  	typeid: that.typeid,
+	          	  	detail: item
+	          	  })
+	          	  setTimeout(function(){
+	          	  	that.curView.show('slide-in-right', 300);
+	          	  }, 150)
+	  	      	},
+	  	      	//获取执行人员列表
+	  	      	getStaffs: function(){
+	  	      	  getStaffsList(this);
+	  	      	},
+	  	      	//关闭执行人员选择对话框
+	  	      	handleClose: function() {
+	          	  var that = this;
+	          	  if(this.userId) {
+	          	  	mui.confirm('确定取消派工？', '确认', ['取消', '确定'], function(e) {
+	          	  	  if(e.index == 1) {
+	          	  	    mui('#pop').popover('hide');
+	          	  	    that.userId = '';
+	          	  	  }
+	          	    })
+	          	  } else {
+	          	  	mui('#pop').popover('hide');
+	          	  }
+	          	},
+	          	//派工/转单
+	  	      	handleDispatch(item, tag, isDel){
+	  	      	  if(this.staffs.length === 0){
+	          	  	mui.toast('暂无维修人员信息');
+	          	  	return;
+	          	  }
+	          	  this.person.NO = item.NO;
+	          	  this.person.typeid = this.typeid;
+	          	  this.person.isDel = isDel;
+	          	  if(tag) {
+	          	  	this.person.operatorType = tag;
+	          	  }
+	          	  mui('#pop').popover('toggle');
+	  	      	},
+	  	      	//抢单
+	  	      	handleGrap: function(item) {
+	  	      	  var that = this;
+	  	      	  g.ajax(config.AssignPersonRepair, {
+	  	      	  	data: {
+	  	      	  	  NO: item.NO,
+	  	      	  	  ACCEPT_USER_ID: config.USER_ID,
+	  	      	  	  HELP_SEND_TIME: new Date().toGMTString()
+	  	      	  	},
+	  	      	  	success: function(res){
+	  	      	  	  if(res.StatusCode == 200) {
+	  	      	  	  	getList(that.w_repair, that, 1);
+	  	      	  	  }
+	  	      	  	}
+	  	      	  })
+	  	      	},
+	  	      	//签到
+	  	      	handleSign: function(item){
+	  	      	  var that = this;
+	  	      	  g.ajax(config.SignRepair, {
+	  	      	  	data: {
+	  	      	  	  NO: item.NO,
+	  	      	  	  ACCEPT_USER_ID: config.USER_ID,
+	  	      	  	  DEPT_CODE: null
+	  	      	  	},
+	  	      	  	success: function(res){
+	  	      	  	  if(res.StatusCode == 200) {
+	  	      	  	  	getList(that.w_repair, that, 1);
+	  	      	  	  }
+	  	      	  	}
+	  	      	  })
+	  	      	},
+	  	      	//完工
+	  	      	handleFinish: function(item){
+	  	      	  var url = this.typeid + '/over-order.html';
+	  	      	  g.openWindow({
+	  	      	  	id: url,
+	  	      	  	url: url,
+	  	      	  	extras: {
+	  	      	  	  item: item
+	  	      	  	}
+	  	      	  })
+	  	      	},
+	  	      	//执行人员选择
+	  	      	handleConfirm(){
+	  	      	  var that = this;
+	  	      	  this.person.userId = this.userId;
+	          	  if(!this.userId) {
+	          	  	mui.toast('请选择执行人员');
+	          	  	return;
+	          	  } else {
+	          	  	var api = this.person.operatorType === 'P' ? config.AssignPersonRepair : config.TransferRepair;
+	          	  	g.ajax(api, {
+	          	  	  type: 'post',
+	          	  	  data: {
+	          	  	  	NO: this.person.NO,
+	          	  	  	BILL_NO: this.person.NO,
+	          	  	  	ACCEPT_USER_ID: this.userId,
+	          	  	  	USER_ID: this.userId,
+	          	  	  	USER_TYPE: 'B',
+	          	  	  	STATE: 'B',
+	          	  	  	CREATE_TIME: new Date(),
+	          	  	  	BUSINESS_TYPE: this.person.typeid === TaskType.repair.value ? BillType.wx.value : ''
+	          	  	  },
+	          	  	  success: function(data) {
+	          	  	  	if(data.StatusCode === 200) {
+	          	  	  	  getList(that.w_repair, that, 1);
+	          	  	  	}
+	          	  	  }
+	          	  	})
+	          	  }
+	          	  mui('#pop').popover('toggle');
 	  	      	}
 	  	      }
 	  	    });
-	   //获取工单列表
-	   function getList(){
-	   	if(config.isMock) {
-	   	  var _where = 'where 1=1';
-	   	  if(app.w_repair.buildId) {
-	   	    _where += ' and BUILD_ID="'+ app.w_repair.buildId +'"';
-	   	  }
-	   	  if(app.w_repair.districtId) {
-	   	    _where += ' and DIST_ID="'+ app.w_repair.districtId +'"'; 
-	   	  }
-	   	  if(app.w_repair.state) {
-            _where += ' and STATE="'+ app.w_repair.state +'"';	   	  	
-	   	  }
-	   	  _where += ' ORDER BY REPORT_TIME DESC limit ' + pageSize + ' offset ' + (pageNum - 1) * pageSize;
-	   	  _database.read(smp_tb.repair_tb, _where, function(res) {
-	   	  	var data = {
-	   	  	  "StatusCode": 200,
-	   	  	  "Message": null,
-	   	  	  "Data": {
-	   	  	  	"lstData": res,
-	   	  	  	"recc": res.length
-	   	  	  },
-	   	  	 }
-	   	  	  dv = [];
-	   	  	  if(res != null) {
-	   	  	  	for(var i = 0, lens = res.length; i < lens; i++) {
-	   	  	  	  var d = {
-	   	  	  	  	ACCEPT_USER_ID: res[i].ACCEPT_USER_ID,
-                    CREATE_USER_ID: res[i].CREATE_USER_ID, 
-                    orderNumber: res[i].NO,
-                    status: res[i].STATE,
-                    money: res[i].MONEY,
-                    hour: res[i].HOURS,
-                    IsOverTime: res[i].IsOverTime,
-                    title: res[i].BUILD_NAME, 
-                    msg: res[i].FAULT_INFO,
-                    datetime: g.formatDate(res[i].REPORT_TIME, 'YMDHMS'),
-                    PRESS_NUM: res[i].PRESS_NUM, //催单次数
-                    IS_URGENCY: res[i].IS_URGENCY,
-                    IS_WAITING: res[i].IS_WAITING//这里添加是否待料
-	   	  	  	  };
-	   	  	  	  dv.push(d);
-	   	  	  	  all.push(d);
-	   	  	  	}
-	   	  	  }
-	   	  	  if(!refresh) {
-	   	  	    app.list = dv;
-	   	  	  }else{
-	   	  	  	app.list = all;
-	   	  	  }
-
-	   	  })
-	   	}
-	   }
 	   //获取建筑名称全列表
 	   function getAllList(){
 	        var nwaiting = window.plus === undefined ? null : plus.nativeUI.showWaiting();
@@ -419,7 +571,7 @@
 		  	  data: {start:0, end: 1000, lstOrgCode: config.ORG_CODE, buildName: app.search},
 		  	  nwaiting: nwaiting,
 		  	  success: function(data){
-		  	  	var dv = [];
+//		  	  	var dv = [];
 		  	  	if(data.StatusCode === 200) {
 		  	  	  for(var i = 0, len = data.Data.List.length; i < len; i++){
 		  	  	  	var d = {
@@ -427,11 +579,11 @@
 		  	  	  	  TITLE:data.Data.List[i].BUILD_NAME,
 		  	  	  	  ADDRESS:data.Data.List[i].ADDRESS
 		  	  	  	}
-		  	  	  	dv.push(d);
-		  	  	  	dvAll.push(d);
+//		  	  	  	dv.push(d);
+		  	  	  	dvBuildAll.push(d);
 		  	  	  }
 		  	  	}
-		  	  	app.searchList = dvAll;
+		  	  	app.searchList = dvBuildAll;
 		  	  	if(window.plus != undefined) {
 		  	  	  plus.nativeUI.closeWaiting();
 		  	  	}
@@ -456,10 +608,10 @@
 	   //获取搜索列表
 	   function getSearchList(key) {
 	   	findList = [];
-	   	var lens = dvAll.length;
+	   	var lens = dvBuildAll.length;
 	   	if(lens > 0) {
 	   	  for(var i = 0; i < lens; i++) {
-	   	    var item = dvAll[i]; 
+	   	    var item = dvBuildAll[i]; 
 	   	  	if(item.TITLE.indexOf(key) > -1) {
 	   	  	  findList.push(item);
 	   	  	}

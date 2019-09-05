@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
 		<title>跟踪记录</title>
 		<link rel="stylesheet" type="text/css" href="../../../css/mui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/app.css"/>
 		<style type="text/css">
 		  .mui-contianer{
 		  	background: #fff;
@@ -80,7 +81,7 @@
 	  	 	getRecord: function(){
 	  	 	  var that = this;
 	  	 	  if(config.isMock){
-	  	 	  	database.read('tb_billexecute_g', 'where BILL_NO="'+that.no+'" and BUSINESS_TYPE="R"',function(res){
+	  	 	  	database.read('tb_billexecute_g', 'where BILL_NO="'+that.no+'" and BUSINESS_TYPE="R" ORDER BY CREATE_TIMEStr DESC',function(res){
 	  	 	  	  that.list = res;
 	  	 	  	})
 	  	 	  }
