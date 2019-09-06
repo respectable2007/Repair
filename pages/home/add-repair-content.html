@@ -165,7 +165,8 @@
 	  	  	  </div>
 	  	  	  <div class="mui-input-row" style="height: 135px;">
 	  	  	  	<div id='F_SMPS' class="row image-list">
-	  	  	  	  <a id='F_SMP'>
+	  	  	  	  <a id='F_SMP'
+	  	  	  	  	 @tap.stop='handleCamera()'>
 	  	  	  	  	<span class="mui-icon mui-icon-camera paizhao"></span>
 	  	  	  	  </a>
 	  	  	  	  <div class="image-item space"
@@ -177,7 +178,7 @@
 	  	  	  	  		 :id='index'
 	  	  	  	  		 :src='item.url'/>
 	  	  	  	  	<span class="del image-close"
-	  	  	  	  		  @tap='handleClearImg(item, index)'>
+	  	  	  	  		  @tap.stop='handleClearImg(item, index)'>
 	  	  	  	  	  <i class="mui-icon mui-icon-close" ></i>
 	  	  	  	  	</span>
 	  	  	  	  </div>
@@ -216,13 +217,14 @@
 	  <script src="../../js/libs/mui.picker.min.js" type  ="text/javascript"></script>
 	  <!--<script src="../../js/libs/mui.zoom.js" type  ="text/javascript"></script>
 	  <script src="../../js/libs/mui.previewimage.js" type  ="text/javascript"></script>-->
-	  <script src="../../js/common/config.js" type  ="text/javascript"></script>
 	  <script src="../../js/libs/mock-min.js" type  ="text/javascript"></script>
+	  <script src="../../js/common/config.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/global.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/webSql.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/mockdata.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/web-storage-cache.js" type  ="text/javascript"></script>
 	  <script src="../../js/common/json.js" type  ="text/javascript"></script>
+	  <script src="../../js/app/image.js" type  ="text/javascript"></script>
 	  <script type="text/javascript">
 	  	mui.init();
 //	  	mui.previewImage();
@@ -236,16 +238,10 @@
             findData = [],//查找后集合
             operatorType = 0,//操作类型：1：代表下拉刷新，2：上拉加载
             wsCache = new WebStorageCache(),//本地存储
-            sltImgCount = 0,//当前选中的图片数
-            showDetailFun = undefined,//选择图片后回调函数
-      	    callBackFun = undefined,//显示图片后回调函数
-      	    localImgUrl = '',//压缩后本地相对路径
-            fullLocalImgUrl = '',//压缩后本地绝对路径
-            smpImgArray = [],//压缩后图片列表
-            smpCurUrl = '',//图片地址
 		    app = new Vue({
 		      el: '#app',
 		      data: {
+		      	camera: null,
 		      	repairType:0,//文字报修
 		      	faultName: '',
 		      	limitTime: '',
@@ -280,21 +276,6 @@
 	          	  }
 	          });
 		      	mui.ready(function(){
-		      	  document.getElementById('F_SMP').addEventListener('tap', function(){
-		      	  	showActionSheet({
-		      	  	  id: 'F_SMP',
-		      	  	  multiple: true,
-		      	  	  imgCount: 6,
-		      	  	  showDetailFun: function(name, divid, url, path) {
-		      	  	  	self.imgItemList.push({
-		      	  	  	  name: name,
-		      	  	  	  divid: divid,
-		      	  	  	  url: url,
-		      	  	  	  path: path
-		      	  	  	})
-		      	  	  }
-		      	  	})
-		      	  })
 		      	  //获取列表
 		      	  getListAll();
 		      	  g.initScroll({
@@ -361,10 +342,28 @@
 		      	              	}
 		      	              })		      	  
 		      	},
+		      	//拍照
+		      	handleCamera: function(){
+		      		var self = this;
+		      		self.camera = new Camera(app);
+		      	    self.camera.showActionSheet({
+		      	  	  id: 'F_SMP',
+		      	  	  multiple: true,
+		      	  	  imgCount: 6,
+		      	  	  showDetailFun: function(name, divid, url, path) {
+		      	  	  	self.imgItemList.push({
+		      	  	  	  name: name,
+		      	  	  	  divid: divid,
+		      	  	  	  url: url,
+		      	  	  	  path: path
+		      	  	  	})
+		      	  	  }
+		      	  	});
+		      	},
 		      	//删除照片
 		      	handleClearImg: function(item, index){
 		      	  this.imgItemList.splice(index, 1);
-		      	  smpImgArray.splice(index, 1);
+		      	  self.camera.smpImgArray.splice(index, 1);
 		      	},
 		      	//故障类型选择
 		      	handlePicker: function(){
@@ -564,182 +563,7 @@
 	  	}
 	  	return false;
 	  }
-      //相册选择或拍照
-      function showActionSheet(item) {
-      	var divid = item.id,
-      	   imgCount = item.imgCount || 5,
-      	   showDetailFun = item.showDetailFun,
-      	   callBackFun = item.callBackFun || undefined;
-      	if(item.type == 'paizhao') {
-      	  getImage(divid,item);
-      	} else {
-      	  var actionSheet = {
-      	  	title: '选取照片',
-      	  	cancel: '取消',
-      	  	buttons: [{
-      	  	  title: '拍照'
-      	  	},{
-      	  	  title: '相册选取'
-      	  	}]
-      	  }
-      	  plus.nativeUI.actionSheet(actionSheet, function(e){
-      	  	if(e.index === 1) {
-      	  	  getImage(divid, item);
-      	  	} else if(e.index === 2) {
-      	  	  galleryImage(divid, item);
-      	  	}
-      	  })
-      	}
-      }
-      
-      /**
-       * 显示压缩图片
-       * @param {string} target 压缩转换后的图片路径
-       * @param {string} divid  字段名称
-       * @param {string} name  图片名称
-       * @param {string} path  压缩转换后图片的本地路径
-       */
-      function showImageDetail(name,divid,url,path) {
-      	app.imgItemList.push({
-      	  name: name,
-      	  divid: divid,
-      	  url: url,
-      	  path: path
-      	})
-      }
-      /**
-       * 保存压缩图片
-       * @param {string} target 压缩转换后的图片路径
-       * @param {string} divid  字段名称
-       * @param {string} name  图片名称
-       * @param {string} path  压缩转换后图片的本地路径
-       */
-      function saveImage(target, divid, name, path) {
-      	plus.nativeUI.showWaiting();
-      	smpImgArray.push(path);
-      	if(showDetailFun == undefined) {
-      	  showImageDetail(name, divid, target, path);
-      	} else {
-      	  smpCurUrl = target;
-      	  showDetailFun(name, divid, target, path);
-      	}
-      	plus.nativeUI.closeWaiting();
-      }
-      //压缩图片
-      function compressImage(url, name, divid){
-      	var path = '_doc/upload/' + divid + "-" + g.getCurrentTimeFormat() + name;//压缩图片保存相对路径，以_doc为开头
-      	plus.zip.compressImage({
-      	  src: url,//压缩转换图片原始路径，file:
-      	  dst: path,//压缩转换图片保存的相对路径，_doc/
-      	  quality: 20,//压缩图片质量
-      	  overwrite: true//是否覆盖新生成的文件
-      	}, function(e){
-      	  //压缩完成后，检测图片是否成功
-      	  plus.io.resolveLocalFileSystemURL(path, function(entry){
-      	  	var compress_path = entry.toLocalURL();
-      	  	fullLocalImgUrl = compress_path;//压缩转换图片的本地路径
-      	  	localImgUrl = path;//相对路径
-      	  	//e.target-压缩转换后的图片url路径，以"file://"开头
-      	  	saveImage(e.target,divid,name,compress_path);
-      	  },function(e){
-      	  	plus.nativeUI.toast('本地保存失败：' + e.message);
-      	  })
-      	}, function(e){
-      	  plus.nativeUI.toast('压缩图片失败，请稍后再试');
-      	})
-      }
-      //本地系统选择图片
-      /**
-       * @param {string} divid 字段名称
-       * @param {object} conf  图片对象
-       */
-      function galleryImage(divid, conf) {
-      	//单选
-      	if(conf.multiple == undefined || conf.multiple == false) {
-      	  plus.gallery.pick(function(path){//path-选择图片或文件路径，以file:///storage为开头
-      	  	//操作文件
-      	  	plus.io.resolveLocalFileSystemURL(path,function(entry){//entry-请求到的目录或文件对象
-      	  	  /*entry.toLocalURL()-获取目录路径转换为本地路径URL地址，以file:///storage为开头
-      	  	   * entry.name-操作文件的文件名
-      	  	   */
-      	  	  compressImage(entry.toLocalURL(), entry.name, divid);
-      	  	  sltImgCount = 1;
-      	  	  if(callBackFun != undefined) {
-      	  	  	callBackFun('sltImgCount', sltImgCount);
-      	  	  }
-      	  	}, function(e){
-      	  		plus.nativeUI.toast('读取相册文件错误' + e.message);
-      	  	})
-      	  },function(){
-      	  	console.log('取消选择图片');
-      	  },{
-      	  	multiple: false,
-      	  	filename: '_doc/camera/'
-      	  })
-      	//多选
-      	} else {
-      	 plus.gallery.pick(function(e) {
-      	   var i = 0;
-      	   sltImgCount += e.files.length;
-      	   if(sltImgCount > conf.imgCount) {
-      	   	 mui.toast('最多只能选择' + conf.imgCount + '张图片');
-      	   	 sltImgCount -= e.files.length;
-      	   	 return;
-      	   }
-      	   setTimeout(file, 200);
-      	   function file() {
-      	   	 plus.io.resolveLocalFileSystemURL(e.files[i],function(entry){
-      	   	 	compressImage(entry.toLocalURL(), entry.name, divid);
-      	   	 },function(e){
-      	   	 	plus.nativeUI.toast('读取相册文件失败'+e.message);
-      	   	 })
-      	   	 i++;
-      	   	 if(i < e.files.length) {
-      	       setTimeout(file, 200);
-      	   	 }
-      	   }
-      	 }, function(e){
-      	   plus.nativeUI.toast('选择照片失败' + e.message);
-      	 },{
-      	   filename: '_doc/camera/',
-      	   multiple: 'true',
-      	   maximum: conf.imgCount,
-      	   system: false,
-      	   onmaxed: function(){
-      	   	mui.toast('最多只能选择' + conf.imgCount + '张图片');
-      	   }
-      	 })
-      	}
-      }
-      /**
-       * 调用摄像头
-       * @param {string} divid 字段名称
-       * @param {object} conf  操作对象
-       */
-      function getImage(divid, conf){
-      	//获取设备默认的摄像头对象
-      	var cmr = plus.camera.getCamera();
-      	if(sltImgCount > conf.imgCount) {
-      	  mui.toast('最多只能选择' + conf.imgCount + '张图片');
-      	  return;
-      	}
-      	cmr.captureImage(function(path){
-      	  plus.io.resolveLocalFileSystemURL(path, function(entry){
-      	  	compressImage(entry.toLocalURL(), entry.name, divid);
-      	  	sltImgCount += 1;
-      	  	if(callBackFun != undefined) {
-      	  	  callBackFun('sltImgCount', sltImgCount);
-      	  	}
-      	  }, function(e){
-      	  	 mui.toast('读取图片失败：' + e.message);
-      	  })
-      	},function(){
-      	  mui.toast('拍照失败');
-      	},{
-      	  filename: "_doc/camera/",
-      	  index: 1
-      	})
-      }
+     
       /**
        * 
        */
