@@ -1222,4 +1222,64 @@ if (config.isMock) {
     addExecuteBill(record);
   	return { "StatusCode": 200, "Message": null, "Data": 1 };
   });
+  //获取耗材
+  Mock.mock(config.GetRepairPartByUser,{
+  	StatusCode: 200,
+  	Data: [{
+  	  EXPORT_NO: 1,
+  	  REPLY_TIME: new Date().toLocaleString(),
+  	  DETAIL: [{
+  	    EXPORT_NO: 1,
+  	    EQ_PART_NAME:"爆破螺丝",
+  	    MODEL:"BPLS_LA",
+  	    COUNT:2,
+  	    PRICE:32,
+  	    UNIT:6,
+  	    EQ_PART_ID:"BPLS_LA",
+  	    BATCH_NO: '20190909'
+  	  }]
+  	}]
+  })
+  //添加耗材
+  Mock.mock(config.AddRepairPart, null, function(option) {
+  	var body = JSON.parse(option.body);
+  	_database.add('tb_consumebill_g', body, function(res){
+//	  console.log(JSON.stringify(res));
+  	})
+  	return {StatusCode: 200, Message: null, Data: 1}
+  })
+  //完工
+  Mock.mock(config.FinishRepair, null, function(option) {
+  	var body = JSON.parse(option.body);
+  	_database.update('tb_repairbill_g','NO', body.NO, {
+  	  'STATE': 'E',
+  	  'FINISH_TIME': g.operationDate(0),
+  	  'FINISH_SIGN': body.FINISH_SIGN,
+  	  'FAULT_TYPE':body.FAULT_TYPE,
+  	  'FINISH_INFO':body.FINISH_INFO,
+  	  'FAULT_INFO':getNamebyTypeId(body.FAULT_TYPE)
+  	},function(res){
+//	  console.log(123)
+//	  console.log(res)
+  	})
+  	var record = {
+	    "ID": newGuid(),
+	    "CREATEDDATE": "",
+	    "BILL_NO": body.NO,
+	    "BUSINESS_TYPE": "R",
+	    "STATE": 'E',
+	    "CREATE_USER_ID": config.USER_ID,
+	    "CREATE_TIME": g.operationDate(0),
+	    "RESULT": "工单结束",
+	    "MESSAGE": null,
+	    "CREATE_TIMEStr": g.operationDate(0),
+	    "STATE_Text": g.getStatusNameById('E'),
+	    "USERNAME": getUserNameByUserId(body.CREATE_USER_ID),
+	    "ROLENAME": null,
+	    "OPETYPE": null,
+	    "sys_updatetime": "0001-01-01T00:00:00"
+    };
+    addExecuteBill(record);
+  	return { "StatusCode": 200, "Message": null, "Data": 1 };
+  })
 }

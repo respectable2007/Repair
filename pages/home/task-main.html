@@ -318,6 +318,10 @@
           	  	    url: url
           	  	  })
 	  	      	})
+	  	      	window.addEventListener('show', function(){
+	  	      	  console.log('fire');
+	  	      	  that.down();
+	  	      	})
 	  	      },
 	  	      methods: {
 	  	      	//刷新
@@ -525,7 +529,7 @@
 	  	      	handleFinish: function(item){
 	  	      	  var url = this.typeid + '/over-order.html';
 	  	      	  g.openWindow({
-	  	      	  	id: url,
+	  	      	  	id: this.typeid + '_over-order',
 	  	      	  	url: url,
 	  	      	  	extras: {
 	  	      	  	  item: item

@@ -103,7 +103,7 @@
 		      	<div class="mui-input-row"
 		      		 v-if='detail.STATE != g.WorkOrderStatus.waitSignin.value'>
 		      	  <label>签到时间</label>
-		      	  <span>{{detail.DEPT_CODE_NAME}}</span>
+		      	  <span>{{detail.SIGN_TIME}}</span>
 		      	</div>
 	      	</div>
 	      	<div class="form-label-title blank">
@@ -240,9 +240,9 @@
 	  	  mounted: function(){
 	  	  	var that = this;
 	  	  	mui.init();
-	  	  	mui.plusReady(function(){
-	  	  	  
-	  	  	})
+//	  	  	mui.plusReady(function(){
+//	  	  	  
+//	  	  	})
 	  	  	window.addEventListener('show', function(e) {
 	  	  	  that.detail = e.detail.detail;
 //	  	  	  console.log(JSON.stringify(e.detail.detail))

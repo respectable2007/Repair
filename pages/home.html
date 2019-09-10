@@ -115,9 +115,10 @@
 	  	      	},
 	  	      	//跳转到模块详情页面
 	  	      	goTaskType: function(name, title, url){
+//	  	      	  console.log(name,url.split('.')[0],title);
 	  	      	  g.openWindowWithTitle({
 	  	      	    url:url,
-	  	      	    id:url,
+	  	      	    id:url.split('.')[0],
 	  	      	    extras: {
 	  	      	      typeid: name,
 	  	      	      title: title

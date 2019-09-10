@@ -52,8 +52,12 @@
   owner.AssignPersonRepair = apiDomain + '/api/Repair/AssignPersonRepair'; //维修抢单、派工
   owner.TransferRepair = apiDomain + '/api/Repair/TransferRepair';//转单
   owner.SignRepair = apiDomain + '/api/Repair/SignRepair'; //维修签到
+  owner.FinishRepair = apiDomain + '/api/Repair/FinishRepair'; //维修完工
+  owner.AddRepairPart = apiDomain + '/api/Repair/AddRepairPart'; //添加耗材
   /*统计信息*/
   owner.BillRewardForUser = apiDomain + '/api/Maintain/BillRewardForUser'; //奖励金额
+  /*其他*/
+  owner.GetRepairPartByUser = apiDomain + '/api/Equipment/GetRepairPartByUser'; //选择维修耗材
 }(window.config = {}));
 
 //APP角色类型
