@@ -191,7 +191,7 @@
 	  	  		   暂无工单信息
 	  	  		</div> 
 	  	   </div>
-	  	</div>
+	  	  </div>
 	  	  <div class="mui-off-canvas-backdrop"></div>
 	  	</div>
 	  	<!--<div class="mui-inner-wrap"></div>-->
@@ -319,9 +319,12 @@
           	  	  })
 	  	      	})
 	  	      	window.addEventListener('show', function(){
-	  	      	  console.log('fire');
 	  	      	  that.down();
 	  	      	})
+	  	      	//监听侧滑关闭事件
+	  	      	document.querySelector('.mui-off-canvas-wrap').addEventListener('hidden',function (event) {
+				  plus.key.hideSoftKeybord();
+				})
 	  	      },
 	  	      methods: {
 	  	      	//刷新
@@ -345,9 +348,7 @@
 	  	      	},
 	  	      	//关闭侧滑菜单
 	  	      	handleCloseCanvas: function(){
-	  	      	   this.search = '';
-	  	      	   mui('#app').offCanvas('close');
-	  	      	   plus.key.hideSoftKeybord();
+	  	      	   this.goBack();
 	  	      	},
 	  	      	//获取搜索列表
 	  	      	handleSearch: function(e) {
@@ -357,8 +358,6 @@
 	  	      	},
 	  	      	//选中搜索记录
 	  	      	handleSelected: function(item){
-	  	      	  this.search = '';
-	  	      	  plus.key.hideSoftKeybord();
 	  	      	  this.goBack();
 	  	      	  if(this.w_repair.buildId != item.ID) {
 	  	      	  	this.buildName = item.TITLE;
@@ -370,7 +369,6 @@
 	  	      	//选中历史记录
 	  	      	handleSelectedHistory: function(item){
 	  	      	  this.search = '';
-	  	      	  plus.key.hideSoftKeybord();
 	  	      	  this.goBack();
 	  	      	  if(this.w_repair.buildId != item.id) {
 	  	      	    this.buildName = item.name;
@@ -389,7 +387,9 @@
 	  	      	  })
 	  	      	},
 	  	      	goBack: function(){
+	  	      	  this.search = '';
 	  	      	  mui('#app').offCanvas('close');
+	  	      	  plus.key.hideSoftKeybord();
 	  	      	},
 	  	      	//获取行政区域列表
 	  	      	getDistrictList: function(){

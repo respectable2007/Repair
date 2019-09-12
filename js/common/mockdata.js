@@ -5,6 +5,7 @@
  
 /*------------------------------用户登录权限start-------------------------------------*/
 var _database = new smpWebSql();
+//_database.d
 //生成一个GUID（取16位）伪随机数
 function newGuid() {
     var guid = "";
@@ -945,17 +946,22 @@ if (config.isMock) {
     	"Message":null,
     	"Data":[{
     		"BusinessType":"R",
+    		"BusinessName":"维修",
     		"NoFinishQty":4,
-    		"FinishQty":2},{
-    		"BusinessType":"C",
-    		"NoFinishQty":2,
-    		"FinishQty":1},{
-    		"BusinessType":"M",
-    		"NoFinishQty":3,
-    		"FinishQty":1},{
-    		"BusinessType":"A",
-    		"NoFinishQty":2,
-    		"FinishQty":0
+    		"FinishQty":2},
+    		{"BusinessType":"C",
+    		"BusinessName":"模块2",
+    		 "NoFinishQty":2,
+    		 "FinishQty":1
+    		},{
+    		 "BusinessType":"M",
+    		"BusinessName":"模块3",
+    		 "NoFinishQty":3,
+    		 "FinishQty":1},
+    		{"BusinessType":"A",
+    		"BusinessName":"模块4",
+    		 "NoFinishQty":2,
+    		 "FinishQty":0
     	}]},
     BillRewardForUser = { 
       "StatusCode": 200, 
@@ -1281,5 +1287,11 @@ if (config.isMock) {
     };
     addExecuteBill(record);
   	return { "StatusCode": 200, "Message": null, "Data": 1 };
+  });
+  //修改密码
+  Mock.mock(config.ModifyPassword, null, function(option){
+    var body = JSON.parse(option.body);
+//  console.log(JSON.stringify(body));
+    return { StatusCode: 200, Message: null, Data: 1};
   })
 }

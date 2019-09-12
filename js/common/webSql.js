@@ -5,7 +5,7 @@
         this.DateBaseName = options.DateBaseName || 'SmpDB';
         this.Version = options.Version || '1.0';
         this.Description = options.Description || 'SmpDB';
-        this.DataBaseSize = options.DataBaseSize || 2 * 1024 * 1024;
+        this.DataBaseSize = options.DataBaseSize || 5 * 1024 * 1024;
         this.init();
     }
     smpWebSql.prototype = {

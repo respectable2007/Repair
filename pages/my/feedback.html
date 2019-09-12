@@ -72,9 +72,14 @@
 			</p>
 			<div class="mui-input-row">
 				<textarea id='question' 
-					      class="mui-input-clear question" 
+					      class="mui-input-clear question"
+					      maxlength="100"
+					      v-model='form.content'
 					      placeholder="请详细描述你的问题和意见">
 				</textarea>
+				<p v-show='form.content' class="mui-feedback-label">
+				  还可输入{{100 - form.content.length}}
+				</p>
 			</div>
 			<p class="mui-feedback-label">图片(选填,提供问题截图,总大小10M以下)</p>
 			<div id='F_SMPS' class="row image-list">
@@ -100,7 +105,8 @@
 			<div class="mui-input-row">
 				<input type="text" 
 					   class="mui-input-clear contact" 
-					   placeholder="请输入QQ或手机号" />
+					   placeholder="请输入QQ或手机号"
+					   v-model='form.tep'/>
 			</div>
 			<div class="row mui-input-row">
 			  <button type="button"
@@ -121,15 +127,19 @@
 	  	  el: '#app',
 	  	  data: {
 	  	  	camera: null,
-	  	  	imgItemList:[]
+	  	  	imgItemList:[],
+	  	  	form:{
+	  	  	  content: '',
+	  	  	  tep: ''
+	  	  	}
 	  	  },
 	  	  mounted: function(){
 	  	    mui.init();
+	  	    this.camera = new Camera(this);
 	  	  },
 	  	  methods: {
 	  	  	handleCamera: function(){
 	  	  	    var that = this;
-	  	  	    that.camera = new Camera(that);
 	      	    that.camera.showActionSheet({
 	      	  	  id: 'F_SMP',
 	      	  	  multiple: true,
@@ -150,7 +160,10 @@
 	  	  	},
 	  	  	//确定提交
 	  	  	handleSubmit: function() {
-	  	  	  console.log(1);
+	  	  	  if(!this.form.content) {
+	  	  	  	mui.toast('问题和意见不可为空');
+	  	  	  	return;
+	  	  	  }
 	  	  	}
 	  	  }
 	  	})

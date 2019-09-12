@@ -16,7 +16,10 @@
 		  	margin-left: 5px;
 		  }
 		  input[type=datetime]{
-		  	padding:10px 3px;
+		  	padding:10px 0;
+		  }
+		  .mui-input-row .mui-btn{
+		  	padding: 10px;
 		  }
 		  div[id^=chart]{
 		  	height: 400px;
@@ -48,9 +51,17 @@
 	  	    </div>
 	  	    <div class="mui-content-padded">
 	  	      <div class="mui-input-row">
-	  	        <input type="datetime" style="width: 38%;" readonly="readonly" :value="startTime" @tap='handleStartTime()'/>
-	  	                 至
-	  	        <input type="datetime" style="width: 38%;" readonly="readonly" :value="endTime" @tap='handleEndTime()'/>
+	  	        <input type="datetime" 
+	  	        	   style="width: 38%;" 
+	  	        	   readonly="readonly" 
+	  	        	   :value="startTime" 
+	  	        	   @tap='handleStartTime()'/>
+	  	        -
+	  	        <input type="datetime" 
+	  	        	   style="width: 38%;" 
+	  	        	   readonly="readonly" 
+	  	        	   :value="endTime" 
+	  	        	   @tap='handleEndTime()'/>
 	  	        <button type="button"
 	  	      	        class="mui-btn mui-btn-primary"
 	  	      	        @tap='handleShowCharts()'>
@@ -106,7 +117,8 @@
 	  	  data:{
 	  	  	startTime: '',
 	  	  	endTime: '',
-	  	  	curDom: null
+	  	  	curDom: null,
+	  	  	index: ''
 	  	  },
 	  	  methods: {
 	  	  	handleStartTime: function(){
@@ -115,8 +127,20 @@
 	  	  	  }),
 	  	  	  that = this;
 	  	  	  dPicker.show(function(item){
-	  	  	  	that.startTime = item.value;
+	  	  	    if(that.time(item.value, that.endTime)){
+	  	  	  	  that.startTime = item.value;
+	  	  	    }
 	  	  	  })
+	  	  	},
+	  	  	time: function(start, end){
+  	  		  var  reg = / /g,
+  	  	           s = Date.parse(start.replace(reg,'T')),
+  	  	           e = Date.parse(end.replace(reg,'T'));
+	  	  	  if( s > e) {
+	  	  	  	mui.toast('起始时间应早于结束时间');
+	  	  	  	return;
+	  	  	  }
+	  	  	  return true;
 	  	  	},
 	  	  	handleEndTime: function(){
 	  	  	  var dPicker = new mui.DtPicker({
@@ -124,7 +148,9 @@
 	  	  	  }),
 	  	  	  that = this;
 	  	  	  dPicker.show(function(item){
-	  	  	  	that.endTime = item.value;
+	  	  	  	if(that.time(that.startTime, item.value)){
+	  	  	  	  that.endTime = item.value;
+	  	  	    }
 	  	  	  })
 	  	  	},
 	  	  	initCharts: function(data){
@@ -158,7 +184,7 @@
 	  	  	  	xAxis : [
 			      {
 			        type : 'category',
-			        data : ['维修', '模块2', '模块3'],
+			        data : [data[0].BusinessName, data[1].BusinessName, data[2].BusinessName],
 			        axisTick: {
 			          alignWithLabel: true
 			        }
@@ -184,9 +210,16 @@
 	  	  	  });
 	  	  	},
 	  	  	handleShowCharts: function(){
-	  	  	  var that = this;
+	  	  	  var that = this,
+	  	  	      reg = / /g,
+	  	  	      start = Date.parse(this.startTime.replace(reg,'T')),
+	  	  	      end = Date.parse(this.startTime.replace(reg,'T'));
+	  	  	  if( start > end) {
+	  	  	  	mui.toast('起始时间应小于结束时间');
+	  	  	  	return;
+	  	  	  }
 	  	  	  g.ajax(config.QueryWorkLoadQty, {
-	  	  	  	data: {},
+	  	  	  	data: {},   
 	  	  	  	success: function(res) {
 	  	  	  	  if(res.StatusCode == 200) {
 	  	  	        that.initCharts(res.Data);
@@ -199,12 +232,14 @@
 	  	  	  this.endTime = '';
 	  	  	  var len = e.target.href.length,
 	  	  	      index = e.target.href[len - 1];
+	  	  	  this.index = index;
 	  	  	  this.curDom =  document.getElementById('chart' + index);
 	  	  	}
 	  	  },
 	  	  mounted: function() {
 	  	  	mui.init();
 	  	  	this.curDom =  document.getElementById('chart1');
+	  	  	this.handleShowCharts();
 	  	  }
 	  	})
 	  </script>

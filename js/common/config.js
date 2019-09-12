@@ -47,6 +47,7 @@
   owner.QueryAddrList = apiDomain + '/api/Base/QueryAddrList'; //获取通讯录
   owner.QueryAppHelpPage = apiDomain + '/api/Base/QueryAppHelpPage'; //帮助分页查询
   owner.QueryWorkLoadQty = apiDomain + '/api/Base/QueryWorkLoadQty'; //工作量
+  owner.ModifyPassword = apiDomain + '/api/Base/ModifyPassword'; //修改密码
   /*维修*/
   owner.AddRepairBill = apiDomain + '/api/Repair/AddRepairBill'; //维修报修
   owner.AssignPersonRepair = apiDomain + '/api/Repair/AssignPersonRepair'; //维修抢单、派工

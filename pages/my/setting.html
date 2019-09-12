@@ -111,21 +111,24 @@
 		  	  	  </li>
 		  	  	  <li class="mui-table-view-cell">
 		  	  	  	<a href='javascript:void(0)'
-		  	  	  	   class="mui-navigate-right">
-		  	  	  	  <span class="title">消息缓存</span>
+		  	  	  	   class="mui-navigate-right"
+		  	  	  	   onclick="handleClearCache()">
+		  	  	  	  <span class="title">清除缓存</span>
 		  	  	  	</a>
 		  	  	  </li>
 		  	  	  <li class="mui-table-view-cell">
 		  	  	  	<a href='javascript:void(0)'
-		  	  	  	   class="mui-navigate-right">
+		  	  	  	   class="mui-navigate-right"
+		  	  	  	   onclick="handleOpenAbout()">
 		  	  	  	  <span class="title">关于我们</span>
 		  	  	  	</a>
 		  	  	  </li>
 		  	  	  <li class="mui-table-view-cell">
 		  	  	  	<a href='javascript:void(0)'
-		  	  	  	   class="mui-navigate-right">
+		  	  	  	   class="mui-navigate-right"
+		  	  	  	   onclick="handleVersion(true)">
 		  	  	  	   当前版本
-		  	  	  	 <i class="mui-pull-right">V1.0.0</i>
+		  	  	  	 <i class="mui-pull-right" id='version'></i>
 		  	  	  	</a>
 		  	  	  </li>
 		  	  	  <li class="mui-table-view-cell">
@@ -154,17 +157,20 @@
 		  	  	  	   <input type="password"
 		  	  	  	   	      class="mui-input-password"
 		  	  	  	   	      maxlength="20"
-		  	  	  	   	      placeholder="请输入旧密码"/>
+		  	  	  	   	      placeholder="请输入新密码"
+		  	  	  	   	      id='pwd'/>
 		  	  	  	</div>
 		  	  	  	<div class="mui-input-row">
 		  	  	  	   <input type="password"
 		  	  	  	   	      class="mui-input-password"
 		  	  	  	   	      maxlength="20"
-		  	  	  	   	      placeholder="请输入新密码"/>
+		  	  	  	   	      placeholder="再次输入新密码"
+		  	  	  	   	      id='sPwd'/>
 		  	  	  	</div>
 		  	  	  	<div class="">
 		  	  	  	  <button type="button"
-		  	  	  	  	      class="mui-btn-primary mui-btn-block">提交</button>
+		  	  	  	  	      class="mui-btn-primary mui-btn-block"
+		  	  	  	  	      onClick='handleChangePwd()'>提交</button>
 		  	  	  	</div>
 		  	  	  </form>
 		  	  	</div>
@@ -185,7 +191,10 @@
 		  	  	<ul class="mui-table-view">
 		  	  		<li class="mui-table-view-cell">
 		  	  		  <a>接收新消息通知
-		  	  		    <span class="mui-pull-right">已开启</span>
+		  	  		    <div class="mui-switch mui-active mui-switch-mini">
+		  	  		      <div class="mui-switch-handle">
+		  	  		      </div>
+		  	  		    </div>
 		  	  		  </a>
 		  	  		</li>
 		  	  	</ul>
@@ -212,12 +221,6 @@
 		  	  	<div class="mui-content-padded">
 		  	  	  <p>设置系统功能消息提示声音和震动的时段</p>
 		  	  	</div>
-		  	  	<ul class="mui-table-view">
-		  	  	  <li class="mui-table-view-cell">
-		  	  	  	接收新消息通知
-		  	  	  	<span class="mui-pull-right">已开启</span>
-		  	  	  </li>
-		  	  	</ul>
 		  	  	<ul class="mui-table-view">
 		  	  	  <li class="mui-table-view-cell">
 		  	  	  	声音
@@ -256,10 +259,13 @@
 		  </div>
 		</div>
 	  <script src="../../js/mui.min.js" type="text/javascript"></script>
-	  <!--<script src="../../js/libs/vue.min.js" type="text/javascript"></script>-->
 	  <script src="../../js/mui.view.js" type="text/javascript"></script>
+	  <script src="../../js/libs/mock-min.js" type="text/javascript"></script>
+	  <script src="../../js/libs/md5.min.js" type="text/javascript"></script>
 	  <script src="../../js/common/config.js" type="text/javascript"></script>
 	  <script src="../../js/common/global.js" type="text/javascript"></script>
+	  <!--<script src="../../js/common/webSql.js" type="text/javascript"></script>-->
+	  <!--<script src="../../js/common/mockdata.js" type="text/javascript"></script>-->
 	  <script type="text/javascript">
 	  	mui.init();
 	  	var v = mui('#app').view({
@@ -277,9 +283,109 @@
 	  	  	}
 	  	  }
 	  	})(mui, v);
+	  	mui.plusReady(function(){
+	  	  console.log(plus.runtime.versionCode);
+	  	  plus.runtime.getProperty(plus.runtime.appid, function(info){
+	  	  	document.getElementById('version').textContent = 'V' + info.version;
+	  	  })
+	  	})
+	  	//退出
 	  	document.getElementById('logout').addEventListener('tap', function() {
 	  	  g.logout();
 	  	})
+	  	//修改密码
+	  	function handleChangePwd(){
+	  	  var pwdDom = document.getElementById('pwd'),
+	  	      spwdDom = document.getElementById('sPwd'),
+	  	      pwd = pwdDom.value,
+	  	      spwd = spwdDom.value;
+	  	  if(!pwd){
+	  	  	mui.toast('请输入新密码');
+	  	  	return;
+	  	  }
+	  	  if(!spwd){
+	  	  	mui.toast('再次输入新密码');
+	  	  	return;
+	  	  }
+	  	  if(pwd != spwd) {
+	  	  	mui.toast('密码不一致，请重新输入');
+	  	  	pwdDom.value = ''; 
+	  	  	spwdDom.value = '';
+	  	  	return;
+	  	  }
+	  	  g.ajax(config.ModifyPassword, {
+	  	  	data: {
+	  	  	  userId: config.USER_ID,
+	  	  	  pwd: md5(pwd)
+	  	  	},
+	  	  	type: 'post',
+	  	  	success: function(data) {
+	  	  	  if(data.StatusCode == 200) {
+	  	  	  	mui.toast('密码修改成功');  
+	  	  	  	mui.back();
+	  	  	  }
+	  	  	}
+	  	  })
+	  	}
+	  	//清除缓存
+	  	function handleClearCache(){
+	  	  mui.confirm('确定清除缓存？', '确定', ['取消', '确定'], function(e){
+	  	  	if(e.index == 1) {
+	  	  	  plus.cache.clear(function(){
+	  	  	  	mui.toast('应用缓存已清空');
+	  	  	  })
+	  	  	}
+	  	  })
+	  	}
+	    //关于我们
+	    function handleOpenAbout(){
+	      g.openWindowWithTitle({
+	      	id: 'about',
+	      	url: 'about.html'
+	      }, '关于我们')
+	    }
+	    //当前版本
+	    function handleVersion(isManual){
+	      mui.plusReady(function(){
+	        plus.runtime.getProperty(plus.runtime.appid, function(info){
+//	          console.log(JSON.stringify(info))
+	          var version = info.version,
+	              ua = navigator.userAgent.toLowerCase();
+	          if(/iphone|ipad|ipod/g.test(ua)){
+	          	mui.ajax(({
+	          	  type:'get',
+	          	  dataType: 'json',
+	          	  url: "https://itunes.apple.com/lookup?id=1318127518",
+	          	  data: {
+	          	  	id: '1318127518'
+	          	  },
+	          	  success: function(data){
+//	          	  	console.log(JSON.stringify(data));
+	          	  	var lens = data.resultCount,
+	          	  	    i = 0,
+	          	  	    laste = '';
+	          	  	for(i; i < lens; i++) {
+	          	  	  laste = data.results[i].version;
+	          	  	  if( laste > version) {
+	          	  	  	mui.confirm('发现新版本:V'+ laste, '升级确认', ['取消','确定'], function(e){
+	          	  	  	  if(e.index == 1){
+	          	  	  	  	document.location.href = 'https://itunes.apple.com/cn/app/san-gu-hui/id1318127518?mt=8'; //上新APPStore下载地址
+	          	  	  	  	if(isManual) {
+	          	  	          mui.toast('当前版本已是最新');
+	          	  	        }
+	          	  	  	  }
+	          	  	  	})
+	          	  	  	break;
+	          	  	  }
+	          	  	}
+	          	  }
+	          	}))
+	          } else {//安卓
+	          	
+	          }
+	        })
+	      })
+	    }
 	  </script>
 	</body>
 </html>
