@@ -10,9 +10,6 @@
 		<link rel="stylesheet" type="text/css" href="../../css/iconfont.css"/>
 		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
 		<style type="text/css">
-		  aside .mui-content .mui-scroll-wrapper{
-		    top: 70px;
-		  }
 		  .mui-bar{
 		  	height: 46px;
 		  }
@@ -52,6 +49,58 @@
 		  .mui-backdrop{
 			 z-index: 0;
 		  }
+		  input[type=search]{
+		  	border-radius: 0;
+		  	border: 1px solid gray;
+		  	padding-left: 5px;
+		  	text-align: left;
+		  	color: #fff;
+		  }
+		  aside .mui-content{
+		  	background: transparent;
+		  }
+		  aside .mui-input-row{
+		  	width: 80%;
+		  	display: inline-block;
+		  }
+		  .mui-cancle{
+		  	background: #007AFF;
+		  	color: #fff;
+		  	padding: 6px 8px;
+		  	position: absolute;
+		  }
+		  aside #offCanvasSideScroll{
+		    top: 34px;
+		  }
+		  aside .mui-table-view{
+		  	background: transparent;
+		  }
+		  aside .mui-table-view-cell.mui-active,aside .mui-table-view-cell.mui-collapse,
+		  aside .mui-collapse-content,aside .mui-collapse-content .mui-input-group{
+		  	background: transparent;
+		  	color: #fff;
+		  }
+		  aside .mui-navigate-right.mui-active{
+		  	background: transparent;
+		  	color: #fff;
+		  }
+		  aside .mui-table-view-cell{
+		  	color: #fff;
+		  }
+		  aside .mui-table-view-cell.mui-collapse .mui-collapse-content{
+		  	background:transparent;
+		  	color: #fff;
+		  }
+		  aside .mui-input-group .mui-input-row{
+		  	line-height: 40px;
+		  }
+		  aside .mui-input-group .mui-input-row:after{
+		  	background: transparent;
+		  }
+		  aside .mui-table-view .mui-input-row{
+		  	border-bottom: none;
+		  	padding-left: 10px;
+		  }
 		</style>
 	</head>
 	<body>
@@ -66,6 +115,9 @@
 	  	  	  	     v-model="search"
 	  	  	  	     @keyup="handleSearch($event)"/>
 	  	  	</div>
+	  	    <a href="javascript:void(0)"
+	  	       class="mui-cancle"
+	  	  	   @tap.stop='handleCloseCanvas()'>取消</a>
 	  	  	<div id='offCanvasSideScroll' class="mui-scroll-wrapper">
 	  	  	  <div class="mui-scroll">
 	  	  	  	<div v-show='search.length'>
@@ -77,12 +129,15 @@
 	  	  	  	  	</li>
 	  	  	  	  </ul>
 	  	  	  	</div>
-	  	  	  	<div v-show='!search.length'>
+	  	  	  	<div v-show='!search.length && historyList.length'>
 	  	  	  	  <ul class="mui-table-view">
 	  	  	  	  	<li class="mui-table-view-cell mui-active mui-collapse">
 	  	  	  	  	   <a href="javascript:void(0)"
 	  	  	  	  	   	  class="mui-navigate-right">
 	  	  	  	  	       历史记录
+	  	  	  	  	    <span @tap.stop='handleClearHistory()'>
+	  	  	  	  	   	  <i class="mui-icon mui-icon-trash i-clear"></i>
+	  	  	  	  	    </span>
 	  	  	  	  	   </a>
 	  	  	  	  	   <div class="mui-collapse-content">
 	  	  	  	  	     <div class="mui-input-group"
@@ -98,17 +153,12 @@
   	  	  	  	       	   暂无历史记录
   	  	  	  	         </div>
 	  	  	  	  	   </div>
-	  	  	  	  	   <span @tap='handleClearHistory()'>
-	  	  	  	  	   	<i class="mui-icon mui-icon-trash i-clear"></i>
-	  	  	  	  	   </span>
 	  	  	  	  	</li>
 	  	  	  	  </ul>
 	  	  	  	</div>
 	  	  	  </div>
 	  	  	</div>
 	  	  </div>
-	  	  <a href="javascript:void(0)"
-	  	  	@tap='handleCloseCanvas()'>取消</a>
 	  	</aside>
 	  	<div class="mui-inner-wrap">
   		  <header class="mui-bar mui-bar-nav">

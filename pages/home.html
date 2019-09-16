@@ -129,9 +129,9 @@
 	  	      	handleTap: function(){
 	  	      	  this.toWaitDoTask(this.result.list[0],0);
 	  	      	},
-	  	      	//任务数
+	  	      	//获取任务数
 	  	      	loadTaskNum: function(){
-	  	      	  this.result.totalTaskNum = g.getCount(this.result.list, this.getNumber);
+	  	      	  g.getCount(this.result.list, this.getNumber);
 	  	      	},
 	  	      	//总任务数
 	  	      	getNumber: function(number){

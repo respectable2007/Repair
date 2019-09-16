@@ -360,13 +360,14 @@
 	      "Data": {
 	        "cCount": 0,
 	        "mCount": 0,
-	        "rCount": 2,
+	        "rCount": 0,
 	        "allCount": 0 + 0 + res,
 	        "cRob": false,
 	        "mRob": false,
 	        "rRob": true
 	      }
       	}
+//    	console.log(JSON.stringify(res));
       	if(data.StatusCode === 200) {
 	  	  	for(var i = 0; i < list.length; i++) {
 	  	  	  if(list[i].name === TaskType.repair.value){
@@ -384,7 +385,7 @@
 	  	  	if(fn){
 	  	  	  fn(data.Data.allCount);
 	  	  	}
-	  	  return list;
+//	  	  return list;
 	  	}else{
 	  	  mui.toast(data.Message)
 	  	}
